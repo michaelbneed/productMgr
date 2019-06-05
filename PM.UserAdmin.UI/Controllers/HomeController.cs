@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PM.DatabaseOperations.Services;
 using PM.Common.Models;
@@ -17,6 +18,7 @@ namespace PM.UserAdmin.UI.Controllers
 			
 		}
 
+		[Authorize]
 		public IActionResult Index()
 		{
 			return View();
