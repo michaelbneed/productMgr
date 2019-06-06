@@ -8,16 +8,20 @@ namespace PM.Common.DtoModels
 	{
 		public int PackageId { get; set; }
 
-		public decimal PackageSize { get; set; }
+		public decimal PackageName { get; set; }
 
 		public decimal PackagePrice { get; set; }
 
-		public ProductDto Product { get; set; }
+		public decimal PackageSize { get; set; }
 
-		public List<ProductDto> Products { get; set; }
+		public int ProductId { get; set; }
 
-		public int PackageTypeId { get; set; }
+		public DateTime CreatedOn { get; set; }
 
-		public string OrderWeek { get; set; }
+		public string CreatedBy { get; set; }
+
+		public DateTime UpdatedOn { get; set; }
+
+		public string UpdatedBy { get; set; }
 	}
 }

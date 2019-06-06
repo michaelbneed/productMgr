@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using PM.Common.EntityModels;
 using PM.DatabaseOperations.Contexts;
 using PM.DatabaseOperations.Services;
 

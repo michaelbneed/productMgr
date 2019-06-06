@@ -7,8 +7,6 @@ namespace PM.Common.ViewModels
 {
 	public class RequestViewModel
 	{
-		public List<RequestTypesDto> RequestHistory { get; set; }
-
 		public RequestDto Request { get; set; }
 
 		// TODO - specific data for UI

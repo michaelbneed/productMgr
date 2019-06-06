@@ -21,7 +21,7 @@ namespace PM.Common.Extensions
 			var timeoutSeconds = TimeSpan.FromSeconds(15);
 			int allowedExceptionsBeforeBreak = 4;
 			
-			// Retry Policy
+			// Retry 
 			var retryPolicy = Policy
 				.Handle<Exception>()
 				.Or<HttpRequestException>()
@@ -30,17 +30,18 @@ namespace PM.Common.Extensions
 					maxRetryAttempts,
 					i => pauseBetweenFailures);
 
-			// TimeOut Policy
+			// TimeOut 
 			var timeOutPolicy = Policy
 				.TimeoutAsync(timeoutSeconds, TimeoutStrategy.Optimistic);
 
+			// Break
 			var circuitBreaker = Policy
 				.Handle<Exception>()
 				.Or<HttpRequestException>()
 				.Or<SqlException>()
 				.CircuitBreakerAsync(allowedExceptionsBeforeBreak, pauseBetweenFailures);
 
-			//Combine the two (or more) policies
+			//Combine the policies
 			var policyWrap = Policy.WrapAsync(retryPolicy, circuitBreaker, timeOutPolicy);
 			return policyWrap;
 		}
