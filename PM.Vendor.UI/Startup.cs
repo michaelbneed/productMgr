@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
-using PM.DatabaseOperations.Contexts;
+using PM.DatabaseOperations.Models;
 using PM.DatabaseOperations.Services;
 
 namespace PM.Vendor.UI
@@ -36,7 +36,7 @@ namespace PM.Vendor.UI
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
-			services.AddDbContext<Context>(options =>
+			services.AddDbContext<VandivierProductManagerContext>(options =>
 				options.UseSqlServer(Configuration.GetConnectionString("Connection")));
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

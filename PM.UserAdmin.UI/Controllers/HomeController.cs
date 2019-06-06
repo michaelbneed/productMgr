@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PM.DatabaseOperations.Services;
-using PM.Common.Models;
-using PM.Common.ViewModels;
+using PM.DatabaseOperations.ViewModels;
 
 namespace PM.UserAdmin.UI.Controllers
 {

@@ -1,6 +1,4 @@
-using System;
-
-namespace PM.Common.Models
+namespace PM.DatabaseOperations.ViewModels
 {
 	public class ErrorViewModel
 	{

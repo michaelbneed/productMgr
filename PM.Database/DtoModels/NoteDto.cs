@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Transactions;
 
-namespace PM.Common.DtoModels
+namespace PM.DatabaseOperations.DtoModels
 {
 	public class NoteDto
 	{

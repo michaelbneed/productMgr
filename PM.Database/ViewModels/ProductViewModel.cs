@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using PM.Common.DtoModels;
+﻿using System.Collections.Generic;
+using PM.DatabaseOperations.DtoModels;
 
-namespace PM.Common.ViewModels
+namespace PM.DatabaseOperations.ViewModels
 {
 	class ProductViewModel
 	{

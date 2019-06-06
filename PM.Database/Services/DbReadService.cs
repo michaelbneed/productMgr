@@ -1,19 +1,18 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using PM.DatabaseOperations.Contexts;
+using PM.DatabaseOperations.Models;
 
 namespace PM.DatabaseOperations.Services
 {
 	public class DbReadService : IDbReadService
 	{
-		private readonly Context _db;
+		private readonly VandivierProductManagerContext _db;
 
-		public DbReadService(Context db)
+		public DbReadService(VandivierProductManagerContext db)
 		{
 			this._db = db;
 		}

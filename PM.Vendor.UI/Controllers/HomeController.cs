@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using PM.Common.Models;
 using PM.DatabaseOperations.Services;
+using PM.DatabaseOperations.ViewModels;
 
 namespace PM.Vendor.UI.Controllers
 {

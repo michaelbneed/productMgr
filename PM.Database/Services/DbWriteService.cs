@@ -4,15 +4,15 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using PM.DatabaseOperations.Contexts;
+using PM.DatabaseOperations.Models;
 
 namespace PM.DatabaseOperations.Services
 {
 	public class DbWriteService : IDbWriteService
 	{
-		private readonly Context _db;
+		private readonly VandivierProductManagerContext _db;
 		
-		public DbWriteService(Context db)
+		public DbWriteService(VandivierProductManagerContext db)
 		{
 			this._db = db;
 		}

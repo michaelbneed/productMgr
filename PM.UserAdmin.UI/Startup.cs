@@ -13,11 +13,11 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PM.DatabaseOperations.Contexts;
 using PM.DatabaseOperations.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
+using PM.DatabaseOperations.Models;
 
 
 namespace PM.UserAdmin.UI
@@ -41,7 +41,7 @@ namespace PM.UserAdmin.UI
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
-			services.AddDbContext<Context>(options =>
+			services.AddDbContext<VandivierProductManagerContext>(options =>
 				options.UseSqlServer(Configuration.GetConnectionString("Connection")));
 
 			services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
