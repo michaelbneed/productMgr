@@ -10,7 +10,7 @@ namespace PM.DatabaseOperations.Models
             Note = new HashSet<Note>();
         }
 
-        public int RequestId { get; set; }
+        public int Id { get; set; }
         public string RequestDescription { get; set; }
         public int? RequestTypeId { get; set; }
         public int? StatusTypeId { get; set; }

@@ -10,7 +10,7 @@ namespace PM.DatabaseOperations.Models
             Request = new HashSet<Request>();
         }
 
-        public int RequestTypeId { get; set; }
+        public int Id { get; set; }
         public string RequestType1 { get; set; }
 
         public virtual ICollection<Request> Request { get; set; }

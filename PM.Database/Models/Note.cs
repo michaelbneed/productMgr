@@ -5,7 +5,7 @@ namespace PM.DatabaseOperations.Models
 {
     public partial class Note
     {
-        public int NoteId { get; set; }
+        public int Id { get; set; }
         public string NoteText { get; set; }
         public int? RequestId { get; set; }
         public DateTime? CreatedOn { get; set; }

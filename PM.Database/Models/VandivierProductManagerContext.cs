@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 namespace PM.DatabaseOperations.Models
 {
@@ -27,10 +26,10 @@ namespace PM.DatabaseOperations.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-	        if (!optionsBuilder.IsConfigured)
+            if (!optionsBuilder.IsConfigured)
             {
-				// TODO: Move connection to a settings file!
-	            optionsBuilder.UseSqlServer("Server=user-pc;Database=VandivierProductManager;Trusted_Connection=True;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Server=user-pc;Database=VandivierProductManager;Trusted_Connection=True;");
             }
         }
 
@@ -40,7 +39,7 @@ namespace PM.DatabaseOperations.Models
 
             modelBuilder.Entity<Note>(entity =>
             {
-                entity.Property(e => e.NoteId).HasColumnName("NoteID");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
@@ -66,7 +65,7 @@ namespace PM.DatabaseOperations.Models
 
             modelBuilder.Entity<Package>(entity =>
             {
-                entity.Property(e => e.PackageId).HasColumnName("PackageID");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
@@ -80,6 +79,8 @@ namespace PM.DatabaseOperations.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.PackagePrice).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.PackageSize).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
@@ -97,7 +98,7 @@ namespace PM.DatabaseOperations.Models
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
@@ -132,7 +133,7 @@ namespace PM.DatabaseOperations.Models
 
             modelBuilder.Entity<Request>(entity =>
             {
-                entity.Property(e => e.RequestId).HasColumnName("RequestID");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
@@ -181,7 +182,7 @@ namespace PM.DatabaseOperations.Models
 
             modelBuilder.Entity<RequestType>(entity =>
             {
-                entity.Property(e => e.RequestTypeId).HasColumnName("RequestTypeID");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.RequestType1)
                     .HasColumnName("RequestType")
@@ -190,7 +191,7 @@ namespace PM.DatabaseOperations.Models
 
             modelBuilder.Entity<StatusType>(entity =>
             {
-                entity.Property(e => e.StatusTypeId).HasColumnName("StatusTypeID");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.StatusType1)
                     .HasColumnName("StatusType")
@@ -200,7 +201,7 @@ namespace PM.DatabaseOperations.Models
 
             modelBuilder.Entity<Supplier>(entity =>
             {
-                entity.Property(e => e.SupplierId).HasColumnName("SupplierID");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
@@ -225,7 +226,7 @@ namespace PM.DatabaseOperations.Models
 
             modelBuilder.Entity<User>(entity =>
             {
-                entity.Property(e => e.UserId).HasColumnName("UserID");
+                entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.AuthId).HasColumnName("AuthID");
 

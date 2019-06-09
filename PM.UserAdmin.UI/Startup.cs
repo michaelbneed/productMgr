@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -16,9 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PM.DatabaseOperations.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
-using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using PM.DatabaseOperations.Models;
-
 
 namespace PM.UserAdmin.UI
 {
@@ -49,12 +42,14 @@ namespace PM.UserAdmin.UI
 
 			services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
 			{
-				options.Authority = options.Authority + "/v2.0/";         // Microsoft identity platform
-
-				options.TokenValidationParameters.ValidateIssuer = false; // accept several tenants (here simplified)
+				options.Authority = options.Authority + "/v2.0/";         
+				options.TokenValidationParameters.ValidateIssuer = false; 
 			});
 
-
+			// Injectable data access service
+			services.AddScoped<IDbReadService, DbReadService>();
+			services.AddScoped<IDbWriteService, DbWriteService>();
+			
 			services.AddMvc(options =>
 			{
 				var policy = new AuthorizationPolicyBuilder()

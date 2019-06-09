@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [dbo].[Product] (
-    [ProductID]          INT            IDENTITY (1, 1) NOT NULL,
+    [ID]                 INT            IDENTITY (1, 1) NOT NULL,
     [ProductName]        VARCHAR (100)  NOT NULL,
     [ProductDescription] NVARCHAR (MAX) NULL,
     [UPCCode]            VARCHAR (50)   NULL,
@@ -10,6 +10,8 @@
     [CreatedBy]          VARCHAR (100)  NULL,
     [UpdatedOn]          DATETIME       NULL,
     [UpdatedBy]          VARCHAR (100)  NULL,
-    CONSTRAINT [PK_Prooduct] PRIMARY KEY CLUSTERED ([ProductID] ASC)
+    CONSTRAINT [PK_Prooduct] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

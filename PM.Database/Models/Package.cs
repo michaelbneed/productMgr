@@ -5,9 +5,10 @@ namespace PM.DatabaseOperations.Models
 {
     public partial class Package
     {
-        public int PackageId { get; set; }
+        public int Id { get; set; }
         public string PackageName { get; set; }
         public decimal? PackagePrice { get; set; }
+        public decimal? PackageSize { get; set; }
         public int? ProductId { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }

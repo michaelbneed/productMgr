@@ -17,5 +17,7 @@ namespace PM.DatabaseOperations.DtoModels
 		public DateTime UpdatedOn { get; set; }
 
 		public string UpdatedBy { get; set; }
+
+
 	}
 }

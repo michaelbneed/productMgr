@@ -11,9 +11,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
 using PM.DatabaseOperations.Models;
 using PM.DatabaseOperations.Services;
+using Microsoft.AspNetCore.Authentication.AzureADB2C.UI;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 
 namespace PM.Vendor.UI
 {
@@ -39,6 +41,19 @@ namespace PM.Vendor.UI
 			services.AddDbContext<VandivierProductManagerContext>(options =>
 				options.UseSqlServer(Configuration.GetConnectionString("Connection")));
 
+			// Injectable data access service
+			services.AddScoped<IDbReadService, DbReadService>();
+			services.AddScoped<IDbWriteService, DbWriteService>();
+
+			services.AddAuthentication(AzureADB2CDefaults.AuthenticationScheme).AddAzureADB2C(options => Configuration.Bind("AzureADB2C", options)); ;
+
+			services.Configure<OpenIdConnectOptions>(AzureADB2CDefaults.OpenIdScheme, options =>
+			{
+				options.Authority = options.Authority + "/v2.0/";         
+
+				options.TokenValidationParameters.ValidateIssuer = false; 
+			});
+
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 		}
 
@@ -60,6 +75,8 @@ namespace PM.Vendor.UI
 			app.UseStaticFiles();
 
 			app.UseCookiePolicy();
+
+			app.UseAuthentication();
 
 			app.UseMvc(routes =>
 			{

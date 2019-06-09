@@ -11,7 +11,7 @@ namespace PM.DatabaseOperations.Models
             User = new HashSet<User>();
         }
 
-        public int SupplierId { get; set; }
+        public int Id { get; set; }
         public string SupplierName { get; set; }
         public string SupplierEmail { get; set; }
         public DateTime? CreatedOn { get; set; }
