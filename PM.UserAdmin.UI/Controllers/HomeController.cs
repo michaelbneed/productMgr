@@ -12,7 +12,6 @@ namespace PM.UserAdmin.UI.Controllers
 			
 		}
 
-		[Authorize]
 		public IActionResult Index()
 		{
 			return View();

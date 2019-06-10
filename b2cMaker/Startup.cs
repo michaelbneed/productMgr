@@ -1,25 +1,18 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.AzureADB2C.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PM.DatabaseOperations.Models;
-using PM.DatabaseOperations.Services;
-using Microsoft.AspNetCore.Authentication.AzureADB2C.UI;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.IdentityModel.Logging;
 
-namespace PM.Vendor.UI
+namespace b2cMaker
 {
 	public class Startup
 	{
@@ -40,26 +33,8 @@ namespace PM.Vendor.UI
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
-			services.AddDbContext<VandivierProductManagerContext>(options =>
-				options.UseSqlServer(Configuration.GetConnectionString("Connection")));
-
-			// Injectable data access service
-			services.AddScoped<IDbReadService, DbReadService>();
-			services.AddScoped<IDbWriteService, DbWriteService>();
-
-			string instance = Configuration["AzureAdB2C:Instance"];
-			string tenant = Configuration["AzureAdB2C:Tenant"];
-			string signupPolicy = Configuration["AzureAdB2C:SignUpSignInPolicyId"];
-
-			IdentityModelEventSource.ShowPII = true;
-
-			services.AddAuthentication(AzureADB2CDefaults.AuthenticationScheme).AddAzureADB2C(options => Configuration.Bind("AzureAdB2C", options)); ;
-
-			services.Configure<OpenIdConnectOptions>(AzureADB2CDefaults.OpenIdScheme, options =>
-			{
-				options.Authority = String.Format(instance, tenant, signupPolicy);   
-				options.TokenValidationParameters.ValidateIssuer = false;
-			});
+			services.AddAuthentication(AzureADB2CDefaults.AuthenticationScheme)
+				.AddAzureADB2C(options => Configuration.Bind("AzureAdB2C", options));
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 		}
@@ -73,24 +48,18 @@ namespace PM.Vendor.UI
 			}
 			else
 			{
-				app.UseExceptionHandler("/Home/Error");
+				app.UseExceptionHandler("/Error");
 				// The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
 				app.UseHsts();
 			}
 
 			app.UseHttpsRedirection();
 			app.UseStaticFiles();
+			app.UseCookiePolicy();
 
 			app.UseAuthentication();
 
-			app.UseCookiePolicy();
-
-			app.UseMvc(routes =>
-			{
-				routes.MapRoute(
-					name: "default",
-					template: "{controller=Home}/{action=Index}/{id?}");
-			});
+			app.UseMvc();
 		}
 	}
 }
