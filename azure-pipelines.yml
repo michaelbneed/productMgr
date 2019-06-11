@@ -51,7 +51,7 @@ steps:
   displayName: "Copy Database Dacpac"
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: 'Database\bin\Debug\PM.Database.dacpac'
+    Contents: 'Database\bin\Output\PM.Database.dacpac'
     TargetFolder: '$(Build.ArtifactStagingDirectory)\Database'
 
 - task: PublishBuildArtifacts@1
