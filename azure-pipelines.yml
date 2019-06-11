@@ -11,6 +11,7 @@ pool:
 
 variables:
   solution: '**/*.sln'
+  projects: '**/*.csproj'
   adminUiProject: 'PM.UserAdmin.UI/PM.UserAdmin.UI.csproj'
   vendorUiProject: 'PM.Vendor.UI/PM.Vendor.UI.csproj'
   buildPlatform: 'Any CPU'
