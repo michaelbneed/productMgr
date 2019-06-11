@@ -36,9 +36,9 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: "Publish Admin UI - Dev"
   inputs:
-    command: 'publish'
+    command: 'build'
     publishWebProjects: false
-    arguments: '$(adminUiProject) /p:PublishProfile=Development'
+    arguments: '$(adminUiProject) /p:DeployOnBuild=true /p:PublishProfile=Development'
 
 - task: CopyFiles@2
   displayName: "Copy Admin UI - Dev File To Artifact"
@@ -50,9 +50,9 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: "Publish Vendor UI - Dev"
   inputs:
-    command: 'publish'
+    command: 'build'
     publishWebProjects: false
-    arguments: '$(vendorUiProject) /p:PublishProfile=Development'
+    arguments: '$(vendorUiProject) /p:DeployOnBuild=true /p:PublishProfile=Development'
 
 - task: CopyFiles@2
   displayName: "Copy Vendor UI - Dev File To Artifact"
