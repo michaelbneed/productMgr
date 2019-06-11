@@ -43,7 +43,7 @@ steps:
 - task: CopyFiles@2
   displayName: "Copy Database Dacpac"
   inputs:
-    SourceFolder: '$(Build.SourceDirectory)'
+    SourceFolder: '$(Build.SourcesDirectory)'
     Contents: 'Database\bin\Debug\PM.Database.dacpac'
     TargetFolder: '$(Build.ArtifactStagingDirectory)\Database'
 
