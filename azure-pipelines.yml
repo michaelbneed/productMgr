@@ -34,11 +34,10 @@ steps:
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
-  displayName: "Publish Admin UI - Dev"
   inputs:
-    command: 'build'
-    publishWebProjects: false
-    arguments: '$(adminUiProject) /p:DeployOnBuild=true /p:PublishProfile=Development'
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '/p:PublishProfile=Development'
 
 - task: CopyFiles@2
   displayName: "Copy Admin UI - Dev File To Artifact"
@@ -47,13 +46,6 @@ steps:
     Contents: |
       obj\Debug\netcoreapp2.2\PubTmp\Out\**
     TargetFolder: '$(Build.ArtifactStagingDirectory)\Dev\Admin'
-
-- task: DotNetCoreCLI@2
-  displayName: "Publish Vendor UI - Dev"
-  inputs:
-    command: 'build'
-    publishWebProjects: false
-    arguments: '$(vendorUiProject) /p:DeployOnBuild=true /p:PublishProfile=Development'
 
 - task: CopyFiles@2
   displayName: "Copy Vendor UI - Dev File To Artifact"
