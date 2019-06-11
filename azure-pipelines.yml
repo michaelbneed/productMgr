@@ -27,36 +27,42 @@ steps:
     version: '2.2.101'
 
 - task: DotNetCoreCLI@2
+  displayName: "Restore Packages"
   inputs:
     command: 'restore'
     projects: '$(projects)'
     feedsToUse: 'select'
 
 - task: DotNetCoreCLI@2
+  displayName: "Publish Admin UI - Dev"
   inputs:
     command: 'publish'
     publishWebProjects: false
-    arguments: '$(adminUiProject) /p:Development'
+    arguments: '$(adminUiProject) /p:PublishProfile=Development'
 
 - task: CopyFiles@2
+  displayName: "Copy Admin UI - Dev File To Artifact"
   inputs:
     SourceFolder: 'PM.UserAdmin.UI/Publish/Dev'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/Dev/Admin'
 
 - task: DotNetCoreCLI@2
+  displayName: "Publish Vendor UI - Dev"
   inputs:
     command: 'publish'
     publishWebProjects: false
-    arguments: '$(vendorUiProject) /p:Development'
+    arguments: '$(vendorUiProject) /p:PublishProfile=Development'
 
 - task: CopyFiles@2
+  displayName: "Copy Vendor UI - Dev File To Artifact"
   inputs:
     SourceFolder: 'PM.Vendor.UI/Publish/Dev'
     Contents: '**'
     TargetFolder: '$(Build.ArtifactStagingDirectory)/Dev/Vendor'
 
 - task: PublishBuildArtifacts@1
+  displayName: "Publish Artifact"
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
