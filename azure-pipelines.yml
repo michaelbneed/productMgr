@@ -44,7 +44,8 @@ steps:
   displayName: "Copy Admin UI - Dev File To Artifact"
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: 'PM.UserAdmin.UI\Publish\Dev\**'
+    Contents: |
+      PM.UserAdmin.UI\Publish\Dev\**
     TargetFolder: '$(Build.ArtifactStagingDirectory)\Dev\Admin'
 
 - task: DotNetCoreCLI@2
