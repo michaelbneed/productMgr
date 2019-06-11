@@ -45,7 +45,7 @@ steps:
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
     Contents: |
-      PM.UserAdmin.UI\Publish\Dev\**
+      obj\Debug\netcoreapp2.2\PubTmp\Out\**
     TargetFolder: '$(Build.ArtifactStagingDirectory)\Dev\Admin'
 
 - task: DotNetCoreCLI@2
