@@ -40,6 +40,13 @@ steps:
     publishWebProjects: true
     arguments: '--output $(Build.ArtifactStagingDirectory)/Dev /p:EnvironmentName=Development'
 
+- task: CopyFiles@2
+  displayName: "Copy Database Dacpac"
+  inputs:
+    SourceFolder: '$(Build.SourceDirectory)'
+    Contents: 'Database\bin\Debug\PM.Database.dacpac'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)\Database'
+
 - task: PublishBuildArtifacts@1
   displayName: "Publish Artifact"
   inputs:
