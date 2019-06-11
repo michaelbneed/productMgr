@@ -20,4 +20,9 @@
     <ProjectReference Include="..\PM.Database\PM.DatabaseOperations.csproj" />
   </ItemGroup>
 
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="" />
+  </Target>
+
 </Project>
