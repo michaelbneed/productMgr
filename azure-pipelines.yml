@@ -11,6 +11,7 @@ pool:
 
 variables:
   solution: '**/*.sln'
+  projects: '**/*.csproj'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
 
@@ -22,9 +23,11 @@ steps:
     packageType: 'sdk'
     version: '2.2.101'
 
-- task: NuGetCommand@2
+- task: DotNetCoreCLI@2
   inputs:
-    restoreSolution: '$(solution)'
+    command: 'restore'
+    projects: '$(projects)'
+    feedsToUse: 'select'
 
 - task: VSBuild@1
   inputs:
