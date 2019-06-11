@@ -40,6 +40,13 @@ steps:
     publishWebProjects: true
     arguments: '--output $(Build.ArtifactStagingDirectory)/Dev /p:EnvironmentName=Development'
 
+- task: VSBuild@1
+  displayName: "Build Database"
+  inputs:
+    solution: 'Database\PM.Database.sqlproj'
+    platform: 'Any CPU'
+    configuration: 'Debug'
+
 - task: CopyFiles@2
   displayName: "Copy Database Dacpac"
   inputs:
