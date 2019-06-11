@@ -21,6 +21,7 @@ steps:
 - task: NuGetToolInstaller@0
 
 - task: UseDotNet@2
+  displayName: "Install .NET Core 2.2.101"
   inputs:
     packageType: 'sdk'
     version: '2.2.101'
@@ -35,7 +36,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
-    arguments: '$(adminUiProject) /p:Development.pubxml'
+    arguments: '$(adminUiProject) /p:Development'
 
 - task: CopyFiles@2
   inputs:
@@ -47,7 +48,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
-    arguments: '$(vendorUiProject) /p:Development.pubxml'
+    arguments: '$(vendorUiProject) /p:Development'
 
 - task: CopyFiles@2
   inputs:
