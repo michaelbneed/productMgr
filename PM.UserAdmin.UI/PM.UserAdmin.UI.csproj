@@ -138,9 +138,4 @@
     </Content>
   </ItemGroup>
 
-
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="" />
-  </Target>
-
 </Project>
