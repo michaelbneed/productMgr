@@ -33,26 +33,12 @@ steps:
     projects: '$(projects)'
     feedsToUse: 'select'
 
-- task: DotNetCoreCLI@2
+task: DotNetCoreCLI@2
+  displayName: "Publish Web Apps (Dev)"
   inputs:
     command: 'publish'
     publishWebProjects: true
-    arguments: '/p:PublishProfile=Development'
-
-- task: CopyFiles@2
-  displayName: "Copy Admin UI - Dev File To Artifact"
-  inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: |
-      obj\Debug\netcoreapp2.2\PubTmp\Out\**
-    TargetFolder: '$(Build.ArtifactStagingDirectory)\Dev\Admin'
-
-- task: CopyFiles@2
-  displayName: "Copy Vendor UI - Dev File To Artifact"
-  inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: 'PM.Vendor.UI/Publish/Dev/**'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)/Dev/Vendor'
+    arguments: '--output $(Build.ArtifactStagingDirectory) /p:PublishProfile=Development'
 
 - task: PublishBuildArtifacts@1
   displayName: "Publish Artifact"
