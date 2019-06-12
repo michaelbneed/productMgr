@@ -4,9 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PM.DatabaseOperations.Models;
+using PM.Entity.Models;
 using PM.DatabaseOperations.Services;
 
 namespace PM.UserAdmin.UI.Controllers
@@ -61,11 +62,11 @@ namespace PM.UserAdmin.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,SupplierName,SupplierEmail,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Supplier supplier)
         {
-            if (ModelState.IsValid)
+	        var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+			if (ModelState.IsValid)
             {
 				if (User != null)
 				{
-					var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
 					supplier.CreatedBy = userFullName;
 				}
 
@@ -74,13 +75,14 @@ namespace PM.UserAdmin.UI.Controllers
 				_dbWriteService.Add(supplier);
 
                 await _dbWriteService.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+
+				return RedirectToAction(nameof(Index));
             }
             return View(supplier);
         }
 
         // GET: Suppliers/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {

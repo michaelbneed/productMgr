@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PM.DatabaseOperations.ViewModels;
+using PM.Entity.ViewModels;
 
 namespace PM.Vendor.UI.Controllers
 {

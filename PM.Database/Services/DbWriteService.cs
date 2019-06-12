@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using PM.DatabaseOperations.Models;
+using PM.Entity.Models;
 
 namespace PM.DatabaseOperations.Services
 {

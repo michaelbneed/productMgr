@@ -12,12 +12,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PM.DatabaseOperations.Models;
 using PM.DatabaseOperations.Services;
 using Microsoft.AspNetCore.Authentication.AzureADB2C.UI;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.IdentityModel.Logging;
+using PM.Entity.Models;
 
 namespace PM.Vendor.UI
 {
@@ -55,11 +55,13 @@ namespace PM.Vendor.UI
 
 			services.AddAuthentication(AzureADB2CDefaults.AuthenticationScheme).AddAzureADB2C(options => Configuration.Bind("AzureAdB2C", options)); ;
 
-			services.Configure<OpenIdConnectOptions>(AzureADB2CDefaults.OpenIdScheme, options =>
+			var myservice = services.Configure<OpenIdConnectOptions>(AzureADB2CDefaults.OpenIdScheme, options =>
 			{
 				options.Authority = String.Format(instance, tenant, signupPolicy);   
 				options.TokenValidationParameters.ValidateIssuer = false;
 			});
+
+			//tring auth = 
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 		}

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<PM.DatabaseOperations.Models.Supplier>
+﻿@model IEnumerable<PM.Entity.Models.Supplier>
 
 @{
     ViewData["Title"] = "Index";
@@ -56,7 +56,7 @@
             </td>
 	        <td>
 		        <a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a> 
-		        <a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">details</i></a> 
+		        <a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a> 
 		        <a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>
 	        </td>
         </tr>

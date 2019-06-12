@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PM.DatabaseOperations.ViewModels;
+using PM.Entity.ViewModels;
 
 namespace PM.UserAdmin.UI.Controllers
 {

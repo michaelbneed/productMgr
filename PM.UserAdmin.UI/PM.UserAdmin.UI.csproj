@@ -17,8 +17,9 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\PM.Common\PM.Common.csproj" />
-    <ProjectReference Include="..\PM.Database\PM.DatabaseOperations.csproj" />
+    <ProjectReference Include="..\PM.Auth\PM.Auth.csproj" />
+    <ProjectReference Include="..\PM.Common\PM.Entity.csproj" />
+    <ProjectReference Include="..\PM.Database\PM.DataAccess.csproj" />
   </ItemGroup>
 
 

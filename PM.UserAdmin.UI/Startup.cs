@@ -11,7 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PM.DatabaseOperations.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
-using PM.DatabaseOperations.Models;
+using PM.Entity.Models;
 
 namespace PM.UserAdmin.UI
 {
