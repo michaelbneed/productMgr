@@ -1,0 +1,62 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'vs2017-win2016'
+
+variables:
+  solution: '**/*.sln'
+  projects: '**/*.csproj'
+  adminUiProject: 'PM.UserAdmin.UI/PM.UserAdmin.UI.csproj'
+  vendorUiProject: 'PM.Vendor.UI/PM.Vendor.UI.csproj'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+
+steps:
+- task: NuGetToolInstaller@0
+
+- task: UseDotNet@2
+  displayName: "Install .NET Core 2.2.101"
+  inputs:
+    packageType: 'sdk'
+    version: '2.2.101'
+
+- task: DotNetCoreCLI@2
+  displayName: "Restore Packages"
+  inputs:
+    command: 'restore'
+    projects: '$(projects)'
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  displayName: "Publish Web Apps (Dev)"
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--output $(Build.ArtifactStagingDirectory)/Dev /p:EnvironmentName=Development'
+
+- task: VSBuild@1
+  displayName: "Build Database"
+  inputs:
+    solution: 'Database\PM.Database.sqlproj'
+    platform: 'Any CPU'
+    configuration: 'Debug'
+
+- task: CopyFiles@2
+  displayName: "Copy Database Dacpac"
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: 'Database\bin\Output\PM.Database.dacpac'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+- task: PublishBuildArtifacts@1
+  displayName: "Publish Artifact"
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'drop'
+    publishLocation: 'Container'
