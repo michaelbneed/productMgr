@@ -5,6 +5,7 @@
     [LastName]     VARCHAR (100) NULL,
     [EmailAddress] VARCHAR (200) NULL,
     [AuthID]       VARCHAR (100) NULL,
+    [Enabled]      BIT           NULL,
     [CreatedOn]    DATETIME      NULL,
     [CreatedBy]    VARCHAR (100) NULL,
     [UpdatedOn]    DATETIME      NULL,
@@ -12,6 +13,8 @@
     CONSTRAINT [PK_Table_1] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_User_Supplier] FOREIGN KEY ([SupplierID]) REFERENCES [dbo].[Supplier] ([ID])
 );
+
+
 
 
 

@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PM.DatabaseOperations.Services;
 using PM.Entity.Models;
 
 
@@ -13,16 +14,24 @@ namespace PM.UserAdmin.UI.Controllers
     public class RequestsController : Controller
     {
         private readonly VandivierProductManagerContext _context;
+        private readonly IDbReadService _dbReadService;
+        private readonly IDbWriteService _dbWriteService;
 
-        public RequestsController(VandivierProductManagerContext context)
+        public RequestsController(VandivierProductManagerContext context, IDbReadService dbReadService, IDbWriteService dbWriteService)
         {
             _context = context;
+            _dbReadService = dbReadService;
+            _dbWriteService = dbWriteService;
         }
 
         // GET: Requests
         public async Task<IActionResult> Index()
         {
-            var vandivierProductManagerContext = _context.Request.Include(r => r.Product).Include(r => r.RequestType).Include(r => r.StatusType).Include(r => r.Supplier);
+			_dbReadService.IncludeEntityNavigation<Product>();
+			_dbReadService.IncludeEntityNavigation<RequestType>();
+			_dbReadService.IncludeEntityNavigation<StatusType>();
+			_dbReadService.IncludeEntityNavigation<Supplier>();
+			var vandivierProductManagerContext = _context.Request.Include(r => r.Product).Include(r => r.RequestType).Include(r => r.StatusType).Include(r => r.Supplier);
             return View(await vandivierProductManagerContext.ToListAsync());
         }
 
@@ -33,6 +42,8 @@ namespace PM.UserAdmin.UI.Controllers
             {
                 return NotFound();
             }
+
+
 
             var request = await _context.Request
                 .Include(r => r.Product)

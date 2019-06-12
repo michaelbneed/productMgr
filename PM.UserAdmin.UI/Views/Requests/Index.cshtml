@@ -7,7 +7,7 @@
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+	<a asp-action="Create" title="Add a new Request"><i class="material-icons">add</i>Add Request</a>
 </p>
 <table class="table">
     <thead>
@@ -23,12 +23,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CreatedBy)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedOn)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UpdatedBy)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Product)
@@ -61,27 +55,21 @@
                 @Html.DisplayFor(modelItem => item.CreatedBy)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.UpdatedOn)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UpdatedBy)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.Product.ProductName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.RequestType.Id)
+                @Html.DisplayFor(modelItem => item.RequestType.RequestTypeName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StatusType.Id)
+                @Html.DisplayFor(modelItem => item.StatusType.StatusTypeName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Supplier.Id)
+                @Html.DisplayFor(modelItem => item.Supplier.SupplierName)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+	            <a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a> 
+	            <a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a> 
+	            <a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>
             </td>
         </tr>
 }

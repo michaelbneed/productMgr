@@ -10,6 +10,5 @@ namespace PM.DataAccess.Extensions
 		{
 			return new SelectList(entityItems, valueField, textField);
 		}
-		
 	}
 }
