@@ -162,5 +162,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Profiles\Development.publish.xml" />
+    <None Include="Profiles\Local.publish.xml" />
+    <None Include="Profiles\QA.publish.xml" />
   </ItemGroup>
 </Project>
