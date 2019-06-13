@@ -16,29 +16,29 @@ namespace PM.UserAdmin.UI.Controllers
 {
     public class UsersController : Controller
     {
-	    private VandivierProductManagerContext _context;
-	    private readonly Microsoft.Extensions.Configuration.IConfiguration Configuration;
+        private VandivierProductManagerContext _context;
+        private readonly Microsoft.Extensions.Configuration.IConfiguration Configuration;
         private readonly IDbReadService _dbReadService;
         private readonly IDbWriteService _dbWriteService;
 
-        public UsersController(VandivierProductManagerContext context, IConfiguration configuration, 
-	        IDbReadService dbReadService, IDbWriteService dbWriteService)
+        public UsersController(VandivierProductManagerContext context, IConfiguration configuration,
+            IDbReadService dbReadService, IDbWriteService dbWriteService)
 
-		{
-			_context = context;
-			Configuration = configuration;
-			_dbReadService = dbReadService;
-			_dbWriteService = dbWriteService;
-		}
-
-		// GET: Users
-		[Authorize]
-		public async Task<IActionResult> Index()
         {
-	        _dbReadService.IncludeEntityNavigation<Supplier>();
-			var users = await _dbReadService.GetAllRecordsAsync<User>();
-			return View(users);
-		}
+            _context = context;
+            Configuration = configuration;
+            _dbReadService = dbReadService;
+            _dbWriteService = dbWriteService;
+        }
+
+        // GET: Users
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+            _dbReadService.IncludeEntityNavigation<Supplier>();
+            var users = await _dbReadService.GetAllRecordsAsync<User>();
+            return View(users);
+        }
 
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -48,7 +48,7 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-			_dbReadService.IncludeEntityNavigation<Supplier>();
+            _dbReadService.IncludeEntityNavigation<Supplier>();
             var user = await _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
 
             if (user == null)
@@ -75,15 +75,26 @@ namespace PM.UserAdmin.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-	            GraphClient graphClient = new GraphClient(Configuration);
-	            graphClient.CreateUser(user, out var objectId);
+                var graphClient = new GraphClient(Configuration);
 
-				_dbWriteService.Add(user);
-                await _dbWriteService.SaveChangesAsync();
-				
-				return RedirectToAction(nameof(Index));
+                var graphResult = graphClient.CreateUser(user);
+
+                if (graphResult)
+                {
+                    _dbWriteService.Add(user);
+
+                    var saveResult = await _dbWriteService.SaveChangesAsync();
+
+                    if (saveResult)
+                        return RedirectToAction(nameof(Index));
+
+                    // Failed to save to the database, delete the user from the directory.
+                    graphClient.DeleteUser(user.AuthId);
+                }
             }
+
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", user.SupplierId);
+
             return View(user);
         }
 
@@ -96,7 +107,7 @@ namespace PM.UserAdmin.UI.Controllers
             }
 
             var user = await _dbReadService.GetSingleRecordAsync<User>(s => s.Id.Equals(id));
-			if (user == null)
+            if (user == null)
             {
                 return NotFound();
             }
@@ -148,10 +159,10 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-			_dbReadService.IncludeEntityNavigation<Supplier>();
-			var user = await _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
+            _dbReadService.IncludeEntityNavigation<Supplier>();
+            var user = await _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
 
-			if (user == null)
+            if (user == null)
             {
                 return NotFound();
             }
@@ -164,10 +175,16 @@ namespace PM.UserAdmin.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-			var user = await _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
-			
-			_dbWriteService.Delete(user);
-			await _context.SaveChangesAsync();
+            var user = await _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
+
+            var graphClient = new GraphClient(Configuration);
+            var graphResult = graphClient.DeleteUser(user.AuthId);
+
+            if (graphResult)
+            {
+                _dbWriteService.Delete(user);
+                await _context.SaveChangesAsync();
+            }
 
             return RedirectToAction(nameof(Index));
         }
