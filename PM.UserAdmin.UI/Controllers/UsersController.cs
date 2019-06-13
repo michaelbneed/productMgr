@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PM.Auth.GraphApi;
-using PM.DatabaseOperations.Services;
+using PM.Entity.Services;
 using PM.Entity.Models;
 
 namespace PM.UserAdmin.UI.Controllers
@@ -73,9 +73,17 @@ namespace PM.UserAdmin.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,SupplierId,FirstName,LastName,EmailAddress,AuthId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] User user)
         {
-            if (ModelState.IsValid)
+	        var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+
+			if (ModelState.IsValid)
             {
-                var graphClient = new GraphClient(Configuration);
+	            if (User != null)
+	            {
+		            user.CreatedBy = userFullName;
+	            }
+
+	            user.CreatedOn = DateTime.Now;
+				var graphClient = new GraphClient(Configuration);
 
                 var graphResult = graphClient.CreateUser(user);
 
@@ -131,7 +139,16 @@ namespace PM.UserAdmin.UI.Controllers
             {
                 try
                 {
-                    _dbWriteService.Update(user);
+	                if (User != null)
+	                {
+		                var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+		                user.UpdatedBy = userFullName;
+	                }
+
+	                user.UpdatedOn = DateTime.Now;
+
+					_dbWriteService.Update(user);
+
                     await _dbWriteService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
