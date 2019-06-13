@@ -51,12 +51,26 @@ steps:
   displayName: "Copy Database Dacpac"
   inputs:
     SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: 'Database\bin\Output\PM.Database.dacpac'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    Contents: 'Database/bin/Output/PM.Database.dacpac'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/Database'
+
+- task: CopyFiles@2
+  displayName: "Copy Database Profiles"
+  inputs:
+    SourceFolder: '$(Build.SourcesDirectory)'
+    Contents: 'Database/Profiles/**'
+    TargetFolder: '$(Build.ArtifactStagingDirectory)/Database'
 
 - task: PublishBuildArtifacts@1
   displayName: "Publish Artifact"
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
     ArtifactName: 'drop'
+    publishLocation: 'Container'
+
+- task: PublishBuildArtifacts@1
+  displayName: "Publish Database Artifact"
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/Database'
+    ArtifactName: 'Database'
     publishLocation: 'Container'
