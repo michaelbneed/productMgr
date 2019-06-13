@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PM.Auth.GraphApi;
-using PM.DatabaseOperations.Services;
+using PM.Entity.Services;
 using PM.Entity.Models;
 
 namespace PM.UserAdmin.UI.Controllers
@@ -75,7 +75,15 @@ namespace PM.UserAdmin.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-	            GraphClient graphClient = new GraphClient(Configuration);
+	            if (User != null)
+	            {
+		            var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+		            user.CreatedBy = userFullName;
+	            }
+
+	            user.CreatedOn = DateTime.Now;
+
+				GraphClient graphClient = new GraphClient(Configuration);
 	            graphClient.CreateUser(user, out var objectId);
 
 				_dbWriteService.Add(user);
@@ -120,13 +128,23 @@ namespace PM.UserAdmin.UI.Controllers
             {
                 try
                 {
-                    _dbWriteService.Update(user);
+	                if (User != null)
+	                {
+		                var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+		                user.UpdatedBy = userFullName;
+	                }
+
+	                user.UpdatedOn = DateTime.Now;
+
+					_dbWriteService.Update(user);
+
                     await _dbWriteService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.Id))
-                    {
+					bool result = await UserExists(user.Id);
+					if (!result)
+					{
                         return NotFound();
                     }
                     else
@@ -167,14 +185,15 @@ namespace PM.UserAdmin.UI.Controllers
 			var user = await _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
 			
 			_dbWriteService.Delete(user);
-			await _context.SaveChangesAsync();
+			await _dbWriteService.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserExists(int id)
+        private async Task<bool> UserExists(int id)
         {
-            return _context.User.Any(e => e.Id == id);
-        }
+			var user = _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
+			return await _dbReadService.DoesRecordExist<User>(e => user.Id == id);
+		}
     }
 }

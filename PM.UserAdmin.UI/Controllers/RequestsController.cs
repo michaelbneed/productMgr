@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PM.DatabaseOperations.Services;
+using PM.Entity.Services;
 using PM.Entity.Models;
 
 
@@ -31,8 +31,9 @@ namespace PM.UserAdmin.UI.Controllers
 			_dbReadService.IncludeEntityNavigation<RequestType>();
 			_dbReadService.IncludeEntityNavigation<StatusType>();
 			_dbReadService.IncludeEntityNavigation<Supplier>();
-			var vandivierProductManagerContext = _context.Request.Include(r => r.Product).Include(r => r.RequestType).Include(r => r.StatusType).Include(r => r.Supplier);
-            return View(await vandivierProductManagerContext.ToListAsync());
+
+			var requests = await _dbReadService.GetAllRecordsAsync<Request>();
+			return View(requests);
         }
 
         // GET: Requests/Details/5
@@ -43,15 +44,14 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
+            _dbReadService.IncludeEntityNavigation<Product>();
+            _dbReadService.IncludeEntityNavigation<RequestType>();
+            _dbReadService.IncludeEntityNavigation<StatusType>();
+            _dbReadService.IncludeEntityNavigation<Supplier>();
 
+            var request = await _dbReadService.GetSingleRecordAsync<Request>(r => r.Id.Equals(id));
 
-            var request = await _context.Request
-                .Include(r => r.Product)
-                .Include(r => r.RequestType)
-                .Include(r => r.StatusType)
-                .Include(r => r.Supplier)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (request == null)
+			if (request == null)
             {
                 return NotFound();
             }
@@ -78,10 +78,21 @@ namespace PM.UserAdmin.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(request);
-                await _context.SaveChangesAsync();
+	            if (User != null)
+	            {
+		            var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+		            request.CreatedBy = userFullName;
+	            }
+
+	            request.CreatedOn = DateTime.Now;
+
+				_dbWriteService.Add(request);
+
+                await _dbWriteService.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", request.ProductId);
             ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
             ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
@@ -97,11 +108,13 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            var request = await _context.Request.FindAsync(id);
+            var request = await _dbReadService.GetSingleRecordAsync<Request>(r => r.Id.Equals(id));
+
             if (request == null)
             {
                 return NotFound();
             }
+
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", request.ProductId);
             ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
             ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
@@ -125,13 +138,15 @@ namespace PM.UserAdmin.UI.Controllers
             {
                 try
                 {
-                    _context.Update(request);
-                    await _context.SaveChangesAsync();
+                    _dbWriteService.Update(request);
+
+                    await _dbWriteService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!RequestExists(request.Id))
-                    {
+					bool result = await RequestExists(request.Id);
+					if (!result)
+					{
                         return NotFound();
                     }
                     else
@@ -156,13 +171,14 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            var request = await _context.Request
-                .Include(r => r.Product)
-                .Include(r => r.RequestType)
-                .Include(r => r.StatusType)
-                .Include(r => r.Supplier)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (request == null)
+            _dbReadService.IncludeEntityNavigation<Product>();
+            _dbReadService.IncludeEntityNavigation<RequestType>();
+            _dbReadService.IncludeEntityNavigation<StatusType>();
+            _dbReadService.IncludeEntityNavigation<Supplier>();
+
+			var request = await _dbReadService.GetSingleRecordAsync<Request>(r => r.Id.Equals(id));
+
+			if (request == null)
             {
                 return NotFound();
             }
@@ -175,15 +191,24 @@ namespace PM.UserAdmin.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var request = await _context.Request.FindAsync(id);
-            _context.Request.Remove(request);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+			var request = await _dbReadService.GetSingleRecordAsync<Request>(r => r.Id.Equals(id));
+
+			_dbWriteService.Delete(request);
+
+            var response = await _dbWriteService.SaveChangesAsync();
+
+            if (!response)
+            {
+	            TempData["notifyUser"] = "This action could not be performed due to data constraints.";
+            }
+
+			return RedirectToAction(nameof(Index));
         }
 
-        private bool RequestExists(int id)
+        private async Task<bool> RequestExists(int id)
         {
-            return _context.Request.Any(e => e.Id == id);
-        }
+			var request = _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(id));
+			return await _dbReadService.DoesRecordExist<Request>(e => request.Id == id);
+		}
     }
 }

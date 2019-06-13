@@ -1,38 +1,34 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Hosting.Internal;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
 namespace PM.UserAdmin.UI.Controllers
 {
-    public class SuppliersController : Controller
+    public class ProductsController : Controller
     {
         private readonly IDbReadService _dbReadService;
         private readonly IDbWriteService _dbWriteService;
-        
-		public SuppliersController(IDbReadService dbReadService, IDbWriteService dbWriteService)
+
+		public ProductsController(IDbReadService dbReadService, IDbWriteService dbWriteService)
         {
             _dbReadService = dbReadService;
             _dbWriteService = dbWriteService;
         }
 
-		// GET: Suppliers
-		[Authorize]
-		public async Task<IActionResult> Index()
+        // GET: Products
+        public async Task<IActionResult> Index()
         {
-	        var suppliers = await _dbReadService.GetAllRecordsAsync<Supplier>();
-	        return View(suppliers);
-        }
+			var products = await _dbReadService.GetAllRecordsAsync<Product>();
+			return View(products);
+		}
 
-        // GET: Suppliers/Details/5
+        // GET: Products/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -40,73 +36,73 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            var supplier = await _dbReadService.GetSingleRecordAsync<Supplier>(s => s.Id.Equals(id));
+			var product = await _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(id));
 
-            if (supplier == null)
+			if (product == null)
             {
                 return NotFound();
             }
 
-            return View(supplier);
+            return View(product);
         }
 
-        // GET: Suppliers/Create
+        // GET: Products/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Suppliers/Create
+        // POST: Products/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,SupplierName,SupplierEmail,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Supplier supplier)
+        public async Task<IActionResult> Create([Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
         {
-	        if (ModelState.IsValid)
+            if (ModelState.IsValid)
             {
-				if (User != null)
-				{
-					var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
-					supplier.CreatedBy = userFullName;
-				}
+	            if(User != null)
+	            {
+		            var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+		            product.CreatedBy = userFullName;
+	            }
 
-				supplier.CreatedOn = DateTime.Now;
+	            product.CreatedOn = DateTime.Now;
 
-				_dbWriteService.Add(supplier);
+				_dbWriteService.Add(product);
 
                 await _dbWriteService.SaveChangesAsync();
 
-				return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index));
             }
-            return View(supplier);
+            return View(product);
         }
 
-        // GET: Suppliers/Edit/5
-		public async Task<IActionResult> Edit(int? id)
+        // GET: Products/Edit/5
+        public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var supplier = await _dbReadService.GetSingleRecordAsync<Supplier>(s => s.Id.Equals(id));
-            
-			if (supplier == null)
+			var product = await _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(id));
+
+			if (product == null)
             {
                 return NotFound();
             }
-            return View(supplier);
+            return View(product);
         }
 
-        // POST: Suppliers/Edit/5
+        // POST: Products/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,SupplierName,SupplierEmail,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Supplier supplier)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
         {
-            if (id != supplier.Id)
+            if (id != product.Id)
             {
                 return NotFound();
             }
@@ -118,20 +114,20 @@ namespace PM.UserAdmin.UI.Controllers
 	                if (User != null)
 	                {
 		                var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
-						supplier.UpdatedBy = userFullName;
+		                product.UpdatedBy = userFullName;
 	                }
 
-	                supplier.UpdatedOn = DateTime.Now;
+	                product.UpdatedOn = DateTime.Now;
 
-					_dbWriteService.Update(supplier);
+					_dbWriteService.Update(product);
 
                     await _dbWriteService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-	                bool result = await SupplierExists(supplier.Id);
-                    if (!result)
-                    {
+					bool result = await ProductExists(product.Id);
+					if (!result)
+					{
                         return NotFound();
                     }
                     else
@@ -141,10 +137,10 @@ namespace PM.UserAdmin.UI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(supplier);
+            return View(product);
         }
 
-        // GET: Suppliers/Delete/5
+        // GET: Products/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -152,39 +148,38 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-			var supplier = await _dbReadService.GetSingleRecordAsync<Supplier>(s => s.Id.Equals(id));
+			var product = await _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(id));
 
-			if (supplier == null)
+			if (product == null)
             {
                 return NotFound();
             }
 
-            return View(supplier);
+            return View(product);
         }
 
-        // POST: Suppliers/Delete/5
+        // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-			var supplier = await _dbReadService.GetSingleRecordAsync<Supplier>(s => s.Id.Equals(id));
+			var product = await _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(id));
 
-			_dbWriteService.Delete(supplier);
+			_dbWriteService.Delete(product);
 
 			var response = await _dbWriteService.SaveChangesAsync();
 
 			if (!response)
 			{
 				TempData["notifyUser"] = "This action could not be performed due to data constraints.";
-	        }
-
+			}
 			return RedirectToAction(nameof(Index));
         }
 
-        private async Task<bool> SupplierExists(int id)
+        private async Task<bool> ProductExists(int id)
         {
-	        var supplier = _dbReadService.GetSingleRecordAsync<Supplier>(s => s.Id.Equals(id));
-			return await _dbReadService.DoesRecordExist<Supplier>(e => supplier.Id == id);
-        }
+			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(id));
+			return await _dbReadService.DoesRecordExist<Product>(e => product.Id == id);
+		}
     }
 }

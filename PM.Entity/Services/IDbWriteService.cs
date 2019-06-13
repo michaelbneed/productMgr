@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace PM.DatabaseOperations.Services
+namespace PM.Entity.Services
 {
 	public interface IDbWriteService
 	{

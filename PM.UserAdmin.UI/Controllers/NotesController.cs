@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PM.DatabaseOperations.Services;
+using PM.Entity.Services;
 using PM.Entity.Models;
 
 namespace PM.UserAdmin.UI.Controllers
@@ -64,9 +66,20 @@ namespace PM.UserAdmin.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,NoteText,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
         {
-            if (ModelState.IsValid)
+	        var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+			
+			if (ModelState.IsValid)
             {
-                _dbWriteService.Add(note);
+	            if (User != null)
+	            {
+		            
+					note.CreatedBy = userFullName;
+	            }
+
+	            note.CreatedOn = DateTime.Now;
+
+				_dbWriteService.Add(note);
+
                 await _dbWriteService.SaveChangesAsync();
 
                 return RedirectToAction(nameof(Index));
@@ -100,7 +113,9 @@ namespace PM.UserAdmin.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,NoteText,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
         {
-            if (id != note.Id)
+	        var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+
+			if (id != note.Id)
             {
                 return NotFound();
             }
@@ -109,13 +124,21 @@ namespace PM.UserAdmin.UI.Controllers
             {
                 try
                 {
-                    _dbWriteService.Update(note);
+	                if (User != null)
+	                {
+		                note.UpdatedBy = userFullName;
+	                }
+
+	                note.UpdatedOn = DateTime.Now;
+					_dbWriteService.Update(note);
+
                     await _dbWriteService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!NoteExists(note.Id))
-                    {
+					bool result = await NoteExists(note.Id);
+					if (!result)
+					{
                         return NotFound();
                     }
                     else
@@ -161,9 +184,10 @@ namespace PM.UserAdmin.UI.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool NoteExists(int id)
+        private async Task<bool> NoteExists(int id)
         {
-            return _context.Note.Any(e => e.Id == id);
-        }
+			var note = _dbReadService.GetSingleRecordAsync<Note>(n => n.Id.Equals(id));
+			return await _dbReadService.DoesRecordExist<Note>(e => note.Id == id);
+		}
     }
 }

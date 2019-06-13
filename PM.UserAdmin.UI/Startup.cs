@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,14 +9,14 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using PM.DatabaseOperations.Services;
+using PM.Entity.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using PM.Entity.Models;
 
 namespace PM.UserAdmin.UI
 {
-	public class Startup
+	public class Startup 
 	{
 		public Startup(IConfiguration configuration)
 		{

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using PM.Entity.Models;
 
-namespace PM.DatabaseOperations.Services
+namespace PM.Entity.Services
 {
 	public class DbWriteService : IDbWriteService
 	{
