@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.UserAdmin.UI", "PM.UserA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.DataAccess", "PM.Database\PM.DataAccess.csproj", "{F75BEEC8-B16D-4374-A918-EEE8FC0A2788}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.Entity", "PM.Common\PM.Entity.csproj", "{1B1C18FE-CEA1-47ED-BD96-0DF4CF41AE86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.Entity", "PM.Entity\PM.Entity.csproj", "{1B1C18FE-CEA1-47ED-BD96-0DF4CF41AE86}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "PM.Database", "Database\PM.Database.sqlproj", "{150A7A51-CAC7-4082-B8E3-4DA2C53A1AF8}"
 EndProject

@@ -16,8 +16,8 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\PM.Common\PM.Entity.csproj" />
     <ProjectReference Include="..\PM.Database\PM.DataAccess.csproj" />
+    <ProjectReference Include="..\PM.Entity\PM.Entity.csproj" />
   </ItemGroup>
 
 </Project>
