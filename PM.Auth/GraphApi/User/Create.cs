@@ -1,4 +1,6 @@
-﻿namespace PM.Auth.GraphApi.User
+﻿using System.Collections.Generic;
+
+namespace PM.Auth.GraphApi.User
 {
     public class Create
     {
@@ -21,6 +23,8 @@
 
         public string Surname { get; set; }
 
-        public string SignInName { get; set; }
+        public PasswordProfile PasswordProfile { get; set; }
+
+        public List<SignInName> SignInNames { get; set; }
     }
 }

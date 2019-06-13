@@ -9,36 +9,36 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PM.Auth.GraphApi;
-using PM.Entity.Services;
+using PM.DatabaseOperations.Services;
 using PM.Entity.Models;
 
 namespace PM.UserAdmin.UI.Controllers
 {
     public class UsersController : Controller
     {
-	    private VandivierProductManagerContext _context;
-	    private readonly Microsoft.Extensions.Configuration.IConfiguration Configuration;
+        private VandivierProductManagerContext _context;
+        private readonly Microsoft.Extensions.Configuration.IConfiguration Configuration;
         private readonly IDbReadService _dbReadService;
         private readonly IDbWriteService _dbWriteService;
 
-        public UsersController(VandivierProductManagerContext context, IConfiguration configuration, 
-	        IDbReadService dbReadService, IDbWriteService dbWriteService)
+        public UsersController(VandivierProductManagerContext context, IConfiguration configuration,
+            IDbReadService dbReadService, IDbWriteService dbWriteService)
 
-		{
-			_context = context;
-			Configuration = configuration;
-			_dbReadService = dbReadService;
-			_dbWriteService = dbWriteService;
-		}
-
-		// GET: Users
-		[Authorize]
-		public async Task<IActionResult> Index()
         {
-	        _dbReadService.IncludeEntityNavigation<Supplier>();
-			var users = await _dbReadService.GetAllRecordsAsync<User>();
-			return View(users);
-		}
+            _context = context;
+            Configuration = configuration;
+            _dbReadService = dbReadService;
+            _dbWriteService = dbWriteService;
+        }
+
+        // GET: Users
+        [Authorize]
+        public async Task<IActionResult> Index()
+        {
+            _dbReadService.IncludeEntityNavigation<Supplier>();
+            var users = await _dbReadService.GetAllRecordsAsync<User>();
+            return View(users);
+        }
 
         // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -48,7 +48,7 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-			_dbReadService.IncludeEntityNavigation<Supplier>();
+            _dbReadService.IncludeEntityNavigation<Supplier>();
             var user = await _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
 
             if (user == null)
@@ -75,23 +75,26 @@ namespace PM.UserAdmin.UI.Controllers
         {
             if (ModelState.IsValid)
             {
-	            if (User != null)
-	            {
-		            var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
-		            user.CreatedBy = userFullName;
-	            }
+                var graphClient = new GraphClient(Configuration);
 
-	            user.CreatedOn = DateTime.Now;
+                var graphResult = graphClient.CreateUser(user);
 
-				GraphClient graphClient = new GraphClient(Configuration);
-	            graphClient.CreateUser(user, out var objectId);
+                if (graphResult)
+                {
+                    _dbWriteService.Add(user);
 
-				_dbWriteService.Add(user);
-                await _dbWriteService.SaveChangesAsync();
-				
-				return RedirectToAction(nameof(Index));
+                    var saveResult = await _dbWriteService.SaveChangesAsync();
+
+                    if (saveResult)
+                        return RedirectToAction(nameof(Index));
+
+                    // Failed to save to the database, delete the user from the directory.
+                    graphClient.DeleteUser(user.AuthId);
+                }
             }
+
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", user.SupplierId);
+
             return View(user);
         }
 
@@ -104,7 +107,7 @@ namespace PM.UserAdmin.UI.Controllers
             }
 
             var user = await _dbReadService.GetSingleRecordAsync<User>(s => s.Id.Equals(id));
-			if (user == null)
+            if (user == null)
             {
                 return NotFound();
             }
@@ -128,23 +131,13 @@ namespace PM.UserAdmin.UI.Controllers
             {
                 try
                 {
-	                if (User != null)
-	                {
-		                var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
-		                user.UpdatedBy = userFullName;
-	                }
-
-	                user.UpdatedOn = DateTime.Now;
-
-					_dbWriteService.Update(user);
-
+                    _dbWriteService.Update(user);
                     await _dbWriteService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-					bool result = await UserExists(user.Id);
-					if (!result)
-					{
+                    if (!UserExists(user.Id))
+                    {
                         return NotFound();
                     }
                     else
@@ -166,10 +159,10 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-			_dbReadService.IncludeEntityNavigation<Supplier>();
-			var user = await _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
+            _dbReadService.IncludeEntityNavigation<Supplier>();
+            var user = await _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
 
-			if (user == null)
+            if (user == null)
             {
                 return NotFound();
             }
@@ -182,18 +175,23 @@ namespace PM.UserAdmin.UI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-			var user = await _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
-			
-			_dbWriteService.Delete(user);
-			await _dbWriteService.SaveChangesAsync();
+            var user = await _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
+
+            var graphClient = new GraphClient(Configuration);
+            var graphResult = graphClient.DeleteUser(user.AuthId);
+
+            if (graphResult)
+            {
+                _dbWriteService.Delete(user);
+                await _context.SaveChangesAsync();
+            }
 
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task<bool> UserExists(int id)
+        private bool UserExists(int id)
         {
-			var user = _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
-			return await _dbReadService.DoesRecordExist<User>(e => user.Id == id);
-		}
+            return _context.User.Any(e => e.Id == id);
+        }
     }
 }

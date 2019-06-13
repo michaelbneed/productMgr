@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using PM.Auth.GraphApi.User;
 
 namespace PM.Auth.GraphApi
 {
@@ -21,12 +22,10 @@ namespace PM.Auth.GraphApi
 
 		private readonly string _tenant;
 		private readonly string _clientId;
-		private readonly string _signupPolicy;
 		private readonly string _clientSecret;
 	    private readonly string _instance;
 	    private readonly string _graphEndpoint;
 		private readonly string _graphVersion;
-		private readonly string _redirectUri;
 
 		
 	    public GraphClient(IConfiguration configuration)
@@ -35,12 +34,10 @@ namespace PM.Auth.GraphApi
 		    
 			_tenant = configuration.GetValue<string>("GraphApi:Tenant");
 			_clientId = configuration.GetValue<string>("GraphApi:ClientId"); 
-		    _signupPolicy = configuration.GetValue<string>("GraphApi:SignUpSignInPolicyId");
 			_clientSecret = configuration.GetValue<string>("GraphApi:ClientSecret");
 			_instance = configuration.GetValue<string>("GraphApi:Instance");
 		    _graphEndpoint = configuration.GetValue<string>("GraphApi:GraphEndpoint");
 			_graphVersion = configuration.GetValue<string>("GraphApi:GraphVersion");
-			_redirectUri = configuration.GetValue<string>("GraphApi:ReplyUri");
 
 			_authenticationContext = new AuthenticationContext($"{_instance}{_tenant}");
 
@@ -60,19 +57,30 @@ namespace PM.Auth.GraphApi
 			}
 		}
 
-		public bool CreateUser(Entity.Models.User model, out string objectId)
+		public bool CreateUser(Entity.Models.User model)
         {
             try
             {
-                var result = JObject.Parse(Post("/users", JsonConvert.SerializeObject(model, new JsonSerializerSettings() { ContractResolver = new CamelCasePropertyNamesContractResolver() })));
+                var password = PasswordGenerator.Generate();
+                var graphModel = new Create()
+                {
+                    AccountEnabled = true,
+                    GivenName = model.FirstName,
+                    Surname = model.LastName,
+                    PasswordProfile = new PasswordProfile() { Password = password },
+                    SignInNames = new List<SignInName>() { new SignInName() { Value = model.EmailAddress } }
+                };
+                var result = JObject.Parse(Post("/users", JsonConvert.SerializeObject(graphModel, new JsonSerializerSettings() { ContractResolver = new CamelCasePropertyNamesContractResolver() })));
 
-                objectId = result.Value<string>("objectId");
+                model.AuthId = result.Value<string>("objectId");
+
+                // TODO: Need to send the user and email with their password
 
                 return true;
             }
             catch(Exception e)
             {
-                objectId = null;
+                model.AuthId = null;
 
                 return false;
             }
