@@ -9,57 +9,58 @@
 <p>
 	<a asp-action="Create" title="Add a new Product"><i class="material-icons">add</i>Add Product</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Upccode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductLocation)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductCost)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProductPrice)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Upccode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductLocation)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductCost)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProductPrice)
-            </td>
-			<td>
-	            <a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a> 
-	            <a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a> 
-	            <a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>
-            </td>
-        </tr>
-}
-    </tbody>
+<table class="table table-striped" style="width:100%">
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.ProductName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ProductDescription)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Upccode)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ProductLocation)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ProductCost)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ProductPrice)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.DisplayFor(modelItem => item.ProductName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ProductDescription)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Upccode)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ProductLocation)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ProductCost)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ProductPrice)
+				</td>
+				<td>
+					<a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a>
+					<a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a>
+					<a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>
