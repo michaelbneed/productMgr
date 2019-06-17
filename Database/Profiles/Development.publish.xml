@@ -8,8 +8,8 @@
     <ProfileVersionNumber>1</ProfileVersionNumber>
     <BlockOnPossibleDataLoss>False</BlockOnPossibleDataLoss>
     <AllowIncompatiblePlatform>True</AllowIncompatiblePlatform>
-    <DropObjectsNotInSource>True</DropObjectsNotInSource>
-    <DoNotDropUsers>True</DoNotDropUsers>
-    <DoNotDropLogins>True</DoNotDropLogins>
+    <DropObjectsNotInSource>False</DropObjectsNotInSource>
+    <DoNotDropUsers>False</DoNotDropUsers>
+    <DoNotDropLogins>False</DoNotDropLogins>
   </PropertyGroup>
 </Project>
