@@ -9,5 +9,7 @@
     <BlockOnPossibleDataLoss>False</BlockOnPossibleDataLoss>
     <AllowIncompatiblePlatform>True</AllowIncompatiblePlatform>
     <DropObjectsNotInSource>True</DropObjectsNotInSource>
+    <DoNotDropLogins>True</DoNotDropLogins>
+    <DoNotDropUsers>True</DoNotDropUsers>
   </PropertyGroup>
 </Project>
