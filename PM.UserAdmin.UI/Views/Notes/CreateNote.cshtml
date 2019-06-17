@@ -14,7 +14,7 @@
 		<form asp-action="CreateNote">
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<div class="form-group">
-				<label asp-for="NoteText" class="control-label"></label>
+				<label asp-for="NoteText" class="control-label">Note</label>
 				<textarea asp-for="NoteText" rows="5" cols="200" class="form-control"></textarea>
 				<span asp-validation-for="NoteText" class="text-danger"></span>
 			</div>
