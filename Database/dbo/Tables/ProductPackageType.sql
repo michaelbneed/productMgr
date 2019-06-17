@@ -7,7 +7,7 @@
     [CreatedBy] VARCHAR (100) NULL,
     [UpdatedOn] DATETIME      NULL,
     [UpdatedBy] VARCHAR (100) NULL,
-    CONSTRAINT [PK_Package] PRIMARY KEY CLUSTERED ([ID] ASC),
+    CONSTRAINT [PK_ProductPackageType] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_ProductPackageType_Product] FOREIGN KEY ([ProductID]) REFERENCES [dbo].[Product] ([ID])
 );
 
