@@ -15,9 +15,10 @@ namespace PM.Entity.Models
         {
         }
 
+        public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<Note> Note { get; set; }
-        public virtual DbSet<Package> Package { get; set; }
         public virtual DbSet<Product> Product { get; set; }
+        public virtual DbSet<ProductPackageType> ProductPackageType { get; set; }
         public virtual DbSet<Request> Request { get; set; }
         public virtual DbSet<RequestType> RequestType { get; set; }
         public virtual DbSet<StatusType> StatusType { get; set; }
@@ -28,13 +29,22 @@ namespace PM.Entity.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-				optionsBuilder.UseSqlServer("Server=user-pc;Database=VandivierProductManager;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=user-pc;Database=VandivierProductManager;Trusted_Connection=True;");
             }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
+
+            modelBuilder.Entity<Category>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CategoryName)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+            });
 
             modelBuilder.Entity<Note>(entity =>
             {
@@ -62,48 +72,27 @@ namespace PM.Entity.Models
                     .HasConstraintName("FK_Notes_Request");
             });
 
-            modelBuilder.Entity<Package>(entity =>
-            {
-                entity.Property(e => e.Id).HasColumnName("ID");
-
-                entity.Property(e => e.CreatedBy)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
-
-                entity.Property(e => e.PackageName)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PackagePrice).HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.PackageSize).HasColumnType("decimal(18, 0)");
-
-                entity.Property(e => e.ProductId).HasColumnName("ProductID");
-
-                entity.Property(e => e.UpdatedBy)
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
-
-                entity.HasOne(d => d.Product)
-                    .WithMany(p => p.Package)
-                    .HasForeignKey(d => d.ProductId)
-                    .HasConstraintName("FK_Package_Product");
-            });
-
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
+
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.OrderWeek)
+                    .HasMaxLength(5)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.PackageSize).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.PackageType)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.ProductCost).HasColumnType("decimal(18, 0)");
 
@@ -128,6 +117,41 @@ namespace PM.Entity.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Category)
+                    .WithMany(p => p.Product)
+                    .HasForeignKey(d => d.CategoryId)
+                    .HasConstraintName("FK_Product_Category");
+            });
+
+            modelBuilder.Entity<ProductPackageType>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.Unit)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductPackageType)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("FK_ProductPackageType_Product");
             });
 
             modelBuilder.Entity<Request>(entity =>
@@ -205,11 +229,8 @@ namespace PM.Entity.Models
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
-                entity.Property(e => e.SupplierEmail)
-                    .HasMaxLength(200)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.SupplierName)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
@@ -236,14 +257,17 @@ namespace PM.Entity.Models
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.EmailAddress)
+                    .IsRequired()
                     .HasMaxLength(200)
                     .IsUnicode(false);
 
                 entity.Property(e => e.FirstName)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.LastName)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
 

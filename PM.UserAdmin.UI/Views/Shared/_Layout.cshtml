@@ -23,38 +23,27 @@
 <body>
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-			@*<div id="alertWindow" runat="server">
-				@Html.Raw(TempData["testmsg"])
-			</div>*@
 			<div class="container">
-				<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Vandivier PM</a>
+				<a class="navbar-brand" asp-area="" asp-controller="Requests" asp-action="Index">Vandivier PM</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				<div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse dropdown">
-					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Requests" asp-action="Index">Requests</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Notes" asp-action="Index">Notes</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
-						</li>
-					</ul>
 					<div style="position: absolute">
 						<button class="btn text-dark" type="button" data-toggle="dropdown">Admin</button>
 						<ul class="dropdown-menu">
 							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-controller="Suppliers" asp-action="Index" style="position: relative">Suppliers</a>
+								<a class="nav-link text-dark" asp-area="" asp-controller="Suppliers" asp-action="Index" style="position: relative">Supplier</a>
 							</li>
 							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index" style="position: relative">Users</a>
+								<a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index" style="position: relative">User</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Notes" asp-action="Index">Notes</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
 							</li>
 						</ul>
 					</div>

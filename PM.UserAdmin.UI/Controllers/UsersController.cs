@@ -31,16 +31,15 @@ namespace PM.UserAdmin.UI.Controllers
             _dbWriteService = dbWriteService;
         }
 
-        // GET: Users
         [Authorize]
         public async Task<IActionResult> Index()
         {
             _dbReadService.IncludeEntityNavigation<Supplier>();
             var users = await _dbReadService.GetAllRecordsAsync<User>();
-            return View(users);
+
+            return View(users.OrderBy(s => s.LastName));
         }
 
-        // GET: Users/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -59,16 +58,12 @@ namespace PM.UserAdmin.UI.Controllers
             return View(user);
         }
 
-        // GET: Users/Create
         public IActionResult Create()
         {
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
             return View();
         }
 
-        // POST: Users/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,SupplierId,FirstName,LastName,EmailAddress,AuthId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] User user)
@@ -106,7 +101,6 @@ namespace PM.UserAdmin.UI.Controllers
             return View(user);
         }
 
-        // GET: Users/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -123,9 +117,6 @@ namespace PM.UserAdmin.UI.Controllers
             return View(user);
         }
 
-        // POST: Users/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,SupplierId,FirstName,LastName,EmailAddress,AuthId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] User user)
@@ -168,7 +159,6 @@ namespace PM.UserAdmin.UI.Controllers
             return View(user);
         }
 
-        // GET: Users/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -187,7 +177,6 @@ namespace PM.UserAdmin.UI.Controllers
             return View(user);
         }
 
-        // POST: Users/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

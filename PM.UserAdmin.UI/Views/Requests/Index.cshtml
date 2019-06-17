@@ -1,72 +1,42 @@
 ﻿@model IEnumerable<PM.Entity.Models.Request>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Requests";
 }
 
-<h1>Index</h1>
+<h1 >Requests...</h1>
 
 <p>
-	<a asp-action="Create" title="Add a new Request"><i class="material-icons">add</i>Add Request</a>
+	<a asp-action="CreateRequest" title="Add a new Request"><i class="material-icons">add</i>Add Request</a>
 </p>
-<table class="table table-striped" style="width:100%">
-	<thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.RequestDescription)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.CreatedOn)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.CreatedBy)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Product)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.RequestType)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.StatusType)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Supplier)
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>
+@foreach (var item in Model)
+{
+	<div class="card border-dark mb-3" style="max-width: 54rem;">
+		<div class="card-header">
+			<div class="row">
+				<div class="col-sm-2">
 					@Html.DisplayFor(modelItem => item.RequestDescription)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.CreatedOn)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.CreatedBy)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Product.ProductName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.RequestType.RequestTypeName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.StatusType.StatusTypeName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Supplier.SupplierName)
-				</td>
-				<td>
+				</div>
+				<div class="col-sm-10" align="right">
 					<a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a>
 					<a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a>
 					<a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>
-				</td>
-			</tr>
-		}
-	</tbody>
-</table>
+				</div>
+			</div>
+		</div>
+		<div class="card-body text-dark">
+			<div class="row">
+				<div class="col-sm-6" style="padding-bottom: 10px">
+					<p class="card-text">Product: @Html.DisplayFor(modelItem => item.Product.ProductName)</p>
+					<p class="card-text">Submitted By: @Html.DisplayFor(modelItem => item.CreatedBy)</p>
+					<p class="card-text">Type: @Html.DisplayFor(modelItem => item.RequestType.RequestTypeName)</p>
+				</div>
+				<div class="col-sm-6">
+					<p class="card-text">Supplier: @Html.DisplayFor(modelItem => item.Supplier.SupplierName)</p>
+					<p class="card-text">Submitted On: @Html.DisplayFor(modelItem => item.CreatedOn)</p>
+					<p class="card-text">Status: @Html.DisplayFor(modelItem => item.StatusType.StatusTypeName)</p>
+				</div>
+			</div>
+		</div>
+	</div>
+}    

@@ -1,0 +1,49 @@
+﻿@model PM.Entity.Models.Request
+
+@{
+    ViewData["Title"] = "Product Request";
+}
+
+<h1>Create</h1>
+
+<h4>Request</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="CreateRequest">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="RequestDescription" class="control-label">Request</label>
+                <input asp-for="RequestDescription" class="form-control" />
+                <span asp-validation-for="RequestDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RequestTypeId" class="control-label">Type</label>
+                <select asp-for="RequestTypeId" class ="form-control" asp-items="ViewBag.RequestTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StatusTypeId" class="control-label">Type</label>
+                <select asp-for="StatusTypeId" class ="form-control" asp-items="ViewBag.StatusTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SupplierId" class="control-label">Supplier</label>
+                <select asp-for="SupplierId" class ="form-control" asp-items="ViewBag.SupplierId"></select>
+            </div>
+	        <input type="hidden" asp-for="CreatedBy" />
+	        <input type="hidden" asp-for="CreatedOn" />
+	        <input type="hidden" asp-for="UpdatedBy" />
+	        <input type="hidden" asp-for="UpdatedOn" />
+	        <div class="form-group">
+		       <input type="submit" value="Next >>>" class="btn btn-primary" />
+	        </div>
+        </form>
+    </div>
+</div>
+
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

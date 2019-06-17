@@ -10,37 +10,56 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="CreateProduct">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="ProductName" class="control-label"></label>
+                <label asp-for="ProductName" class="control-label">Product</label>
                 <input asp-for="ProductName" class="form-control" />
                 <span asp-validation-for="ProductName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductDescription" class="control-label"></label>
+                <label asp-for="ProductDescription" class="control-label">Description</label>
                 <input asp-for="ProductDescription" class="form-control" />
                 <span asp-validation-for="ProductDescription" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Upccode" class="control-label"></label>
+                <label asp-for="Upccode" class="control-label">UPC</label>
                 <input asp-for="Upccode" class="form-control" />
                 <span asp-validation-for="Upccode" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductLocation" class="control-label"></label>
+                <label asp-for="ProductLocation" class="control-label">Location</label>
                 <input asp-for="ProductLocation" class="form-control" />
                 <span asp-validation-for="ProductLocation" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductCost" class="control-label"></label>
+                <label asp-for="ProductCost" class="control-label">Cost</label>
                 <input asp-for="ProductCost" class="form-control" />
                 <span asp-validation-for="ProductCost" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductPrice" class="control-label"></label>
+                <label asp-for="ProductPrice" class="control-label">Price</label>
                 <input asp-for="ProductPrice" class="form-control" />
                 <span asp-validation-for="ProductPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PackageSize" class="control-label">Package Size</label>
+                <input asp-for="PackageSize" class="form-control" />
+                <span asp-validation-for="PackageSize" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PackageType" class="control-label">Package Type</label>
+                <input asp-for="PackageType" class="form-control" />
+                <span asp-validation-for="PackageType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrderWeek" class="control-label">Order Week</label>
+                <input asp-for="OrderWeek" class="form-control" />
+                <span asp-validation-for="OrderWeek" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label">Category</label>
+                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
             </div>
 	        <input type="hidden" asp-for="CreatedBy" />
 	        <input type="hidden" asp-for="CreatedOn" />
@@ -52,9 +71,8 @@
         </form>
     </div>
 </div>
-
 <div>
-    <a asp-action="Index">Back to List</a>
+	<a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {

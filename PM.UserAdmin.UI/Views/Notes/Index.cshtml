@@ -1,54 +1,40 @@
 ﻿@model IEnumerable<PM.Entity.Models.Note>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Notes";
 }
 
 <h1>Notes</h1>
 
-<p>
-	<a asp-action="Create" title="Add a new Note"><i class="material-icons">add</i>Add Note</a>
-</p>
-<table class="table table-striped" style="width:100%">
-	<thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.NoteText)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.CreatedOn)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.CreatedBy)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Request)
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
-			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.NoteText)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.CreatedOn)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.CreatedBy)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Request.RequestDescription)
-				</td>
-				<td>
-					<a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a> &nbsp;
-					<a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a> &nbsp;
+@foreach (var item in Model)
+{
+	<div class="card border-dark mb-3" style="max-width: 54rem;">
+		<div class="card-header">
+			<div class="row">
+				<div class="col-sm-2">
+					<p class="card-text">@Html.DisplayFor(modelItem => item.CreatedOn)</p>
+				</div>
+				<div class="col-sm-10" align="right">
+					<a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a>
+					<a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a>
 					<a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>
-				</td>
-			</tr>
-		}
-	</tbody>
-</table>
+				</div>
+			</div>
+		</div>
+		<div class="card-body text-dark">
+			<div class="row">
+				<div class="col-sm-6" style="padding-bottom: 10px">
+					<p class="card-text">Note: @Html.DisplayFor(modelItem => item.NoteText)</p>
+				</div>
+				<div class="col-sm-6">
+					<p class="card-text">Product: @Html.DisplayFor(modelItem => item.Request.Product.ProductName)</p>
+					<p class="card-text">Supplier: @Html.DisplayFor(modelItem => item.Request.Supplier.SupplierName)</p>
+					<a asp-controller="Requests" asp-action="Details" asp-route-id="@item.RequestId" class="control-label">
+						<p class="card-text">Request: @Html.DisplayFor(modelItem => item.Request.RequestDescription)</p>
+					</a><br />
+					<p class="card-text">Submitted By: @Html.DisplayFor(modelItem => item.CreatedBy)</p>
+				</div>
+			</div>
+		</div>
+	</div>
+}

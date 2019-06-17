@@ -7,66 +7,68 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Request</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RequestDescription)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RequestDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.CreatedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedOn)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.UpdatedBy)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Product)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Product.ProductName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.RequestType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.RequestType.Id)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StatusType)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StatusType.StatusTypeName)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Supplier)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Supplier.SupplierName)
-        </dd>
-    </dl>
+	<h4>Request</h4>
+	<hr />
+	<dl class="row">
+		<dt class = "col-sm-2">
+			Request
+		</dt>
+		<dd class = "col-sm-10">
+			@Html.DisplayFor(model => model.RequestDescription)
+		</dd>
+		<dt class = "col-sm-2">
+			Date
+		</dt>
+		<dd class = "col-sm-10">
+			@Html.DisplayFor(model => model.CreatedOn)
+		</dd>
+		<dt class = "col-sm-2">
+			User
+		</dt>
+		<dd class = "col-sm-10">
+			@Html.DisplayFor(model => model.CreatedBy)
+		</dd>
+		<dt class = "col-sm-2">
+			Updated
+		</dt>
+		<dd class = "col-sm-10">
+			@Html.DisplayFor(model => model.UpdatedOn)
+		</dd>
+		<dt class = "col-sm-2">
+			User
+		</dt>
+		<dd class = "col-sm-10">
+			@Html.DisplayFor(model => model.UpdatedBy)
+		</dd>
+		<dt class = "col-sm-2">
+			@Html.DisplayNameFor(model => model.Product)
+		</dt>
+		<dd class = "col-sm-10">
+			<a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId">@Html.DisplayFor(model => model.Product.ProductName)</a>
+		</dd>
+		<dt class = "col-sm-2">
+			Type
+		</dt>
+		<dd class = "col-sm-10">
+			@Html.DisplayFor(model => model.RequestType.RequestTypeName)
+		</dd>
+		<dt class = "col-sm-2">
+			Status
+		</dt>
+		<dd class = "col-sm-10">
+			@Html.DisplayFor(model => model.StatusType.StatusTypeName)
+		</dd>
+		<dt class = "col-sm-2">
+			@Html.DisplayNameFor(model => model.Supplier)
+		</dt>
+		<dd class = "col-sm-10">
+			@Html.DisplayFor(model => model.Supplier.SupplierName)
+		</dd>
+	</dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+	<a asp-controller="Notes" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-primary border-right-0">Notes</a>
+	<a asp-controller="Notes" asp-action="CreateNote" asp-route-id="@Model.Id" class="btn btn-warning">Create Note</a>
+	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-success">Edit Request</a> <br/>
+	<a asp-action="Index">Back to List</a>
 </div>

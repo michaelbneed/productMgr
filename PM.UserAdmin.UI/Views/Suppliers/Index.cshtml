@@ -15,10 +15,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.SupplierName)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SupplierEmail)
-            </th>
-            <th></th>
+	        <th></th>
         </tr>
     </thead>
     <tbody>
@@ -27,10 +24,7 @@
             <td>
                 @Html.DisplayFor(modelItem => item.SupplierName)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SupplierEmail)
-            </td>
-            <td>
+	        <td>
 		        <a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a> 
 		        <a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a> 
 		        <a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>

@@ -3,12 +3,11 @@ using System.Collections.Generic;
 
 namespace PM.Entity.Models
 {
-    public partial class Package
+    public partial class ProductPackageType
     {
         public int Id { get; set; }
-        public string PackageName { get; set; }
-        public decimal? PackagePrice { get; set; }
-        public decimal? PackageSize { get; set; }
+        public decimal? Quantity { get; set; }
+        public string Unit { get; set; }
         public int? ProductId { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }

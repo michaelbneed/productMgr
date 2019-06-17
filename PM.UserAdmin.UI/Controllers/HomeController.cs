@@ -7,15 +7,7 @@ namespace PM.UserAdmin.UI.Controllers
 {
 	public class HomeController : Controller
 	{
-		public HomeController()
-		{
-			
-		}
-
-		public IActionResult Index()
-		{
-			return View();
-		}
+		public HomeController(){}
 
 		public IActionResult Privacy()
 		{

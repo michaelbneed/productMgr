@@ -24,7 +24,16 @@ namespace PM.Entity.Services
 
 		public async Task<List<TEntity>> GetAllRecordsAsync<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : class
 		{
-			return await _db.Set<TEntity>().Where(expression).ToListAsync();
+			try
+			{
+				return await _db.Set<TEntity>().Where(expression).ToListAsync();
+			}
+			catch (Exception e)
+			{
+				Console.WriteLine(e);
+				throw;
+			}
+			
 		}
 
 		public async Task<TEntity> GetSingleRecordAsync<TEntity>(Expression<Func<TEntity, bool>> expression) where TEntity : class

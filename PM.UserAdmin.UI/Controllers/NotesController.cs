@@ -1,49 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
-using System.Security.Principal;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PM.Entity.Services;
 using PM.Entity.Models;
+using PM.Entity.Services;
 
 namespace PM.UserAdmin.UI.Controllers
 {
     public class NotesController : Controller
     {
-	    private VandivierProductManagerContext _context;
-		private readonly IDbReadService _dbReadService;
-	    private readonly IDbWriteService _dbWriteService;
+        private readonly VandivierProductManagerContext _context;
+        private readonly IDbReadService _dbReadService;
+        private readonly IDbWriteService _dbWriteService;
 
-        public NotesController(VandivierProductManagerContext context, IDbReadService dbReadService, IDbWriteService dbWriteService)
+		public NotesController(VandivierProductManagerContext context, IDbReadService dbReadService, IDbWriteService dbWriteService)
         {
-	        _context = context;
-	        _dbReadService = dbReadService;
-	        _dbWriteService = dbWriteService;
-        }
-
-        // GET: Notes
-        public async Task<IActionResult> Index()
-        {
-            _dbReadService.IncludeEntityNavigation<Request>();
-            var notes = await _dbReadService.GetAllRecordsAsync<Note>();
-            return View(notes);
+            _context = context;
+            _dbReadService = dbReadService;
+            _dbWriteService = dbWriteService;
 		}
 
-        // GET: Notes/Details/5
-        public async Task<IActionResult> Details(int? id)
+		[Authorize]
+		public async Task<IActionResult> Index(int? id)
+		{
+			_dbReadService.IncludeEntityNavigation<Request>();
+			List<Note> notes = null;
+			if (id > 0 || id != null) 
+			{
+				notes = await _dbReadService.GetAllRecordsAsync<Note>(s => s.RequestId.Equals(id));
+			}
+			else
+			{
+				notes = await _dbReadService.GetAllRecordsAsync<Note>();
+			}
+
+			notes.Reverse();
+
+			return View(notes);
+		}
+
+		public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+	        _dbReadService.IncludeEntityNavigation<Request>();
+			if (id == null)
             {
                 return NotFound();
             }
 
-            _dbReadService.IncludeEntityNavigation<Request>();
-            var note = await _dbReadService.GetSingleRecordAsync<Note>(n => n.Id.Equals(id));
+			_dbReadService.IncludeEntityNavigation<Request>();
 
+            var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.Id.Equals(id));
+                
             if (note == null)
             {
                 return NotFound();
@@ -52,53 +63,47 @@ namespace PM.UserAdmin.UI.Controllers
             return View(note);
         }
 
-        // GET: Notes/Create
-        public IActionResult Create()
-        {
-            ViewData["RequestId"] = new SelectList(_context.Request, "Id", "RequestDescription");
-            return View();
-        }
+		public IActionResult CreateNote(int? id)
+		{
+			_dbReadService.IncludeEntityNavigation<Request>();
+			return View();
+		}
 
-        // POST: Notes/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,NoteText,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
-        {
-	        var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
-			
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> CreateNote(int? id, [Bind("Id,NoteText,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
+		{
+			note.Id = 0;
 			if (ModelState.IsValid)
-            {
-	            if (User != null)
-	            {
-		            
+			{
+				if (User != null)
+				{
+					var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
 					note.CreatedBy = userFullName;
-	            }
+				}
 
-	            note.CreatedOn = DateTime.Now;
+				note.CreatedOn = DateTime.Now;
 
+				note.RequestId = id;
 				_dbWriteService.Add(note);
 
-                await _dbWriteService.SaveChangesAsync();
+				await _dbWriteService.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["RequestId"] = new SelectList(_context.Request, "Id", "RequestDescription", note.RequestId);
-            return View(note);
-        }
+				return RedirectToAction("Index", "Requests", new { id = note.RequestId });
+			}
+			return RedirectToAction("Details", "Requests", new { id = note.RequestId });
+		}
 
-        // GET: Notes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var note = await _dbReadService.GetSingleRecordAsync<Note>(n => n.Id.Equals(id));
+            var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.Id.Equals(id));
 
-			if (note == null)
+            if (note == null)
             {
                 return NotFound();
             }
@@ -106,16 +111,11 @@ namespace PM.UserAdmin.UI.Controllers
             return View(note);
         }
 
-        // POST: Notes/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,NoteText,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
         {
-	        var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
-
-			if (id != note.Id)
+            if (id != note.Id)
             {
                 return NotFound();
             }
@@ -124,14 +124,15 @@ namespace PM.UserAdmin.UI.Controllers
             {
                 try
                 {
-	                if (User != null)
-	                {
-		                note.UpdatedBy = userFullName;
-	                }
+					if (User != null)
+					{
+						var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+						note.UpdatedBy = userFullName;
+					}
 
-	                note.UpdatedOn = DateTime.Now;
+					note.UpdatedOn = DateTime.Now;
+
 					_dbWriteService.Update(note);
-
                     await _dbWriteService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -152,7 +153,6 @@ namespace PM.UserAdmin.UI.Controllers
             return View(note);
         }
 
-        // GET: Notes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -161,9 +161,10 @@ namespace PM.UserAdmin.UI.Controllers
             }
 
 			_dbReadService.IncludeEntityNavigation<Request>();
-			var note = await _dbReadService.GetSingleRecordAsync<Note>(u => u.Id.Equals(id));
 
-			if (note == null)
+            var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.Id.Equals(id));
+                
+            if (note == null)
             {
                 return NotFound();
             }
@@ -171,22 +172,27 @@ namespace PM.UserAdmin.UI.Controllers
             return View(note);
         }
 
-        // POST: Notes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var note = await _dbReadService.GetSingleRecordAsync<Note>(n => n.Id.Equals(id));
+            var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.Id.Equals(id));
 
-			_dbWriteService.Delete(note);
-            await _dbWriteService.SaveChangesAsync();
+            _dbWriteService.Delete(note);
 
-            return RedirectToAction(nameof(Index));
-        }
+			var response = await _dbWriteService.SaveChangesAsync();
 
-        private async Task<bool> NoteExists(int id)
-        {
-			var note = _dbReadService.GetSingleRecordAsync<Note>(n => n.Id.Equals(id));
+			if (!response)
+			{
+				TempData["notifyUser"] = "This action could not be performed due to data constraints.";
+			}
+
+			return RedirectToAction("Index", "Notes", new { id = note.RequestId });
+		}
+
+		private async Task<bool> NoteExists(int id)
+		{
+			var note = _dbReadService.GetSingleRecordAsync<Note>(s => s.Id.Equals(id));
 			return await _dbReadService.DoesRecordExist<Note>(e => note.Id == id);
 		}
     }

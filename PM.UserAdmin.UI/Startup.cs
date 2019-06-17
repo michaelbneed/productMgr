@@ -35,6 +35,8 @@ namespace PM.UserAdmin.UI
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
+			var conn = Configuration.GetConnectionString("Connection");
+
 			services.AddDbContext<VandivierProductManagerContext>(options =>
 				options.UseSqlServer(Configuration.GetConnectionString("Connection")));
 
@@ -79,7 +81,7 @@ namespace PM.UserAdmin.UI
 			{
 				routes.MapRoute(
 					name: "default",
-					template: "{controller=Home}/{action=Index}/{id?}");
+					template: "{controller=Requests}/{action=Index}/{id?}");
 			});
 		}
 	}
