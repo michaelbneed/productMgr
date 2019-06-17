@@ -39,7 +39,11 @@ namespace PM.UserAdmin.UI
 
 			services.AddDbContext<VandivierProductManagerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Connection")));
 
-		    services.AddAuthentication(AzureADDefaults.AuthenticationScheme).AddAzureAD(options => Configuration.Bind("AzureAd", options)).AddCookie();
+		    //services.AddAuthentication(AzureADDefaults.AuthenticationScheme).AddAzureAD(options => Configuration.Bind("AzureAd", options)).AddCookie();
+
+		    services.AddAuthentication(AzureADDefaults.AuthenticationScheme).AddAzureAD(AzureADDefaults.AuthenticationScheme,
+		        OpenIdConnectDefaults.AuthenticationScheme, CookieAuthenticationDefaults.AuthenticationScheme, "Test",
+		        options => Configuration.Bind("AzureAd", options));
 
             services.AddAuthorization(policies =>
             {

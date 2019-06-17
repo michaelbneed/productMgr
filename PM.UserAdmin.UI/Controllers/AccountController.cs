@@ -13,7 +13,7 @@ namespace PM.UserAdmin.UI.Controllers
         {
             var callbackUrl = Url.Action("Index", "Requests", values: null, protocol: Request.Scheme);
 
-            return SignOut( new AuthenticationProperties { RedirectUri = callbackUrl }, AzureADDefaults.AuthenticationScheme);
+            return SignOut( new AuthenticationProperties { RedirectUri = callbackUrl }, AzureADDefaults.AuthenticationScheme, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
         }
     }
 }
