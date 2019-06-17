@@ -29,7 +29,7 @@ namespace PM.Entity.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=user-pc;Database=VandivierProductManager;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=SQL2.corp.adaptivesys.com,1470;Database=Vandivier_PM_LOCAL;User ID=vandivierPmDev;Password=dev;MultipleActiveResultSets=true");
             }
         }
 
