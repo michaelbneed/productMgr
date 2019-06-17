@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PM.Entity.Models;
 using PM.Entity.Services;
+using PM.UserAdmin.UI.Security;
 
 namespace PM.UserAdmin.UI.Controllers
 {
@@ -24,7 +25,7 @@ namespace PM.UserAdmin.UI.Controllers
 	        _context = context;
         }
 
-		[Authorize]
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Index()
         {
 	        _dbReadService.IncludeEntityNavigation<Product>();

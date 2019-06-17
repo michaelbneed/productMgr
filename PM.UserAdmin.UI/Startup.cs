@@ -12,7 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using PM.Entity.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using PM.Entity.Models;
+using PM.UserAdmin.UI.Security;
 
 namespace PM.UserAdmin.UI
 {
@@ -35,13 +37,17 @@ namespace PM.UserAdmin.UI
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
-			var conn = Configuration.GetConnectionString("Connection");
+			services.AddDbContext<VandivierProductManagerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Connection")));
 
-			services.AddDbContext<VandivierProductManagerContext>(options =>
-				options.UseSqlServer(Configuration.GetConnectionString("Connection")));
+		    services.AddAuthentication(AzureADDefaults.AuthenticationScheme).AddAzureAD(options => Configuration.Bind("AzureAd", options)).AddCookie();
 
-			services.AddAuthentication(AzureADDefaults.AuthenticationScheme)
-				.AddAzureAD(options => Configuration.Bind("AzureAd", options));
+            services.AddAuthorization(policies =>
+            {
+                policies.AddPolicy(GroupAuthorization.AdminPolicyName, policy => policy.RequireAssertion(x => GroupAuthorization.AdminPolicyAssertion(x, Configuration)));
+                policies.AddPolicy(GroupAuthorization.HeadQuartersPolicyName, policy => policy.RequireAssertion(x => GroupAuthorization.AdminPolicyAssertion(x, Configuration)));
+                policies.AddPolicy(GroupAuthorization.StoreManagerPolicyName, policy => policy.RequireAssertion(x => GroupAuthorization.AdminPolicyAssertion(x, Configuration)));
+                policies.AddPolicy(GroupAuthorization.EmployeePolicyName, policy => policy.RequireAssertion(x => GroupAuthorization.AdminPolicyAssertion(x, Configuration)));
+            });
 
 			services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
 			{
@@ -56,7 +62,7 @@ namespace PM.UserAdmin.UI
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+	    // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
 			if (env.IsDevelopment())
