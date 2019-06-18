@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PM.Entity.Models;
 using PM.Entity.Services;
-using PM.DataAccess.Dto;
+using PM.UserAdmin.UI.Security;
 
 namespace PM.UserAdmin.UI.Controllers
 {
@@ -25,7 +25,7 @@ namespace PM.UserAdmin.UI.Controllers
 	        _context = context;
         }
 
-		[Authorize]
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Index()
         {
 	        _dbReadService.IncludeEntityNavigation<Product>();
@@ -36,15 +36,12 @@ namespace PM.UserAdmin.UI.Controllers
 			var requests = await _dbReadService.GetAllRecordsAsync<Request>();
 			requests.Reverse();
 
-			RequestDto.RequestId = null;
-			RequestDto.RequestDescription = null;
-
 			return View(requests);
 		}
 
         public async Task<IActionResult> Details(int? id)
         {
-	        if (id == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -55,8 +52,6 @@ namespace PM.UserAdmin.UI.Controllers
 			_dbReadService.IncludeEntityNavigation<Supplier>();
 
 			var request = await _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(id));
-			RequestDto.RequestId = request.Id;
-			RequestDto.RequestDescription = request.RequestDescription;
 
 			if (request == null)
             {
@@ -97,16 +92,12 @@ namespace PM.UserAdmin.UI.Controllers
 			ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
 			ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
 			ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", request.SupplierId);
-
-			RequestDto.RequestId = request.Id;
-			RequestDto.RequestDescription = request.RequestDescription;
-
 			return View(request);
 		}
 
 		public async Task<IActionResult> Edit(int? id)
         {
-	        if (id == null)
+            if (id == null)
             {
                 return NotFound();
             }
@@ -121,10 +112,6 @@ namespace PM.UserAdmin.UI.Controllers
 			ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
 			ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
 			ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", request.SupplierId);
-
-			RequestDto.RequestId = request.Id;
-			RequestDto.RequestDescription = request.RequestDescription;
-
 			return View(request);
         }
 
