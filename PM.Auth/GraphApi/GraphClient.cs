@@ -58,11 +58,12 @@ namespace PM.Auth.GraphApi
 			}
 		}
 
-		public bool CreateUser(Entity.Models.User model)
+		public bool CreateUser(Entity.Models.User model, out string password)
         {
             try
             {
-                var password = PasswordGenerator.Generate();
+                password = PasswordGenerator.Generate();
+
                 var graphModel = new Create()
                 {
                     AccountEnabled = true,
@@ -75,13 +76,13 @@ namespace PM.Auth.GraphApi
 
                 model.AuthId = result.Value<string>("objectId");
 
-                // TODO: Need to send the user and email with their password
-
                 return true;
             }
             catch(Exception e)
             {
                 model.AuthId = null;
+
+                password = null;
 
                 return false;
             }
