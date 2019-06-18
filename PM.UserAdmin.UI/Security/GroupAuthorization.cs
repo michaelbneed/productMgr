@@ -42,8 +42,7 @@ namespace PM.UserAdmin.UI.Security
             {
                 configuration.GetValue<string>("SecurityGroups:Admin"),
                 configuration.GetValue<string>("SecurityGroups:HeadQuarters"),
-                configuration.GetValue<string>("SecurityGroups:StoreManager"),
-                configuration.GetValue<string>("SecurityGroups:Employee")
+                configuration.GetValue<string>("SecurityGroups:StoreManager")
             };
 
             return context.User.Claims.Where(claim => claim.Type == "groups").Select(x => x).Any(x => allowedSecurityGroups.Contains(x.Value));

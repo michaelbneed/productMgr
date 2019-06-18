@@ -39,8 +39,6 @@ namespace PM.UserAdmin.UI
 
 			services.AddDbContext<VandivierProductManagerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Connection")));
 
-		    //services.AddAuthentication(AzureADDefaults.AuthenticationScheme).AddAzureAD(options => Configuration.Bind("AzureAd", options)).AddCookie();
-
 		    services.AddAuthentication(AzureADDefaults.AuthenticationScheme).AddAzureAD(AzureADDefaults.AuthenticationScheme,
 		        OpenIdConnectDefaults.AuthenticationScheme, CookieAuthenticationDefaults.AuthenticationScheme, "Test",
 		        options => Configuration.Bind("AzureAd", options));
@@ -48,9 +46,9 @@ namespace PM.UserAdmin.UI
             services.AddAuthorization(policies =>
             {
                 policies.AddPolicy(GroupAuthorization.AdminPolicyName, policy => policy.RequireAssertion(x => GroupAuthorization.AdminPolicyAssertion(x, Configuration)));
-                policies.AddPolicy(GroupAuthorization.HeadQuartersPolicyName, policy => policy.RequireAssertion(x => GroupAuthorization.AdminPolicyAssertion(x, Configuration)));
-                policies.AddPolicy(GroupAuthorization.StoreManagerPolicyName, policy => policy.RequireAssertion(x => GroupAuthorization.AdminPolicyAssertion(x, Configuration)));
-                policies.AddPolicy(GroupAuthorization.EmployeePolicyName, policy => policy.RequireAssertion(x => GroupAuthorization.AdminPolicyAssertion(x, Configuration)));
+                policies.AddPolicy(GroupAuthorization.HeadQuartersPolicyName, policy => policy.RequireAssertion(x => GroupAuthorization.HeadQuartersPolicyAssertion(x, Configuration)));
+                policies.AddPolicy(GroupAuthorization.StoreManagerPolicyName, policy => policy.RequireAssertion(x => GroupAuthorization.StoreManagersPolicyAssertion(x, Configuration)));
+                policies.AddPolicy(GroupAuthorization.EmployeePolicyName, policy => policy.RequireAssertion(x => GroupAuthorization.EmployeePolicyAssertion(x, Configuration)));
             });
 
 			services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
