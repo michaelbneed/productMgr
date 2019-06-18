@@ -78,7 +78,7 @@ namespace PM.UserAdmin.UI.Controllers
 	            }
 
 	            user.CreatedOn = DateTime.Now;
-				var graphClient = new GraphClient(Configuration);
+				var graphClient = new GraphClient(Configuration, true);
 
                 var graphResult = graphClient.CreateUser(user);
 
@@ -183,7 +183,7 @@ namespace PM.UserAdmin.UI.Controllers
         {
             var user = await _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
 
-            var graphClient = new GraphClient(Configuration);
+            var graphClient = new GraphClient(Configuration, true);
             var graphResult = graphClient.DeleteUser(user.AuthId);
 
             if (graphResult)
