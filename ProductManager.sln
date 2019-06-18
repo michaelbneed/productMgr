@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28307.645
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.UserAdmin.UI", "PM.UserAdmin.UI\PM.UserAdmin.UI.csproj", "{ED598FF5-92D9-4514-BC65-75AB33625804}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.DataAccess", "PM.Database\PM.DataAccess.csproj", "{F75BEEC8-B16D-4374-A918-EEE8FC0A2788}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.Business", "PM.Database\PM.Business.csproj", "{F75BEEC8-B16D-4374-A918-EEE8FC0A2788}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.Entity", "PM.Entity\PM.Entity.csproj", "{1B1C18FE-CEA1-47ED-BD96-0DF4CF41AE86}"
 EndProject
@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.Vendor.UI", "PM.Vendor.U
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.XUnit.Tests", "PM.XUnit.Tests\PM.XUnit.Tests.csproj", "{DA7B44BC-404D-45BD-B76B-D74736104C7F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PM.Auth", "PM.Auth\PM.Auth.csproj", "{4119FBF2-8268-4B62-AF7E-D69AB67AF4D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PM.Auth", "PM.Auth\PM.Auth.csproj", "{4119FBF2-8268-4B62-AF7E-D69AB67AF4D6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

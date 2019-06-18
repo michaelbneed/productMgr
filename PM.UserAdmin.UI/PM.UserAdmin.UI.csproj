@@ -19,12 +19,13 @@
     <PackageReference Include="Microsoft.AspNetCore.Authentication.AzureAD.UI" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.3" />
+    <PackageReference Include="Polly" Version="7.1.0" />
   </ItemGroup>
 
 
   <ItemGroup>
     <ProjectReference Include="..\PM.Auth\PM.Auth.csproj" />
-    <ProjectReference Include="..\PM.Database\PM.DataAccess.csproj" />
+    <ProjectReference Include="..\PM.Database\PM.Business.csproj" />
     <ProjectReference Include="..\PM.Entity\PM.Entity.csproj" />
   </ItemGroup>
 

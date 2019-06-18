@@ -24,7 +24,13 @@
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
 			<div class="container">
-				<a class="navbar-brand" asp-area="" asp-controller="Requests" asp-action="Index">Vandivier PM</a>
+				<a class="navbar-brand" asp-area="" asp-controller="Requests" asp-action="Index">Vandivier PM <i class="material-icons">home</i></a>
+				@if (@PM.DataAccess.Dto.RequestDto.RequestId != null)
+				{
+					<a asp-controller="Requests" asp-action="Details" asp-route-id=@PM.DataAccess.Dto.RequestDto.RequestId 
+					   class="nav-link text-dark small">Currently working request: @PM.DataAccess.Dto.RequestDto.RequestDescription</a>
+				}
+
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
@@ -38,12 +44,6 @@
 							</li>
 							<li class="nav-item">
 								<a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index" style="position: relative">User</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-controller="Notes" asp-action="Index">Notes</a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link text-dark" asp-area="" asp-controller="Products" asp-action="Index">Products</a>
 							</li>
 						</ul>
 					</div>

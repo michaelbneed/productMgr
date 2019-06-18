@@ -4,12 +4,11 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Edit this note</h1>
 
-<h4>Note</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -33,7 +32,11 @@
 </div>
 
 <div>
-	<a asp-action="Index" asp-route-id="@Model.RequestId">Back to List</a>
+	<a asp-action="Index" asp-route-id="@Model.RequestId">Back to Note List</a> <br />
+	@if (@PM.DataAccess.Dto.RequestDto.RequestId != null)
+	{
+		<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.DataAccess.Dto.RequestDto.RequestId">Back to Request</a>
+	}
 </div>
 
 @section Scripts {

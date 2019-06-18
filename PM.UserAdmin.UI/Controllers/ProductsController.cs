@@ -144,11 +144,10 @@ namespace PM.UserAdmin.UI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("Details", "Products", new { id = product.Id });
             }
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
-            return View(product);
-        }
+			return RedirectToAction("Details", "Products", new { id = product.Id });
+		}
 
         public async Task<IActionResult> Delete(int? id)
         {

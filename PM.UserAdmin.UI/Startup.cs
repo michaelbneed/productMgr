@@ -13,6 +13,7 @@ using PM.Entity.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using PM.Entity.Models;
+using Polly;
 
 namespace PM.UserAdmin.UI
 {

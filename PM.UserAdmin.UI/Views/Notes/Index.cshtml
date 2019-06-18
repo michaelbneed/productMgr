@@ -5,15 +5,19 @@
 }
 
 <h1>Notes</h1>
+@if (@PM.DataAccess.Dto.RequestDto.RequestId != null)
+	{
+		<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.DataAccess.Dto.RequestDto.RequestId">Back to Request</a> <br />
+	}
 
 @foreach (var item in Model)
 {
-	<div class="card border-dark mb-3" style="max-width: 54rem;">
+	<div class="card border-primary mb-3" style="max-width: 100%;">
 		<div class="card-header">
 			<div class="row">
-				<div class="col-sm-2">
+				<h6 class="col-sm-2">
 					<p class="card-text">@Html.DisplayFor(modelItem => item.CreatedOn)</p>
-				</div>
+				</h6>
 				<div class="col-sm-10" align="right">
 					<a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a>
 					<a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a>

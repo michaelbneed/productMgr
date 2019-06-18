@@ -4,9 +4,8 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<h1>Add a product</h1>
 
-<h4>Product</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -66,13 +65,17 @@
 	        <input type="hidden" asp-for="UpdatedBy" />
 	        <input type="hidden" asp-for="UpdatedOn" />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create" class="btn btn-success" />
             </div>
         </form>
     </div>
 </div>
 <div>
-	<a asp-action="Index">Back to List</a>
+	@if (@PM.DataAccess.Dto.RequestDto.RequestId != null)
+	{
+		<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.DataAccess.Dto.RequestDto.RequestId">Back to Request</a> <br />
+	}
+	<a asp-action="Index" asp-controller="Requests">Back to List</a>
 </div>
 
 @section Scripts {

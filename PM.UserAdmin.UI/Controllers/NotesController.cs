@@ -65,7 +65,6 @@ namespace PM.UserAdmin.UI.Controllers
 
 		public IActionResult CreateNote(int? id)
 		{
-			_dbReadService.IncludeEntityNavigation<Request>();
 			return View();
 		}
 
@@ -88,10 +87,8 @@ namespace PM.UserAdmin.UI.Controllers
 				_dbWriteService.Add(note);
 
 				await _dbWriteService.SaveChangesAsync();
-
-				return RedirectToAction("Index", "Requests", new { id = note.RequestId });
 			}
-			return RedirectToAction("Details", "Requests", new { id = note.RequestId });
+			return RedirectToAction("Index", "Notes", new { id = note.RequestId });
 		}
 
 		public async Task<IActionResult> Edit(int? id)
@@ -147,11 +144,10 @@ namespace PM.UserAdmin.UI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["RequestId"] = new SelectList(_context.Request, "Id", "RequestDescription", note.RequestId);
-            return View(note);
-        }
+			return RedirectToAction("Index", "Notes", new { id = note.RequestId });
+		}
 
         public async Task<IActionResult> Delete(int? id)
         {

@@ -4,9 +4,7 @@
 	ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
-
-<h4>Note</h4>
+<h1>Add a note</h1>
 
 <hr />
 <div class="row">
@@ -30,7 +28,8 @@
 </div>
 
 <div>
-	<a asp-action="Index">Back to List</a>
+	<a asp-action="Index" asp-route-id="@PM.DataAccess.Dto.RequestDto.RequestId">Back to Note List</a> <br />
+	<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.DataAccess.Dto.RequestDto.RequestId">Back to Request</a>
 </div>
 
 @section Scripts {

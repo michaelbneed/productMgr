@@ -16,7 +16,7 @@
 
 
   <ItemGroup>
-    <ProjectReference Include="..\PM.Database\PM.DataAccess.csproj" />
+    <ProjectReference Include="..\PM.Database\PM.Business.csproj" />
     <ProjectReference Include="..\PM.Entity\PM.Entity.csproj" />
   </ItemGroup>
 
