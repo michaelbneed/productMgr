@@ -20,5 +20,6 @@ namespace PM.Entity.Models
 
         public virtual ICollection<Request> Request { get; set; }
         public virtual ICollection<User> User { get; set; }
-    }
+        public virtual ICollection<ProductPackageType> ProductPackageType { get; set; }
+	}
 }

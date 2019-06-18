@@ -4,12 +4,11 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+<h1>Edit this product</h1>
 
-<h4>Product</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-5">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
@@ -69,15 +68,17 @@
             <input type="hidden" asp-for="UpdatedOn" />
             <div class="form-group">
 	            <input type="submit" value="Save" class="btn btn-primary" />
-	            <a asp-controller="" asp-action="" asp-route-id="@Model.Id" class="btn btn-warning">Packages</a>
-	            <a asp-controller="" asp-action="" asp-route-id="@Model.Id" class="btn btn-success">Create Package</a>
             </div>
         </form>
     </div>
 </div>
 
 <div>
-	<a asp-controller="Requests" asp-action="Index">Back to List</a>
+	@if (@PM.DataAccess.Dto.RequestDto.RequestId != null)
+	{
+		<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.DataAccess.Dto.RequestDto.RequestId">Back to Request</a> <br />
+	}
+	<a asp-controller="Requests" asp-action="Index">Back to Request List</a>
 </div>
 
 @section Scripts {

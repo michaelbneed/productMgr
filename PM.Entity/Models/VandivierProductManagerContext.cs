@@ -148,7 +148,15 @@ namespace PM.Entity.Models
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
-                entity.HasOne(d => d.Product)
+                entity.Property(e => e.AlternateProductName);
+                entity.Property(e => e.AlternateProductUpcCode);
+                entity.Property(e => e.SupplierData);
+                entity.Property(e => e.SupplierId).HasColumnName("SupplierId");
+
+                entity.Property(e => e.AlternateProductPrice).HasColumnType("decimal(18, 0)");
+				entity.Property(e => e.AlternateProductCost).HasColumnType("decimal(18, 0)");
+
+				entity.HasOne(d => d.Product)
                     .WithMany(p => p.ProductPackageType)
                     .HasForeignKey(d => d.ProductId)
                     .HasConstraintName("FK_ProductPackageType_Product");
