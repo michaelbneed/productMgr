@@ -31,10 +31,10 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-	            @if (@PM.DataAccess.Dto.RequestDto.RequestId != null)
+	            @if (@PM.Business.Dto.RequestDto.RequestId != null)
 	            {
-		            <a asp-controller="Requests" asp-action="Details" asp-route-id=@PM.DataAccess.Dto.RequestDto.RequestId 
-		               class="nav-link text-dark small">Currently working request: @PM.DataAccess.Dto.RequestDto.RequestDescription</a>
+		            <a asp-controller="Requests" asp-action="Details" asp-route-id=@PM.Business.Dto.RequestDto.RequestId 
+		               class="nav-link text-dark small">Currently working request: @PM.Business.Dto.RequestDto.RequestDescription</a>
 	            }
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse dropdown">
                     <ul class="nav navbar-nav navbar-right">

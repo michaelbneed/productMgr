@@ -33,9 +33,9 @@
 
 <div>
 	<a asp-action="Index" asp-route-id="@Model.RequestId">Back to Note List</a> <br />
-	@if (@PM.DataAccess.Dto.RequestDto.RequestId != null)
+	@if (@PM.Business.Dto.RequestDto.RequestId != null)
 	{
-		<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.DataAccess.Dto.RequestDto.RequestId">Back to Request</a>
+		<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a>
 	}
 </div>
 

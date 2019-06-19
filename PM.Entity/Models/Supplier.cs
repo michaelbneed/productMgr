@@ -7,6 +7,7 @@ namespace PM.Entity.Models
     {
         public Supplier()
         {
+            ProductPackageType = new HashSet<ProductPackageType>();
             Request = new HashSet<Request>();
             User = new HashSet<User>();
         }
@@ -18,8 +19,8 @@ namespace PM.Entity.Models
         public DateTime? UpdatedOn { get; set; }
         public string UpdatedBy { get; set; }
 
+        public virtual ICollection<ProductPackageType> ProductPackageType { get; set; }
         public virtual ICollection<Request> Request { get; set; }
         public virtual ICollection<User> User { get; set; }
-        public virtual ICollection<ProductPackageType> ProductPackageType { get; set; }
-	}
+    }
 }
