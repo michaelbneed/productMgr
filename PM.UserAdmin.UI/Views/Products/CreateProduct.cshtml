@@ -56,24 +56,28 @@
                 <input asp-for="OrderWeek" class="form-control" />
                 <span asp-validation-for="OrderWeek" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label">Category</label>
-                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
-            </div>
+	        <div class="form-group">
+		        <label asp-for="CategoryId" class="control-label">Category</label>
+		        <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+	        </div>
+	        <div class="form-group">
+		        <label asp-for="AlternateProductPackage" class="control-label">Create Package?</label>
+		        <input asp-for="AlternateProductPackage" class ="form-control" />
+	        </div>
 	        <input type="hidden" asp-for="CreatedBy" />
 	        <input type="hidden" asp-for="CreatedOn" />
 	        <input type="hidden" asp-for="UpdatedBy" />
 	        <input type="hidden" asp-for="UpdatedOn" />
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-success" />
-            </div>
+	        <div class="form-group">
+		        <input type="submit" value="Create" class="btn btn-success" />
+	        </div>
         </form>
     </div>
 </div>
 <div>
-	@if (@PM.DataAccess.Dto.RequestDto.RequestId != null)
+	@if (@PM.Business.Dto.RequestDto.RequestId != null)
 	{
-		<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.DataAccess.Dto.RequestDto.RequestId">Back to Request</a> <br />
+		<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a> <br />
 	}
 	<a asp-action="Index" asp-controller="Requests">Back to List</a>
 </div>

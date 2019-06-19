@@ -29,7 +29,7 @@ namespace PM.Entity.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=SQL2.corp.adaptivesys.com,1470;Database=Vandivier_PM_LOCAL;User ID=vandivierPmDev;Password=dev;MultipleActiveResultSets=true");
+				optionsBuilder.UseSqlServer("Server=SQL2.corp.adaptivesys.com,1470;Database=Vandivier_PM_LOCAL;User ID=vandivierPmDev;Password=dev;MultipleActiveResultSets=true");
             }
         }
 
@@ -128,6 +128,19 @@ namespace PM.Entity.Models
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
+                entity.Property(e => e.AlternateProductCost).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.AlternateProductName)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.AlternateProductPrice).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.AlternateProductUpccode)
+                    .HasColumnName("AlternateProductUPCCode")
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
                     .IsUnicode(false);
@@ -137,6 +150,12 @@ namespace PM.Entity.Models
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
                 entity.Property(e => e.Quantity).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.SupplierData)
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SupplierId).HasColumnName("SupplierID");
 
                 entity.Property(e => e.Unit)
                     .HasMaxLength(50)
@@ -148,18 +167,15 @@ namespace PM.Entity.Models
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
-                entity.Property(e => e.AlternateProductName);
-                entity.Property(e => e.AlternateProductUpcCode);
-                entity.Property(e => e.SupplierData);
-                entity.Property(e => e.SupplierId).HasColumnName("SupplierId");
-
-                entity.Property(e => e.AlternateProductPrice).HasColumnType("decimal(18, 0)");
-				entity.Property(e => e.AlternateProductCost).HasColumnType("decimal(18, 0)");
-
-				entity.HasOne(d => d.Product)
+                entity.HasOne(d => d.Product)
                     .WithMany(p => p.ProductPackageType)
                     .HasForeignKey(d => d.ProductId)
                     .HasConstraintName("FK_ProductPackageType_Product");
+
+                entity.HasOne(d => d.Supplier)
+                    .WithMany(p => p.ProductPackageType)
+                    .HasForeignKey(d => d.SupplierId)
+                    .HasConstraintName("FK_ProductPackageType_Supplier");
             });
 
             modelBuilder.Entity<Request>(entity =>

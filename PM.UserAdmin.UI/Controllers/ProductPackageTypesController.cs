@@ -1,31 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PM.Business.Dto;
 using PM.Entity.Models;
+using PM.Entity.Services;
 
 namespace PM.UserAdmin.UI.Controllers
 {
     public class ProductPackageTypesController : Controller
     {
         private readonly VandivierProductManagerContext _context;
+        private readonly IDbReadService _dbReadService;
+        private readonly IDbWriteService _dbWriteService;
+        public bool myCheckbox;
 
-        public ProductPackageTypesController(VandivierProductManagerContext context)
+        public ProductPackageTypesController(VandivierProductManagerContext context, IDbReadService dbReadService, IDbWriteService dbWriteService)
         {
             _context = context;
-        }
+            _dbReadService = dbReadService;
+            _dbWriteService = dbWriteService;
+		}
 
-        // GET: ProductPackageTypes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            var vandivierProductManagerContext = _context.ProductPackageType.Include(p => p.Product);
-            return View(await vandivierProductManagerContext.ToListAsync());
+	        _dbReadService.IncludeEntityNavigation<Supplier>();
+			_dbReadService.IncludeEntityNavigation<Product>();
+
+            var packages = await _dbReadService.GetAllRecordsAsync<ProductPackageType>(s => s.ProductId.Equals(id));
+			packages.Reverse();
+
+            return View(packages);
         }
 
-        // GET: ProductPackageTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,10 +44,10 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            var productPackageType = await _context.ProductPackageType
-                .Include(p => p.Product)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (productPackageType == null)
+            _dbReadService.IncludeEntityNavigation<Supplier>();
+			var productPackageType = await _dbReadService.GetSingleRecordAsync<ProductPackageType>(p => p.Id.Equals(id));
+
+			if (productPackageType == null)
             {
                 return NotFound();
             }
@@ -44,31 +55,40 @@ namespace PM.UserAdmin.UI.Controllers
             return View(productPackageType);
         }
 
-        // GET: ProductPackageTypes/Create
-        public IActionResult Create()
+        public IActionResult Create(int? id)
         {
-            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName");
+	        ViewData["ProductId"] = id;
+            ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
             return View();
         }
 
-        // POST: ProductPackageTypes/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Quantity,Unit,AlternateProductName,AlternateProductUpcCode,Supplier,SupplierId,AlternateProductPrice,AlternateProductCost,ProductId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] ProductPackageType productPackageType)
+        public async Task<IActionResult> Create(int id, [Bind("Id,Quantity,Unit,AlternateProductName,AlternateProductUpcCode,SupplierData,SupplierId,AlternateProductPrice,AlternateProductCost,ProductId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] ProductPackageType productPackageType)
         {
+	        productPackageType.Id = 0;
             if (ModelState.IsValid)
             {
-                _context.Add(productPackageType);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", productPackageType.ProductId);
-            return View(productPackageType);
-        }
+	            if (User != null)
+	            {
+		            var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+		            productPackageType.CreatedBy = userFullName;
+	            }
 
-        // GET: ProductPackageTypes/Edit/5
+	            productPackageType.CreatedOn = DateTime.Now;
+
+	            productPackageType.ProductId = id;
+	            _dbWriteService.Add(productPackageType);
+
+                await _dbWriteService.SaveChangesAsync();
+            }
+
+            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", productPackageType.ProductId);
+            ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", productPackageType.SupplierId);
+
+            return RedirectToAction("Create", "ProductPackageTypes", new { id = productPackageType.Id });
+		}
+
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -76,21 +96,21 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            var productPackageType = await _context.ProductPackageType.FindAsync(id);
-            if (productPackageType == null)
+            var productPackageType = await _dbReadService.GetSingleRecordAsync<ProductPackageType>(p => p.Id.Equals(id));
+
+			if (productPackageType == null)
             {
                 return NotFound();
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", productPackageType.ProductId);
+            ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", productPackageType.SupplierId);
+
             return View(productPackageType);
         }
 
-        // POST: ProductPackageTypes/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Quantity,Unit,AlternateProductName,AlternateProductUpcCode,Supplier,SupplierId,AlternateProductPrice,AlternateProductCost,ProductId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] ProductPackageType productPackageType)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Quantity,Unit,AlternateProductName,AlternateProductUpcCode,SupplierData,SupplierId,AlternateProductPrice,AlternateProductCost,ProductId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] ProductPackageType productPackageType)
         {
             if (id != productPackageType.Id)
             {
@@ -101,12 +121,21 @@ namespace PM.UserAdmin.UI.Controllers
             {
                 try
                 {
-                    _context.Update(productPackageType);
-                    await _context.SaveChangesAsync();
+	                if (User != null)
+	                {
+		                var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+		                productPackageType.UpdatedBy = userFullName;
+	                }
+
+	                productPackageType.UpdatedOn = DateTime.Now;
+
+	                _dbWriteService.Update(productPackageType);
+                    await _dbWriteService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProductPackageTypeExists(productPackageType.Id))
+	                bool result = await ProductPackageTypeExists(productPackageType.Id);
+	                if (!result)
                     {
                         return NotFound();
                     }
@@ -115,13 +144,13 @@ namespace PM.UserAdmin.UI.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", productPackageType.ProductId);
-            return View(productPackageType);
-        }
+            ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", productPackageType.SupplierId);
 
-        // GET: ProductPackageTypes/Delete/5
+			return RedirectToAction("Index", "ProductPackageTypes", new { id = productPackageType.ProductId });
+		}
+
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -129,10 +158,10 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            var productPackageType = await _context.ProductPackageType
-                .Include(p => p.Product)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (productPackageType == null)
+            _dbReadService.IncludeEntityNavigation<Supplier>();
+			var productPackageType = await _dbReadService.GetSingleRecordAsync<ProductPackageType>(p => p.Id.Equals(id));
+
+			if (productPackageType == null)
             {
                 return NotFound();
             }
@@ -140,20 +169,23 @@ namespace PM.UserAdmin.UI.Controllers
             return View(productPackageType);
         }
 
-        // POST: ProductPackageTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var productPackageType = await _context.ProductPackageType.FindAsync(id);
-            _context.ProductPackageType.Remove(productPackageType);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            var productPackageType = await _dbReadService.GetSingleRecordAsync<ProductPackageType>(s => s.Id.Equals(id));
 
-        private bool ProductPackageTypeExists(int id)
-        {
-            return _context.ProductPackageType.Any(e => e.Id == id);
-        }
-    }
+			_dbWriteService.Delete(productPackageType);
+
+            await _context.SaveChangesAsync();
+
+			return RedirectToAction("Index", "ProductPackageTypes", new { id = productPackageType.ProductId });
+		}
+
+		private async Task<bool> ProductPackageTypeExists(int id)
+		{
+			var request = _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(id));
+			return await _dbReadService.DoesRecordExist<Request>(e => request.Id == id);
+		}
+	}
 }

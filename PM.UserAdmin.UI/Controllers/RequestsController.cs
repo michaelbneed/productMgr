@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using PM.DataAccess.Dto;
+using PM.Business.Dto;
 using PM.Entity.Models;
 using PM.Entity.Services;
 using PM.UserAdmin.UI.Security;
@@ -29,7 +29,6 @@ namespace PM.UserAdmin.UI.Controllers
 		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Index()
         {
-	        _dbReadService.IncludeEntityNavigation<Product>();
 	        _dbReadService.IncludeEntityNavigation<RequestType>();
 	        _dbReadService.IncludeEntityNavigation<StatusType>();
 	        _dbReadService.IncludeEntityNavigation<Supplier>();
@@ -93,13 +92,13 @@ namespace PM.UserAdmin.UI.Controllers
 				_dbWriteService.Add(request);
 
 				await _dbWriteService.SaveChangesAsync();
-
-				return RedirectToAction("CreateProduct", "Products", new { id = request.Id });
 			}
+
 			ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
 			ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
 			ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", request.SupplierId);
-			return View(request);
+
+			return RedirectToAction("CreateProduct", "Products", new { id = request.Id });
 		}
 
 		public async Task<IActionResult> Edit(int? id)

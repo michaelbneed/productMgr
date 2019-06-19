@@ -7,7 +7,7 @@
     [SupplierData]            VARCHAR (50)  NULL,
     [SupplierID]              INT           NULL,
     [AlternateProductPrice]   DECIMAL (18)  NULL,
-    [AlternateProductCost]    NCHAR (10)    NULL,
+    [AlternateProductCost]    DECIMAL (18)    NULL,
     [ProductID]               INT           NULL,
     [CreatedOn]               DATETIME      NULL,
     [CreatedBy]               VARCHAR (100) NULL,

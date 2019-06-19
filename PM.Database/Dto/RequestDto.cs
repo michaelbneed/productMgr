@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PM.DataAccess.Dto
+namespace PM.Business.Dto
 {
 	public static class RequestDto
 	{

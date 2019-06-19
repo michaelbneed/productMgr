@@ -99,9 +99,9 @@
 	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
 	<a asp-controller="ProductPackageTypes" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-warning">Packages</a>
 	<a asp-controller="ProductPackageTypes" asp-action="Create" asp-route-id="@Model.Id" class="btn btn-success">Create Package</a> <br />
-	@if (@PM.DataAccess.Dto.RequestDto.RequestId != null)
+	@if (@PM.Business.Dto.RequestDto.RequestId != null)
 	{
-		<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.DataAccess.Dto.RequestDto.RequestId">Back to Request</a> <br />
+		<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a> <br />
 	}
 	<a asp-controller="Requests" asp-action="Index">Back to List</a>
 </div>
