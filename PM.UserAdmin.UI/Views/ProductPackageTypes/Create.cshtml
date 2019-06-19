@@ -1,4 +1,5 @@
-﻿@model PM.Entity.Models.ProductPackageType
+﻿@using PM.Business.Dto
+@model PM.Entity.Models.ProductPackageType
 
 @{
     ViewData["Title"] = "Create";
@@ -27,9 +28,9 @@
                 <span asp-validation-for="AlternateProductName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="AlternateProductUpcCode" class="control-label">UPC Code (alt)</label>
-                <input asp-for="AlternateProductUpcCode" class="form-control" />
-                <span asp-validation-for="AlternateProductUpcCode" class="text-danger"></span>
+                <label asp-for="AlternateProductUpccode" class="control-label">UPC Code (alt)</label>
+                <input asp-for="AlternateProductUpccode" class="form-control" />
+                <span asp-validation-for="AlternateProductUpccode" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="SupplierData" class="control-label">Supplier Data</label>
@@ -55,7 +56,7 @@
 	        <input type="hidden" asp-for="UpdatedBy" />
 	        <input type="hidden" asp-for="UpdatedOn" />
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+	            <input type="submit" value="Create" class="btn btn-primary" />
             </div>
         </form>
     </div>

@@ -29,7 +29,7 @@ namespace PM.Entity.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-	            optionsBuilder.UseSqlServer("Server=SQL2.corp.adaptivesys.com,1470;Database=Vandivier_PM_LOCAL;User ID=vandivierPmDev;Password=dev;MultipleActiveResultSets=true");
+				optionsBuilder.UseSqlServer("Server=SQL2.corp.adaptivesys.com,1470;Database=Vandivier_PM_LOCAL;User ID=vandivierPmDev;Password=dev;MultipleActiveResultSets=true");
             }
         }
 
@@ -128,7 +128,7 @@ namespace PM.Entity.Models
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.AlternateProductCost).HasMaxLength(10);
+                entity.Property(e => e.AlternateProductCost).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.AlternateProductName)
                     .HasMaxLength(100)
@@ -136,7 +136,7 @@ namespace PM.Entity.Models
 
                 entity.Property(e => e.AlternateProductPrice).HasColumnType("decimal(18, 0)");
 
-                entity.Property(e => e.AlternateProductUpcCode)
+                entity.Property(e => e.AlternateProductUpccode)
                     .HasColumnName("AlternateProductUPCCode")
                     .HasMaxLength(50)
                     .IsUnicode(false);

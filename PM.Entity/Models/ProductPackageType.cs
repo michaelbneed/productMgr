@@ -9,7 +9,7 @@ namespace PM.Entity.Models
         public decimal? Quantity { get; set; }
         public string Unit { get; set; }
         public string AlternateProductName { get; set; }
-        public string AlternateProductUpcCode { get; set; }
+        public string AlternateProductUpccode { get; set; }
         public string SupplierData { get; set; }
         public int? SupplierId { get; set; }
         public decimal? AlternateProductPrice { get; set; }

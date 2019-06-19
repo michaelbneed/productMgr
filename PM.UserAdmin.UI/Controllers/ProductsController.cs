@@ -70,6 +70,11 @@ namespace PM.UserAdmin.UI.Controllers
 	        }
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
 
+	        if (product.AlternateProductPackage)
+	        {
+				return RedirectToAction("Create", "ProductPackageTypes", new { id = product.Id });
+			}
+
 	        return RedirectToAction("Details", "Requests", new { id = requestId });
         }
 

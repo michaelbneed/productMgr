@@ -17,6 +17,7 @@ namespace PM.UserAdmin.UI.Controllers
         private readonly VandivierProductManagerContext _context;
         private readonly IDbReadService _dbReadService;
         private readonly IDbWriteService _dbWriteService;
+        public bool myCheckbox;
 
         public ProductPackageTypesController(VandivierProductManagerContext context, IDbReadService dbReadService, IDbWriteService dbWriteService)
         {

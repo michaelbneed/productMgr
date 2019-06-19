@@ -25,7 +25,7 @@
 					<a asp-controller="Products" asp-action="Details" asp-route-id="@item.ProductId" class="control-label">
 						<p class="card-text">Parent Product: @Html.DisplayFor(modelItem => item.Product.ProductName)</p>
 					</a><br />
-					<p class="card-text">Product UPC (alt): @Html.DisplayFor(modelItem => item.AlternateProductUpcCode)</p>
+					<p class="card-text">Product UPC (alt): @Html.DisplayFor(modelItem => item.AlternateProductUpccode)</p>
 					<p class="card-text">Supplier: @Html.DisplayFor(modelItem => item.Supplier.SupplierName)</p>
 				</div>
 				<div class="col-sm-4" style="padding-bottom: 10px">

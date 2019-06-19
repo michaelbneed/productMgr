@@ -22,6 +22,7 @@ namespace PM.Entity.Models
         public string PackageType { get; set; }
         public string OrderWeek { get; set; }
         public int? CategoryId { get; set; }
+        public bool AlternateProductPackage { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
