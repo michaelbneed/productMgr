@@ -13,7 +13,7 @@ namespace PM.Entity.Models
         public string SupplierData { get; set; }
         public int? SupplierId { get; set; }
         public decimal? AlternateProductPrice { get; set; }
-        public string AlternateProductCost { get; set; }
+        public decimal? AlternateProductCost { get; set; }
         public int? ProductId { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }
