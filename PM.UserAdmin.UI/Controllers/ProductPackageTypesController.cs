@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PM.Business.Dto;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -54,7 +56,7 @@ namespace PM.UserAdmin.UI.Controllers
 
         public IActionResult Create(int? id)
         {
-            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName");
+	        ViewData["ProductId"] = id;
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
             return View();
         }
