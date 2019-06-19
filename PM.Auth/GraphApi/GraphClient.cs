@@ -9,6 +9,7 @@ using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
+using PM.Auth.GraphApi.Group;
 using PM.Auth.GraphApi.User;
 
 namespace PM.Auth.GraphApi
@@ -28,16 +29,16 @@ namespace PM.Auth.GraphApi
 		private readonly string _graphVersion;
 
 		
-	    public GraphClient(IConfiguration configuration)
+	    public GraphClient(IConfiguration configuration, bool useB2CInstance)
 	    {
 		    Configuration = configuration;
 		    
-			_tenant = configuration.GetValue<string>("GraphApi:Tenant");
-			_clientId = configuration.GetValue<string>("GraphApi:ClientId"); 
-			_clientSecret = configuration.GetValue<string>("GraphApi:ClientSecret");
-			_instance = configuration.GetValue<string>("GraphApi:Instance");
-		    _graphEndpoint = configuration.GetValue<string>("GraphApi:GraphEndpoint");
-			_graphVersion = configuration.GetValue<string>("GraphApi:GraphVersion");
+			_tenant = useB2CInstance ? configuration.GetValue<string>("B2CGraphApi:Tenant") : configuration.GetValue<string>("AADGraphApi:Tenant");
+			_clientId = useB2CInstance ? configuration.GetValue<string>("B2CGraphApi:ClientId") : configuration.GetValue<string>("AADGraphApi:ClientId"); 
+			_clientSecret = useB2CInstance ? configuration.GetValue<string>("B2CGraphApi:ClientSecret") : configuration.GetValue<string>("AADGraphApi:ClientSecret");
+			_instance = useB2CInstance ? configuration.GetValue<string>("B2CGraphApi:Instance") : configuration.GetValue<string>("AADGraphApi:Instance");
+		    _graphEndpoint = useB2CInstance ? configuration.GetValue<string>("B2CGraphApi:GraphEndpoint") : configuration.GetValue<string>("AADGraphApi:GraphEndpoint");
+			_graphVersion = useB2CInstance ? configuration.GetValue<string>("B2CGraphApi:GraphVersion") : configuration.GetValue<string>("AADGraphApi:GraphVersion");
 
 			_authenticationContext = new AuthenticationContext($"{_instance}{_tenant}");
 
@@ -57,11 +58,12 @@ namespace PM.Auth.GraphApi
 			}
 		}
 
-		public bool CreateUser(Entity.Models.User model)
+		public bool CreateUser(Entity.Models.User model, out string password)
         {
             try
             {
-                var password = PasswordGenerator.Generate();
+                password = PasswordGenerator.Generate();
+
                 var graphModel = new Create()
                 {
                     AccountEnabled = true,
@@ -74,13 +76,13 @@ namespace PM.Auth.GraphApi
 
                 model.AuthId = result.Value<string>("objectId");
 
-                // TODO: Need to send the user and email with their password
-
                 return true;
             }
             catch(Exception e)
             {
                 model.AuthId = null;
+
+                password = null;
 
                 return false;
             }
@@ -114,6 +116,29 @@ namespace PM.Auth.GraphApi
             }
         }
 
+        public List<string> GetGroupUsersEmail(string groupId)
+        {
+            var result = new List<string>();
+
+            try
+            {
+                var users = JsonConvert.DeserializeObject<GroupMembersResponse>(Get($"/groups/{groupId}/$links/members", null));
+
+                foreach (var item in users.Urls)
+                {
+                    var userResult = JObject.Parse(Get(item.Url));
+
+                    result.Add(userResult.Value<string>("userPrincipalName"));
+                }
+
+                return result;
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
         private string Get(string api, string query)
         {
 	        
@@ -121,6 +146,25 @@ namespace PM.Auth.GraphApi
 
             if (string.IsNullOrEmpty(query) == false)
                 url = $"{url}&{query}";
+
+            var token = _authenticationContext.AcquireTokenAsync(_graphEndpoint, _clientCredential).Result;
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token.AccessToken);
+
+            var httpClient = new HttpClient();
+
+            var response = httpClient.SendAsync(request).Result;
+
+            if (response.IsSuccessStatusCode == false)
+                throw new WebException(); // TODO: Use a custom exception that will log to NLog.
+
+            return response.Content.ReadAsStringAsync().Result;
+        }
+
+        private string Get(string url)
+        {
+            url = $"{url}?{_graphVersion}";
 
             var token = _authenticationContext.AcquireTokenAsync(_graphEndpoint, _clientCredential).Result;
             var request = new HttpRequestMessage(HttpMethod.Get, url);

@@ -78,9 +78,10 @@ namespace PM.UserAdmin.UI.Controllers
 	            }
 
 	            user.CreatedOn = DateTime.Now;
-				var graphClient = new GraphClient(Configuration);
 
-                var graphResult = graphClient.CreateUser(user);
+				var graphClient = new GraphClient(Configuration, true);
+                var password = string.Empty;
+                var graphResult = graphClient.CreateUser(user, out password);
 
                 if (graphResult)
                 {
@@ -89,7 +90,13 @@ namespace PM.UserAdmin.UI.Controllers
                     var saveResult = await _dbWriteService.SaveChangesAsync();
 
                     if (saveResult)
+                    {
+                        var userEmail = new PM.Business.Email.User(Configuration);
+
+                        userEmail.SendWelcomeEmail(user, password);
+
                         return RedirectToAction(nameof(Index));
+                    }
 
                     // Failed to save to the database, delete the user from the directory.
                     graphClient.DeleteUser(user.AuthId);
@@ -183,7 +190,7 @@ namespace PM.UserAdmin.UI.Controllers
         {
             var user = await _dbReadService.GetSingleRecordAsync<User>(u => u.Id.Equals(id));
 
-            var graphClient = new GraphClient(Configuration);
+            var graphClient = new GraphClient(Configuration, true);
             var graphResult = graphClient.DeleteUser(user.AuthId);
 
             if (graphResult)
