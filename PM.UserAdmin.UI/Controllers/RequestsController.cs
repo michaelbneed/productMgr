@@ -29,7 +29,8 @@ namespace PM.UserAdmin.UI.Controllers
 		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Index()
         {
-	        _dbReadService.IncludeEntityNavigation<RequestType>();
+	        _dbReadService.IncludeEntityNavigation<Product>();
+			_dbReadService.IncludeEntityNavigation<RequestType>();
 	        _dbReadService.IncludeEntityNavigation<StatusType>();
 	        _dbReadService.IncludeEntityNavigation<Supplier>();
 
@@ -44,7 +45,7 @@ namespace PM.UserAdmin.UI.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
+	        if (id == null)
             {
                 return NotFound();
             }
@@ -97,6 +98,8 @@ namespace PM.UserAdmin.UI.Controllers
 			ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
 			ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
 			ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", request.SupplierId);
+
+			RequestDto.RequestId = request.Id;
 
 			return RedirectToAction("CreateProduct", "Products", new { id = request.Id });
 		}
