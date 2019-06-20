@@ -9,6 +9,7 @@
 @if (@ViewData["ProductId"] != null)
 {
 	<a asp-controller="Products" asp-action="Details" asp-route-id="@ViewData["ProductId"]">Back to Parent Product</a> <br />
+	<a asp-action="Create" asp-route-id="@ViewData["ProductId"]" title="Add a new Package"><i class="material-icons">add</i>Add Alternate Package</a>
 }
 
 <br />
