@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
@@ -39,9 +40,9 @@ namespace PM.UserAdmin.UI
 
 			services.AddDbContext<VandivierProductManagerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Connection")));
 
-		    services.AddAuthentication(AzureADDefaults.AuthenticationScheme).AddAzureAD(AzureADDefaults.AuthenticationScheme,
-		        OpenIdConnectDefaults.AuthenticationScheme, CookieAuthenticationDefaults.AuthenticationScheme, "Test",
-		        options => Configuration.Bind("AzureAd", options));
+            services.AddAuthentication(AzureADDefaults.AuthenticationScheme).AddAzureAD(AzureADDefaults.AuthenticationScheme,
+                OpenIdConnectDefaults.AuthenticationScheme, CookieAuthenticationDefaults.AuthenticationScheme, "Test",
+                options => Configuration.Bind("AzureAd", options));
 
             services.AddAuthorization(policies =>
             {
@@ -51,14 +52,14 @@ namespace PM.UserAdmin.UI
                 policies.AddPolicy(GroupAuthorization.EmployeePolicyName, policy => policy.RequireAssertion(x => GroupAuthorization.EmployeePolicyAssertion(x, Configuration)));
             });
 
-			services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
-			{
-				options.Authority = options.Authority + "/v2.0/";         
-				options.TokenValidationParameters.ValidateIssuer = false; 
-			});
+		    services.Configure<OpenIdConnectOptions>(AzureADDefaults.OpenIdScheme, options =>
+		    {
+		        options.Authority = options.Authority + "/v2.0/";
+		        options.TokenValidationParameters.ValidateIssuer = false;
+		    });
 
-			// Injectable data access service
-			services.AddScoped<IDbReadService, DbReadService>();
+            // Injectable data access service
+            services.AddScoped<IDbReadService, DbReadService>();
 			services.AddScoped<IDbWriteService, DbWriteService>();
 
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

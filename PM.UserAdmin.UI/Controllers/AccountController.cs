@@ -15,5 +15,10 @@ namespace PM.UserAdmin.UI.Controllers
 
             return SignOut( new AuthenticationProperties { RedirectUri = callbackUrl }, AzureADDefaults.AuthenticationScheme, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
         }
+
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
     }
 }
