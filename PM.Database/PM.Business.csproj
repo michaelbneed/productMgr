@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PM.Auth\PM.Auth.csproj" />
     <ProjectReference Include="..\PM.Entity\PM.Entity.csproj" />
   </ItemGroup>
 
