@@ -17,8 +17,7 @@ namespace PM.UserAdmin.UI.Controllers
         private readonly VandivierProductManagerContext _context;
         private readonly IDbReadService _dbReadService;
         private readonly IDbWriteService _dbWriteService;
-        public bool myCheckbox;
-
+        
         public ProductPackageTypesController(VandivierProductManagerContext context, IDbReadService dbReadService, IDbWriteService dbWriteService)
         {
             _context = context;
@@ -28,6 +27,7 @@ namespace PM.UserAdmin.UI.Controllers
 
         public async Task<IActionResult> Index(int? id)
         {
+	        ViewData["ProductId"] = id;
 	        _dbReadService.IncludeEntityNavigation<Supplier>();
 			_dbReadService.IncludeEntityNavigation<Product>();
 
@@ -86,7 +86,7 @@ namespace PM.UserAdmin.UI.Controllers
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", productPackageType.ProductId);
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", productPackageType.SupplierId);
 
-            return RedirectToAction("Create", "ProductPackageTypes", new { id = productPackageType.Id });
+            return RedirectToAction("Details", "Requests", new { id = RequestDto.RequestId });
 		}
 
         public async Task<IActionResult> Edit(int? id)

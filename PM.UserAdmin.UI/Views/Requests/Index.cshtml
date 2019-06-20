@@ -15,7 +15,7 @@
 		<div class="card-header">
 			<div class="row">
 				<h6 class="col-sm-2">
-					@Html.DisplayFor(modelItem => item.RequestDescription)
+					Request: <br/>@Html.DisplayFor(modelItem => item.RequestDescription)
 				</h6>
 				<div class="col-sm-10" align="right">
 					<a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a>

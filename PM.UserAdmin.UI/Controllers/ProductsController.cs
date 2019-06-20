@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PM.Business.Dto;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -16,7 +17,7 @@ namespace PM.UserAdmin.UI.Controllers
         private readonly VandivierProductManagerContext _context;
         private readonly IDbReadService _dbReadService;
         private readonly IDbWriteService _dbWriteService;
-
+        
         public ProductsController(IDbReadService dbReadService, IDbWriteService dbWriteService, VandivierProductManagerContext context)
         {
             _context = context;
@@ -70,13 +71,40 @@ namespace PM.UserAdmin.UI.Controllers
 	        }
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
 
-	        if (product.AlternateProductPackage)
-	        {
-				return RedirectToAction("Create", "ProductPackageTypes", new { id = product.Id });
-			}
-
-	        return RedirectToAction("Details", "Requests", new { id = requestId });
+	       return RedirectToAction("Details", "Requests", new { id = requestId });
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateProductAndPackage(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
+        {
+	        var requestId = RequestDto.RequestId;
+	        product.Id = 0;
+
+	        if (ModelState.IsValid)
+	        {
+		        if (User != null)
+		        {
+			        var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+			        product.CreatedBy = userFullName;
+		        }
+
+		        product.CreatedOn = DateTime.Now;
+
+		        _dbWriteService.Add(product);
+		        await _dbWriteService.SaveChangesAsync();
+
+		        _dbReadService.IncludeEntityNavigation<Request>();
+		        var request = await _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(requestId));
+
+		        request.ProductId = product.Id;
+		        _dbWriteService.Update(request);
+		        await _dbWriteService.SaveChangesAsync();
+	        }
+	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
+
+	        return RedirectToAction("Create", "ProductPackageTypes", new { id = product.Id });
+		}
 
 		public async Task<IActionResult> Details(int? id)
         {
