@@ -10,12 +10,13 @@
 		<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a> <br />
 	}
 
+<br />
 @foreach (var item in Model)
 {
 	<div class="card border-primary mb-3" style="max-width: 100%;">
 		<div class="card-header">
 			<div class="row">
-				<h6 class="col-sm-2">Date: <br/>@Html.DisplayFor(modelItem => item.CreatedOn)</h6>
+				<a asp-action="Details" title="Details" asp-route-id="@item.Id" class="col-sm-2">Date: <br />@Html.DisplayFor(modelItem => item.CreatedOn)</a>
 				<div class="col-sm-10" align="right">
 					<a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a>
 					<a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a>

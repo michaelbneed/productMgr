@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PM.Entity.Models
 {
@@ -12,6 +13,7 @@ namespace PM.Entity.Models
         }
 
         public int Id { get; set; }
+		[Required]
         public string ProductName { get; set; }
         public string ProductDescription { get; set; }
         public string Upccode { get; set; }

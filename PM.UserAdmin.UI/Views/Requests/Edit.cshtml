@@ -1,4 +1,5 @@
-﻿@model PM.Entity.Models.Request
+﻿@using PM.Business.Dto
+@model PM.Entity.Models.Request
 
 @{
     ViewData["Title"] = "Edit";
@@ -45,7 +46,16 @@
 	            <input type="submit" value="Save" class="btn btn-primary" />
 	            <a asp-controller="Notes" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-warning">Notes</a>
 	            <a asp-controller="Notes" asp-action="CreateNote" asp-route-id="@Model.Id" class="btn btn-success">Create Note</a>
-	            <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-info">View Product</a> 
+	            
+	            @if (@Model.ProductId == null)
+	            {
+		            <a asp-controller="Products" asp-action="CreateProduct" asp-route-id="@RequestDto.RequestId" class="btn btn-info">Add Product</a>
+	            }
+	            else
+	            {
+		            <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-info">View Product</a>
+	            }
+
             </div>
         </form>
     </div>
