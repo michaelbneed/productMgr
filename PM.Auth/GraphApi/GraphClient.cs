@@ -142,7 +142,7 @@ namespace PM.Auth.GraphApi
                 {
                     var userResult = JObject.Parse(Get(item.Url));
 
-                    result.Add(userResult.Value<string>("userPrincipalName"));
+                    result.Add(userResult.Value<string>("mail"));
                 }
 
                 return result;

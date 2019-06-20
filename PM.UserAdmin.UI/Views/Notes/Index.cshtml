@@ -4,7 +4,7 @@
 	ViewData["Title"] = "Notes";
 }
 
-<h1>Notes</h1>
+<h1>Notes for Request: @PM.Business.Dto.RequestDto.RequestDescription</h1>
 @if (@PM.Business.Dto.RequestDto.RequestId != null)
 {
 	<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a> <br />

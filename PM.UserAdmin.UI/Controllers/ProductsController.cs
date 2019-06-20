@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PM.Business.Dto;
+using PM.Business.Email;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -17,13 +19,17 @@ namespace PM.UserAdmin.UI.Controllers
         private readonly VandivierProductManagerContext _context;
         private readonly IDbReadService _dbReadService;
         private readonly IDbWriteService _dbWriteService;
-        
-        public ProductsController(IDbReadService dbReadService, IDbWriteService dbWriteService, VandivierProductManagerContext context)
+        private readonly IConfiguration _configuration;
+
+
+		public ProductsController(IDbReadService dbReadService, IDbWriteService dbWriteService, 
+	        VandivierProductManagerContext context, IConfiguration configuration)
         {
             _context = context;
             _dbReadService = dbReadService;
             _dbWriteService = dbWriteService;
-		}
+            _configuration = configuration;
+        }
 
         [Authorize]
         public async Task<IActionResult> Index()
@@ -68,10 +74,13 @@ namespace PM.UserAdmin.UI.Controllers
 		        request.ProductId = product.Id;
 		        _dbWriteService.Update(request);
 		        await _dbWriteService.SaveChangesAsync();
-	        }
+
+		        RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
+		        requestEmail.SendNewRequestToHeadQuarters(request);
+			}
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
 
-	       return RedirectToAction("Details", "Requests", new { id = requestId });
+			return RedirectToAction("Details", "Requests", new { id = requestId });
         }
 
         [HttpPost]

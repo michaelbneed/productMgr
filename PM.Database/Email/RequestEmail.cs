@@ -5,13 +5,13 @@ using PM.Entity.Services;
 
 namespace PM.Business.Email
 {
-    public class Request
+    public class RequestEmail
     {
         private readonly IConfiguration _configuration;
 
         private readonly IDbReadService _dbReadService;
 
-        public Request(IConfiguration configuration, IDbReadService dbReadService)
+        public RequestEmail(IConfiguration configuration, IDbReadService dbReadService)
         {
             _configuration = configuration;
             _dbReadService = dbReadService;
@@ -30,7 +30,11 @@ namespace PM.Business.Email
                            $"View the request <a href='{adminUrl}{requestEditPath}'>here</a> <br /><br />" +
                            $"Thanks, <br /> Vandivier Management";
 
-                Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
+                if (emailAddress != null)
+                {
+					Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
+				}
+                
             }
         }
 

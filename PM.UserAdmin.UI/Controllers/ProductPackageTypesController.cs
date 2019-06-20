@@ -28,8 +28,12 @@ namespace PM.UserAdmin.UI.Controllers
         public async Task<IActionResult> Index(int? id)
         {
 	        ViewData["ProductId"] = id;
-	        _dbReadService.IncludeEntityNavigation<Supplier>();
+			_dbReadService.IncludeEntityNavigation<Supplier>();
 			_dbReadService.IncludeEntityNavigation<Product>();
+
+			var product = await _dbReadService.GetSingleRecordAsync<Product>(s => s.Id.Equals(id));
+
+			ViewData["ProductName"] = product.ProductName;
 
             var packages = await _dbReadService.GetAllRecordsAsync<ProductPackageType>(s => s.ProductId.Equals(id));
 			packages.Reverse();
