@@ -116,6 +116,20 @@ namespace PM.Auth.GraphApi
             }
         }
 
+        public string GetUserEmail(string objectId)
+        {
+            try
+            {
+                var result = JObject.Parse(Get($"/users/{objectId}"));
+
+                return result.Value<string>("mail");
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+        }
+
         public List<string> GetGroupUsersEmail(string groupId)
         {
             var result = new List<string>();
