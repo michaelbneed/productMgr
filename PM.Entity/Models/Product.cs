@@ -17,6 +17,7 @@ namespace PM.Entity.Models
         public string ProductName { get; set; }
         public string ProductDescription { get; set; }
         public string Upccode { get; set; }
+		//TODO: Add to store settings
         public string ProductLocation { get; set; }
         public decimal? ProductCost { get; set; }
         public decimal? ProductPrice { get; set; }

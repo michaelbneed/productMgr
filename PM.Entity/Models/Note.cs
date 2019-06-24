@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PM.Entity.Models
 {
     public partial class Note
     {
         public int Id { get; set; }
+		[Required]
         public string NoteText { get; set; }
         public int? RequestId { get; set; }
         public DateTime? CreatedOn { get; set; }
