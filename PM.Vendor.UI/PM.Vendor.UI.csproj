@@ -18,4 +18,11 @@
     <ProjectReference Include="..\PM.Entity\PM.Entity.csproj" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Content Update="Views\Requests\Edit.cshtml">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

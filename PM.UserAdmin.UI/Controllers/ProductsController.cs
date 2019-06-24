@@ -109,7 +109,11 @@ namespace PM.UserAdmin.UI.Controllers
 		        request.ProductId = product.Id;
 		        _dbWriteService.Update(request);
 		        await _dbWriteService.SaveChangesAsync();
-	        }
+
+		        RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
+		        requestEmail.SendNewRequestToHeadQuarters(request);
+			}
+
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
 
 	        return RedirectToAction("Create", "ProductPackageTypes", new { id = product.Id });
@@ -130,7 +134,14 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            return View(product);
+			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
+
+			if (note != null)
+			{
+				ViewData["NoteId"] = note.Id;
+			}
+
+			return View(product);
         }
 
 		public async Task<IActionResult> Edit(int? id)
@@ -147,7 +158,15 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
-            return View(product);
+
+            var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
+
+            if (note != null)
+            {
+	            ViewData["NoteId"] = note.Id;
+            }
+
+			return View(product);
         }
 
         [HttpPost]
@@ -188,7 +207,8 @@ namespace PM.UserAdmin.UI.Controllers
                 }
             }
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
-			return RedirectToAction("Details", "Products", new { id = product.Id });
+
+            return RedirectToAction("Details", "Products", new { id = product.Id });
 		}
 
         public async Task<IActionResult> Delete(int? id)

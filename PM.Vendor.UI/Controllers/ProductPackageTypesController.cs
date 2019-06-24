@@ -10,7 +10,7 @@ using PM.Business.Dto;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
-namespace PM.UserAdmin.UI.Controllers
+namespace PM.Vendor.UI.Controllers
 {
     public class ProductPackageTypesController : Controller
     {
@@ -82,7 +82,7 @@ namespace PM.UserAdmin.UI.Controllers
             {
 	            if (User != null)
 	            {
-		            var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+		            var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"emails").Value;
 		            productPackageType.CreatedBy = userFullName;
 	            }
 
@@ -141,7 +141,7 @@ namespace PM.UserAdmin.UI.Controllers
                 {
 	                if (User != null)
 	                {
-		                var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+		                var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"emails").Value;
 		                productPackageType.UpdatedBy = userFullName;
 	                }
 

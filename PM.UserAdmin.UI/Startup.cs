@@ -14,8 +14,8 @@ using PM.Entity.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.AzureAD.UI;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using PM.Business.Security;
 using PM.Entity.Models;
-using PM.UserAdmin.UI.Security;
 
 namespace PM.UserAdmin.UI
 {

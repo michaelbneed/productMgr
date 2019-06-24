@@ -20,7 +20,7 @@ namespace PM.Entity.Models
         public string ProductLocation { get; set; }
         public decimal? ProductCost { get; set; }
         public decimal? ProductPrice { get; set; }
-        public decimal? PackageSize { get; set; }
+        public string PackageSize { get; set; }
         public string PackageType { get; set; }
         public string OrderWeek { get; set; }
         public int? CategoryId { get; set; }

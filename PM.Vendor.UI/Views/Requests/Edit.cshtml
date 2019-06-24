@@ -24,15 +24,18 @@
                 <span asp-validation-for="RequestTypeId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StatusTypeId" class="control-label">Status</label>
-                <select asp-for="StatusTypeId" class="form-control" asp-items="ViewBag.StatusTypeId"></select>
-                <span asp-validation-for="StatusTypeId" class="text-danger"></span>
+	            <label asp-for="StatusTypeId" class="control-label">Status</label>
+	            <select asp-for="StatusTypeId" class="form-control" asp-items="ViewBag.StatusTypeId" disabled="disabled"></select>
+	            <span asp-validation-for="StatusTypeId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-	            <a asp-controller="Products" asp-action="Edit" asp-route-id="@Model.ProductId" class="control-label">Edit Product</a>
-                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId" disabled="disabled"></select>
-                <span asp-validation-for="ProductId" class="text-danger"></span>
-            </div>
+			@if (@Model.ProductId != null)
+			{
+				<div class="form-group">
+					<a asp-controller="Products" asp-action="Edit" asp-route-id="@Model.ProductId" class="control-label">Edit Product</a>
+					<select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId" disabled="disabled"></select>
+					<span asp-validation-for="ProductId" class="text-danger"></span>
+				</div>
+			}
             <div class="form-group">
                 <label asp-for="SupplierId" class="control-label">Supplier</label>
                 <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
@@ -55,7 +58,7 @@
 
 				@if (@Model.ProductId == null)
 				{
-					<a asp-controller="Products" asp-action="CreateProduct" asp-route-id="@RequestDto.RequestId" class="btn btn-success">Add Product</a>
+					<a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-success disabled">View Product</a>
 				}
 				else
 				{
@@ -64,11 +67,11 @@
 
 				@if (@Model.ProductId == null)
 				{
-					<a asp-controller="Products" asp-action="CreateProduct" asp-route-id="@RequestDto.RequestId" class="btn btn-info disabled">Edit Product</a>
+					<a asp-controller="Products" asp-action="Edit" asp-route-id="@Model.ProductId" class="btn btn-info disabled">Edit Product</a>
 				}
 				else
 				{
-					<a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-info">Edit Product</a>
+					<a asp-controller="Products" asp-action="Edit" asp-route-id="@Model.ProductId" class="btn btn-info">Edit Product</a>
 				}
 
 			</div>

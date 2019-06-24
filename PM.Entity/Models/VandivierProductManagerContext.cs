@@ -88,9 +88,11 @@ namespace PM.Entity.Models
                     .HasMaxLength(5)
                     .IsUnicode(false);
 
-                entity.Property(e => e.PackageSize).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.PackageSize)
+	                .HasMaxLength(50)
+	                .IsUnicode(false);
 
-                entity.Property(e => e.PackageType)
+				entity.Property(e => e.PackageType)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 

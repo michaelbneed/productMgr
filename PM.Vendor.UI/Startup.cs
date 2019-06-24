@@ -91,7 +91,7 @@ namespace PM.Vendor.UI
 			{
 				routes.MapRoute(
 					name: "default",
-					template: "{controller=Home}/{action=Index}/{id?}");
+					template: "{controller=Requests}/{action=Index}/{id?}");
 			});
 		}
 	}

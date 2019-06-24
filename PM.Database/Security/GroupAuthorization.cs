@@ -3,7 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 
-namespace PM.UserAdmin.UI.Security
+namespace PM.Business.Security
 {
     public class GroupAuthorization
     {
