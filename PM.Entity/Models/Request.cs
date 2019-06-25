@@ -12,8 +12,8 @@ namespace PM.Entity.Models
         }
 
         public int Id { get; set; }
-		[Required]
-        public string RequestDescription { get; set; }
+        [Required]
+		public string RequestDescription { get; set; }
         public int? RequestTypeId { get; set; }
         public int? StatusTypeId { get; set; }
         public int? UserId { get; set; }

@@ -38,9 +38,7 @@ namespace PM.UserAdmin.UI.Controllers
 			{
 				notes = await _dbReadService.GetAllRecordsAsync<Note>();
 			}
-
 			notes.Reverse();
-
 			return View(notes);
 		}
 
@@ -53,8 +51,7 @@ namespace PM.UserAdmin.UI.Controllers
             }
 
 			_dbReadService.IncludeEntityNavigation<Request>();
-
-            var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.Id.Equals(id));
+			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.Id.Equals(id));
                 
             if (note == null)
             {
@@ -62,8 +59,7 @@ namespace PM.UserAdmin.UI.Controllers
             }
 
             var productRelation = await _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(RequestDto.RequestId));
-
-            if (productRelation != null)
+			if (productRelation != null)
             {
 				ViewData["ProductId"] = productRelation.ProductId;
 			}
@@ -90,7 +86,6 @@ namespace PM.UserAdmin.UI.Controllers
 				}
 
 				note.CreatedOn = DateTime.Now;
-
 				note.RequestId = id;
 				_dbWriteService.Add(note);
 
@@ -107,8 +102,7 @@ namespace PM.UserAdmin.UI.Controllers
             }
 
             var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.Id.Equals(id));
-
-            if (note == null)
+			if (note == null)
             {
                 return NotFound();
             }
@@ -116,8 +110,7 @@ namespace PM.UserAdmin.UI.Controllers
             ViewData["RequestId"] = new SelectList(_context.Request, "Id", "RequestDescription", note.RequestId);
 
             var productRelation = await _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(RequestDto.RequestId));
-
-            if (productRelation != null)
+			if (productRelation != null)
             {
 	            ViewData["ProductId"] = productRelation.ProductId;
             }
@@ -176,7 +169,6 @@ namespace PM.UserAdmin.UI.Controllers
 			_dbReadService.IncludeEntityNavigation<Request>();
 
             var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.Id.Equals(id));
-                
             if (note == null)
             {
                 return NotFound();
@@ -190,11 +182,8 @@ namespace PM.UserAdmin.UI.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.Id.Equals(id));
-
-            _dbWriteService.Delete(note);
-
+			_dbWriteService.Delete(note);
 			var response = await _dbWriteService.SaveChangesAsync();
-
 			if (!response)
 			{
 				TempData["notifyUser"] = "This action could not be performed due to data constraints.";

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace PM.Entity.Models
 {
@@ -9,7 +10,8 @@ namespace PM.Entity.Models
         public int? SupplierId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string EmailAddress { get; set; }
+        [Required]
+		public string EmailAddress { get; set; }
         public string AuthId { get; set; }
         public bool? Enabled { get; set; }
         public DateTime? CreatedOn { get; set; }

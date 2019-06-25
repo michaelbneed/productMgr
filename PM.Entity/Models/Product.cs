@@ -9,15 +9,15 @@ namespace PM.Entity.Models
         public Product()
         {
             ProductPackageType = new HashSet<ProductPackageType>();
+            ProductStoreSpecific = new HashSet<ProductStoreSpecific>();
             Request = new HashSet<Request>();
         }
 
         public int Id { get; set; }
-		[Required]
-        public string ProductName { get; set; }
+        [Required]
+		public string ProductName { get; set; }
         public string ProductDescription { get; set; }
         public string Upccode { get; set; }
-		//TODO: Add to store settings
         public string ProductLocation { get; set; }
         public decimal? ProductCost { get; set; }
         public decimal? ProductPrice { get; set; }
@@ -29,8 +29,10 @@ namespace PM.Entity.Models
         public string CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string UpdatedBy { get; set; }
-		public virtual Category Category { get; set; }
+
+        public virtual Category Category { get; set; }
         public virtual ICollection<ProductPackageType> ProductPackageType { get; set; }
+        public virtual ICollection<ProductStoreSpecific> ProductStoreSpecific { get; set; }
         public virtual ICollection<Request> Request { get; set; }
     }
 }

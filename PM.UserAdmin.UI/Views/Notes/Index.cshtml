@@ -8,7 +8,7 @@
 @if (@PM.Business.Dto.RequestDto.RequestId != null)
 {
 	<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a> <br />
-	<a asp-action="CreateNote" asp-route-id="@PM.Business.Dto.RequestDto.RequestId" title="Add a new Note"><i class="material-icons">add</i>Add Note</a>
+	<a asp-action="CreateNote" asp-route-id="@PM.Business.Dto.RequestDto.RequestId" title="Add a new Note"><i class="material-icons">add</i>Add Note</a><br/>
 }
 
 <br />

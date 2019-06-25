@@ -6,11 +6,16 @@ namespace PM.Entity.Models
 {
     public partial class ProductPackageType
     {
+        public ProductPackageType()
+        {
+            ProductStoreSpecific = new HashSet<ProductStoreSpecific>();
+        }
+
         public int Id { get; set; }
         public decimal? Quantity { get; set; }
         public string Unit { get; set; }
-		[Required]
-        public string AlternateProductName { get; set; }
+        [Required]
+		public string AlternateProductName { get; set; }
         public string AlternateProductUpccode { get; set; }
         public string SupplierData { get; set; }
         public int? SupplierId { get; set; }
@@ -24,5 +29,6 @@ namespace PM.Entity.Models
 
         public virtual Product Product { get; set; }
         public virtual Supplier Supplier { get; set; }
+        public virtual ICollection<ProductStoreSpecific> ProductStoreSpecific { get; set; }
     }
 }

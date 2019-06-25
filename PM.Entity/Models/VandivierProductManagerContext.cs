@@ -19,6 +19,7 @@ namespace PM.Entity.Models
         public virtual DbSet<Note> Note { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductPackageType> ProductPackageType { get; set; }
+        public virtual DbSet<ProductStoreSpecific> ProductStoreSpecific { get; set; }
         public virtual DbSet<Request> Request { get; set; }
         public virtual DbSet<RequestType> RequestType { get; set; }
         public virtual DbSet<StatusType> StatusType { get; set; }
@@ -29,7 +30,7 @@ namespace PM.Entity.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-				optionsBuilder.UseSqlServer("Server=SQL2.corp.adaptivesys.com,1470;Database=Vandivier_PM_LOCAL;User ID=vandivierPmDev;Password=dev;MultipleActiveResultSets=true");
+				optionsBuilder.UseSqlServer("Server=user-pc;Database=VandivierProductManager;Trusted_Connection=True;");
             }
         }
 
@@ -89,10 +90,10 @@ namespace PM.Entity.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.PackageSize)
-	                .HasMaxLength(50)
-	                .IsUnicode(false);
+                    .HasMaxLength(50)
+                    .IsUnicode(false);
 
-				entity.Property(e => e.PackageType)
+                entity.Property(e => e.PackageType)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -133,6 +134,7 @@ namespace PM.Entity.Models
                 entity.Property(e => e.AlternateProductCost).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.AlternateProductName)
+                    .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
@@ -178,6 +180,46 @@ namespace PM.Entity.Models
                     .WithMany(p => p.ProductPackageType)
                     .HasForeignKey(d => d.SupplierId)
                     .HasConstraintName("FK_ProductPackageType_Supplier");
+            });
+
+            modelBuilder.Entity<ProductStoreSpecific>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.PackageTypeId).HasColumnName("PackageTypeID");
+
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.Property(e => e.StoreCost).HasColumnType("decimal(18, 0)");
+
+                entity.Property(e => e.StoreName)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StorePrice).HasColumnType("decimal(18, 0)");
+
+				entity.Property(e => e.UpdatedBy)
+					.HasMaxLength(100)
+					.IsUnicode(false);
+
+				entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+
+                entity.HasOne(d => d.PackageType)
+                    .WithMany(p => p.ProductStoreSpecific)
+                    .HasForeignKey(d => d.PackageTypeId)
+                    .HasConstraintName("FK_ProductStoreSpecific_ProductPackageType");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductStoreSpecific)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("FK_ProductStoreSpecific_Product");
             });
 
             modelBuilder.Entity<Request>(entity =>

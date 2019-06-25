@@ -10,95 +10,101 @@
 <div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            Product
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductName)
-        </dd>
-        <dt class = "col-sm-2">
-            Description
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductDescription)
-        </dd>
-        <dt class = "col-sm-2">
-            UPC
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Upccode)
-        </dd>
-        <dt class = "col-sm-2">
-            Location
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductLocation)
-        </dd>
-        <dt class = "col-sm-2">
-            Cost
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductCost)
-        </dd>
-        <dt class = "col-sm-2">
-            Price
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.ProductPrice)
-        </dd>
-        <dt class = "col-sm-2">
-            Package Size
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PackageSize)
-        </dd>
-        <dt class = "col-sm-2">
-            Package Type
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PackageType)
-        </dd>
-        <dt class = "col-sm-2">
-            Order Week
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.OrderWeek)
-        </dd>
-        <dt class = "col-sm-2">
-            Date
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            User
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.CreatedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            Updated
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedOn)
-        </dd>
-        <dt class = "col-sm-2">
-            User
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.UpdatedBy)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.CategoryName)
-        </dd>
+	    <dt class = "col-sm-2">
+		    Product
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.ProductName)
+	    </dd>
+	    <dt class = "col-sm-2">
+		    Description
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.ProductDescription)
+	    </dd>
+	    <dt class = "col-sm-2">
+		    UPC
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.Upccode)
+	    </dd>
+	    <dt class = "col-sm-2">
+		    Location
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.ProductLocation)
+	    </dd>
+	    <dt class = "col-sm-2">
+		    Cost
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.ProductCost)
+	    </dd>
+	    <dt class = "col-sm-2">
+		    Price
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.ProductPrice)
+	    </dd>
+	    <dt class = "col-sm-2">
+		    Package Size
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.PackageSize)
+	    </dd>
+	    <dt class = "col-sm-2">
+		    Package Type
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.PackageType)
+	    </dd>
+	    <dt class = "col-sm-2">
+		    Order Week
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.OrderWeek)
+	    </dd>
+	    <dt class = "col-sm-2">
+		    Date
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.CreatedOn)
+	    </dd>
+	    <dt class = "col-sm-2">
+		    User
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.CreatedBy)
+	    </dd>
+	    <dt class = "col-sm-2">
+		    Updated
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.UpdatedOn)
+	    </dd>
+	    <dt class = "col-sm-2">
+		    User
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.UpdatedBy)
+	    </dd>
+	    <dt class = "col-sm-2">
+		    @Html.DisplayNameFor(model => model.Category)
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.Category.CategoryName)
+	    </dd>
+	    <dt class = "col-sm-2">
+		    Store Pricing
+	    </dt>
+	    <dd class = "col-sm-10">
+		    <a asp-controller="ProductStoreSpecificProducts" asp-action="Index" asp-route-id="@Model.Id">There are @ViewData["ProductStoreSpecificCount"] unique store prices</a>
+	    </dd>
     </dl>
 </div>
 <div>
 	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
-	
+
 	@if (ViewData["NoteId"] == null)
 	{
 		<a asp-controller="Notes" asp-action="CreateNote" asp-route-id="@RequestDto.RequestId" class="btn btn-warning">Add Note</a>
@@ -107,14 +113,14 @@
 	{
 		<a asp-controller="Notes" asp-action="Index" asp-route-id="@RequestDto.RequestId" class="btn btn-warning">Notes</a>
 	}
-	
+
 	<a asp-controller="ProductPackageTypes" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-success">Packages</a>
-	
+
 	<br />
 	@if (@PM.Business.Dto.RequestDto.RequestId != null)
 	{
 		<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a> <br />
 	}
-	
+
 	<a asp-controller="Requests" asp-action="Index">Back to List</a>
 </div>

@@ -5,7 +5,7 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create a package type</h1>
+<h1>Create store prices</h1>
 
 <hr />
 <div class="row">
@@ -63,7 +63,7 @@
 </div>
 
 <div>
-	<a asp-controller="Products" asp-action="Details" asp-route-id="@ViewBag.ProductId">Back to Product</a> <br />
+	<a asp-action="Index" asp-route-id="@Model.ProductId">Back to Store Pricing List</a> <br />
 	<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a>
 </div>
 

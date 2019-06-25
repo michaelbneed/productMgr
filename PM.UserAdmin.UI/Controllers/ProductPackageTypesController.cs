@@ -32,13 +32,11 @@ namespace PM.UserAdmin.UI.Controllers
 			_dbReadService.IncludeEntityNavigation<Product>();
 
 			var product = await _dbReadService.GetSingleRecordAsync<Product>(s => s.Id.Equals(id));
-
 			ViewData["ProductName"] = product.ProductName;
 
             var packages = await _dbReadService.GetAllRecordsAsync<ProductPackageType>(s => s.ProductId.Equals(id));
 			packages.Reverse();
-
-            return View(packages);
+			return View(packages);
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -57,10 +55,16 @@ namespace PM.UserAdmin.UI.Controllers
             }
 
 			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
-
 			if (note != null)
 			{
 				ViewData["NoteId"] = note.Id;
+			}
+
+			var productStoreSpecific = await _dbReadService.GetAllRecordsAsync<ProductStoreSpecific>(p => p.PackageTypeId.Equals(id));
+			if (productStoreSpecific != null)
+			{
+				var productStoreSpecificCount = productStoreSpecific.Count();
+				ViewData["ProductStoreSpecificCount"] = productStoreSpecificCount;
 			}
 
 			return View(productPackageType);
@@ -108,7 +112,6 @@ namespace PM.UserAdmin.UI.Controllers
             }
 
             var productPackageType = await _dbReadService.GetSingleRecordAsync<ProductPackageType>(p => p.Id.Equals(id));
-
 			if (productPackageType == null)
             {
                 return NotFound();
@@ -117,8 +120,7 @@ namespace PM.UserAdmin.UI.Controllers
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", productPackageType.SupplierId);
 
             var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
-
-            if (note != null)
+			if (note != null)
             {
 	            ViewData["NoteId"] = note.Id;
             }
@@ -178,7 +180,6 @@ namespace PM.UserAdmin.UI.Controllers
 
             _dbReadService.IncludeEntityNavigation<Supplier>();
 			var productPackageType = await _dbReadService.GetSingleRecordAsync<ProductPackageType>(p => p.Id.Equals(id));
-
 			if (productPackageType == null)
             {
                 return NotFound();
@@ -192,12 +193,10 @@ namespace PM.UserAdmin.UI.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var productPackageType = await _dbReadService.GetSingleRecordAsync<ProductPackageType>(s => s.Id.Equals(id));
-
 			_dbWriteService.Delete(productPackageType);
-
             await _context.SaveChangesAsync();
 
-			return RedirectToAction("Index", "ProductPackageTypes", new { id = productPackageType.ProductId });
+            return RedirectToAction("Index", "ProductPackageTypes", new { id = productPackageType.ProductId });
 		}
 
 		private async Task<bool> ProductPackageTypeExists(int id)

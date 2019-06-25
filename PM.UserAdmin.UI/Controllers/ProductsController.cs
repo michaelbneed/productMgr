@@ -36,7 +36,6 @@ namespace PM.UserAdmin.UI.Controllers
         {
 			_dbReadService.IncludeEntityNavigation<Category>();
 			var products = await _dbReadService.GetAllRecordsAsync<Product>();
-
 			products.Reverse();
 
 			return View(products);
@@ -128,17 +127,22 @@ namespace PM.UserAdmin.UI.Controllers
 
 			_dbReadService.IncludeEntityNavigation<Category>();
 			var product = await _dbReadService.GetSingleRecordAsync<Product>(s => s.Id.Equals(id));
-
 			if (product == null)
             {
                 return NotFound();
             }
 
 			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
-
 			if (note != null)
 			{
 				ViewData["NoteId"] = note.Id;
+			}
+
+			var productStoreSpecific = await _dbReadService.GetAllRecordsAsync<ProductStoreSpecific>(p => p.ProductId.Equals(id));
+			if (productStoreSpecific != null)
+			{
+				var productStoreSpecificCount = productStoreSpecific.Count();
+				ViewData["ProductStoreSpecificCount"] = productStoreSpecificCount;
 			}
 
 			return View(product);
@@ -152,16 +156,15 @@ namespace PM.UserAdmin.UI.Controllers
             }
 
 			var product = await _dbReadService.GetSingleRecordAsync<Product>(s => s.Id.Equals(id));
-
 			if (product == null)
             {
                 return NotFound();
             }
+
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
 
             var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
-
-            if (note != null)
+			if (note != null)
             {
 	            ViewData["NoteId"] = note.Id;
             }
@@ -234,11 +237,8 @@ namespace PM.UserAdmin.UI.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _dbReadService.GetSingleRecordAsync<Supplier>(s => s.Id.Equals(id));
-
-            _dbWriteService.Delete(product);
-
+			_dbWriteService.Delete(product);
 			var response = await _dbWriteService.SaveChangesAsync();
-
 			if (!response)
 			{
 				TempData["notifyUser"] = "This action could not be performed due to data constraints.";

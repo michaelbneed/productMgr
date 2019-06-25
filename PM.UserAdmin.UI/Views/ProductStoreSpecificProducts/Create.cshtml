@@ -1,0 +1,55 @@
+﻿@model PM.Entity.Models.ProductStoreSpecific
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>Store Pricing</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+	        <div class="form-group" hidden="hidden">
+                <label asp-for="ProductId" class="control-label"></label>
+                <select asp-for="ProductId" class ="form-control" asp-items="ViewBag.ProductId"></select>
+            </div>
+            <div class="form-group" hidden="hidden">
+                <label asp-for="PackageTypeId" class="control-label"></label>
+                <select asp-for="PackageTypeId" class ="form-control" asp-items="ViewBag.PackageTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StoreName" class="control-label"></label>
+                <input asp-for="StoreName" class="form-control" />
+                <span asp-validation-for="StoreName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StorePrice" class="control-label"></label>
+                <input asp-for="StorePrice" class="form-control" />
+                <span asp-validation-for="StorePrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StoreCost" class="control-label"></label>
+                <input asp-for="StoreCost" class="form-control" />
+                <span asp-validation-for="StoreCost" class="text-danger"></span>
+            </div>
+	        <input type="hidden" asp-for="CreatedBy" />
+	        <input type="hidden" asp-for="CreatedOn" />
+	        <input type="hidden" asp-for="UpdatedBy" />
+	        <input type="hidden" asp-for="UpdatedOn" />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+	<a asp-controller="Products" asp-action="Details" asp-route-id="@ViewBag.ProductId">Back to Product</a> <br />
+	<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

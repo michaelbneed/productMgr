@@ -66,7 +66,6 @@ namespace PM.UserAdmin.UI.Controllers
 			RequestDto.RequestDescription = request.RequestDescription;
 
 			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(id));
-
 			if (note != null)
 			{
 				ViewData["NoteId"] = note.Id;
@@ -80,6 +79,7 @@ namespace PM.UserAdmin.UI.Controllers
 			ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName");
 			ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName");
 			ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
+
 			return View();
 		}
 
@@ -98,7 +98,6 @@ namespace PM.UserAdmin.UI.Controllers
 				request.CreatedOn = DateTime.Now;
 
 				_dbWriteService.Add(request);
-
 				await _dbWriteService.SaveChangesAsync();
 			}
 
@@ -133,7 +132,6 @@ namespace PM.UserAdmin.UI.Controllers
 			RequestDto.RequestDescription = request.RequestDescription;
 
 			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(id));
-
 			if (note != null)
 			{
 				ViewData["NoteId"] = note.Id;
@@ -164,8 +162,7 @@ namespace PM.UserAdmin.UI.Controllers
 					request.UpdatedOn = DateTime.Now;
 
 					_dbWriteService.Update(request);
-
-                    await _dbWriteService.SaveChangesAsync();
+					await _dbWriteService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -185,6 +182,7 @@ namespace PM.UserAdmin.UI.Controllers
             ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
             ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", request.SupplierId);
+
             return View(request);
         }
 
@@ -201,7 +199,7 @@ namespace PM.UserAdmin.UI.Controllers
 			_dbReadService.IncludeEntityNavigation<Supplier>();
 
 			var request = await _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(id));
-
+			
             if (request == null)
             {
 	            return NotFound();
@@ -219,7 +217,6 @@ namespace PM.UserAdmin.UI.Controllers
             _dbWriteService.Delete(request);
 
 			var response = await _dbWriteService.SaveChangesAsync();
-
 			if (!response)
 			{
 				TempData["notifyUser"] = "This action could not be performed due to data constraints.";
