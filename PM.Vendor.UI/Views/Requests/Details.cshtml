@@ -67,7 +67,15 @@
 	</dl>
 </div>
 <div>
-	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary border-right-0">Edit</a>
+	@if (@Model.StatusTypeId == 1)
+	{
+		<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary border-right-0">Edit</a>
+	}
+	else
+	{
+		<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary disabled border-right-0">Edit</a>	
+	}
+
 
 	@if (ViewData["NoteId"] == null)
 	{
@@ -84,7 +92,7 @@
 	}
 	else
 	{
-	<a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-success">View Product</a>
+		<a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-success">View Product</a>
 	}
 
 	<br />

@@ -34,7 +34,7 @@
 				@if (@PM.Business.Dto.RequestDto.RequestId != null)
 				{
 					<a asp-controller="Requests" asp-action="Details" asp-route-id=@PM.Business.Dto.RequestDto.RequestId
-					   class="nav-link text-dark">Currently working request:@PM.Business.Dto.RequestDto.RequestDescription</a>
+					   class="nav-link text-primary" style="font-size: 16pt">Request: @PM.Business.Dto.RequestDto.RequestDescription</a>
 				}
 				<div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse dropdown">
 					<ul class="nav navbar-nav navbar-right">

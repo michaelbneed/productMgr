@@ -63,7 +63,7 @@
 </div>
 
 <div>
-	<a asp-controller="Products" asp-action="Details" asp-route-id="@ViewBag.ProductId">Back to Product</a> <br />
+	<a asp-action="Index" asp-route-id="@ViewData["ProductId"]">Back to Package Types List</a> <br />
 	<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a>
 </div>
 
