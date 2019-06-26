@@ -5,7 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PM.Business.Dto;
+using PM.Business.Email;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -16,13 +18,15 @@ namespace PM.UserAdmin.UI.Controllers
 		private readonly VandivierProductManagerContext _context;
 		private readonly IDbReadService _dbReadService;
 		private readonly IDbWriteService _dbWriteService;
+		private readonly IConfiguration _configuration;
 
 		public ProductStoreSpecificPackagesController(VandivierProductManagerContext context,
-			IDbReadService dbReadService, IDbWriteService dbWriteService)
+			IDbReadService dbReadService, IDbWriteService dbWriteService, IConfiguration configuration)
 		{
 			_context = context;
 			_dbReadService = dbReadService;
 			_dbWriteService = dbWriteService;
+			_configuration = configuration;
 		}
 
 		public async Task<IActionResult> Index(int? id)
@@ -90,6 +94,12 @@ namespace PM.UserAdmin.UI.Controllers
 				productStoreSpecific.PackageTypeId = id;
 				_dbWriteService.Add(productStoreSpecific);
 				await _dbWriteService.SaveChangesAsync();
+
+				var request = await _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(RequestDto.RequestId));
+
+				RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
+				requestEmail.SendNewRequestToHeadQuarters(request);
+
 				return RedirectToAction("Index", "ProductStoreSpecificPackages", new {id = productStoreSpecific.PackageTypeId});
 			}
 
