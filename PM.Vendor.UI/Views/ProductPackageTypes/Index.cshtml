@@ -36,7 +36,7 @@
 					<p class="card-text">Supplier: @Html.DisplayFor(modelItem => item.Supplier.SupplierName)</p>
 				</div>
 				<div class="col-sm-4" style="padding-bottom: 10px">
-					<p class="card-text">Price (alt): @Html.DisplayFor(modelItem => item.AlternateProductPrice)</p>
+					<p class="card-text">Category: @Html.DisplayFor(modelItem => item.Product.Category.CategoryName)</p>
 					<p class="card-text">Quantity: @Html.DisplayFor(modelItem => item.Quantity)</p>
 					<p class="card-text">Supplier ID: @Html.DisplayFor(modelItem => item.SupplierData)</p>
 				</div>
