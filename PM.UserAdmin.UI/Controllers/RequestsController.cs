@@ -19,6 +19,8 @@ namespace PM.UserAdmin.UI.Controllers
         private readonly IDbReadService _dbReadService;
         private readonly IDbWriteService _dbWriteService;
 
+        private int? requestStatusBeforeEdit;
+
 		public RequestsController(IDbReadService dbReadService, IDbWriteService dbWriteService, VandivierProductManagerContext context)
 		{
 			_dbReadService = dbReadService;
@@ -111,15 +113,16 @@ namespace PM.UserAdmin.UI.Controllers
 		}
 
 		public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
+        { 
+			if (id == null)
             {
                 return NotFound();
             }
 
             var request = await _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(id));
+            requestStatusBeforeEdit = request.StatusTypeId;
 
-            if (request == null)
+			if (request == null)
             {
                 return NotFound();
             }
@@ -163,8 +166,14 @@ namespace PM.UserAdmin.UI.Controllers
 
 					_dbWriteService.Update(request);
 					await _dbWriteService.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
+
+					//TODO Send email on completed status
+					//if (request.StatusTypeId != requestStatusBeforeEdit && request.StatusTypeId == 5)
+					//{
+
+					//}
+				}
+				catch (DbUpdateConcurrencyException)
                 {
 	                bool result = await RequestExists(request.Id);
 	                if (!result)
