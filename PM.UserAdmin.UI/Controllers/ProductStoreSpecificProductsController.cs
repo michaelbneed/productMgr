@@ -195,8 +195,8 @@ namespace PM.UserAdmin.UI.Controllers
 
 		private async Task<bool> ProductStoreSpecificExists(int id)
 		{
-			var productStoreSpecific = _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(id));
-			return await _dbReadService.DoesRecordExist<Request>(e => productStoreSpecific.Id == id);
+			var productStoreSpecific = _dbReadService.GetSingleRecordAsync<ProductStoreSpecific>(s => s.Id.Equals(id));
+			return await _dbReadService.DoesRecordExist<ProductStoreSpecific>(e => productStoreSpecific.Id == id);
 		}
 	}
 }
