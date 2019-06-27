@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -28,21 +29,18 @@ namespace PM.Vendor.UI.Controllers
 
 		[Authorize]
 		public async Task<IActionResult> Index()
-        {
-			var userData = await _dbReadService.GetAllRecordsAsync<User>();
-			var loggedInUser = userData.FirstOrDefault();
-			var loggedInSupplierId = loggedInUser.SupplierId;
-			var userClaim = User.Claims;
-			var b2cUser = userClaim.ToList();
-
-			// TODO Filter by user!!!
+		{
+			// Restrict by SupplierId
+			var b2cUserAuthId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+			var userToEnsure = await _dbReadService.GetSingleRecordAsync<User>(s => s.AuthId.Equals(b2cUserAuthId));
+			var supplierId = userToEnsure.SupplierId;
 
 			_dbReadService.IncludeEntityNavigation<Product>();
 			_dbReadService.IncludeEntityNavigation<RequestType>();
 	        _dbReadService.IncludeEntityNavigation<StatusType>();
 	        _dbReadService.IncludeEntityNavigation<Supplier>();
 
-			var requests = await _dbReadService.GetAllRecordsAsync<Request>();
+			var requests = await _dbReadService.GetAllRecordsAsync<Request>(s => s.SupplierId.Equals(supplierId));
 			requests.Reverse();
 
 			RequestDto.RequestId = null;
