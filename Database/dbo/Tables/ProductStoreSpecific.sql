@@ -3,8 +3,8 @@
     [ProductID]     INT           NULL,
     [PackageTypeID] INT           NULL,
     [StoreName]     VARCHAR (100) NOT NULL,
-    [StorePrice]    DECIMAL (18)  NULL,
-    [StoreCost]     DECIMAL (18)  NULL,
+    [StorePrice]    MONEY         NULL,
+    [StoreCost]     MONEY         NULL,
     [CreatedOn]     DATETIME      NULL,
     [CreatedBy]     VARCHAR (100) NULL,
     [UpdatedOn]     DATETIME      NULL,
@@ -13,6 +13,8 @@
     CONSTRAINT [FK_ProductStoreSpecific_Product] FOREIGN KEY ([ProductID]) REFERENCES [dbo].[Product] ([ID]),
     CONSTRAINT [FK_ProductStoreSpecific_ProductPackageType] FOREIGN KEY ([PackageTypeID]) REFERENCES [dbo].[ProductPackageType] ([ID])
 );
+
+
 
 
 

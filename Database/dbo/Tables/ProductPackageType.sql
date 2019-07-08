@@ -6,8 +6,8 @@
     [AlternateProductUPCCode] VARCHAR (50)  NULL,
     [SupplierData]            VARCHAR (50)  NULL,
     [SupplierID]              INT           NULL,
-    [AlternateProductPrice]   DECIMAL (18)  NULL,
-    [AlternateProductCost]    DECIMAL (18)  NULL,
+    [AlternateProductPrice]   MONEY         NULL,
+    [AlternateProductCost]    MONEY         NULL,
     [ProductID]               INT           NULL,
     [CreatedOn]               DATETIME      NULL,
     [CreatedBy]               VARCHAR (100) NULL,
@@ -17,6 +17,8 @@
     CONSTRAINT [FK_ProductPackageType_Product] FOREIGN KEY ([ProductID]) REFERENCES [dbo].[Product] ([ID]),
     CONSTRAINT [FK_ProductPackageType_Supplier] FOREIGN KEY ([SupplierID]) REFERENCES [dbo].[Supplier] ([ID])
 );
+
+
 
 
 

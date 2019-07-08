@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PM.Business.Dto;
+using PM.Business.Email;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -17,10 +19,13 @@ namespace PM.UserAdmin.UI.Controllers
         private readonly VandivierProductManagerContext _context;
         private readonly IDbReadService _dbReadService;
         private readonly IDbWriteService _dbWriteService;
+        private readonly IConfiguration _configuration;
 
-		public NotesController(VandivierProductManagerContext context, IDbReadService dbReadService, IDbWriteService dbWriteService)
+		public NotesController(VandivierProductManagerContext context, IConfiguration configuration,
+			IDbReadService dbReadService, IDbWriteService dbWriteService)
         {
             _context = context;
+            _configuration = configuration;
             _dbReadService = dbReadService;
             _dbWriteService = dbWriteService;
 		}
@@ -90,6 +95,19 @@ namespace PM.UserAdmin.UI.Controllers
 				_dbWriteService.Add(note);
 
 				await _dbWriteService.SaveChangesAsync();
+				var request = await _dbReadService.GetSingleRecordAsync<Request>(r => r.Id.Equals(id));
+				if (NoteDto.EmailSupplier) 
+				{
+					RequestEmail supplierEmail = new RequestEmail(_configuration, _dbReadService);
+					supplierEmail.SendNewNoteEmailToSuppliers(request, note);
+				}
+
+				if (NoteDto.EmailRequestOriginator)
+				{
+					RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
+					requestEmail.SendNewNoteEmailToOriginatingUser(request, note);
+				}
+				
 			}
 			return RedirectToAction("Index", "Notes", new { id = note.RequestId });
 		}

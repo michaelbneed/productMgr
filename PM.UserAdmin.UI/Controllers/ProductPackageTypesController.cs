@@ -101,7 +101,7 @@ namespace PM.UserAdmin.UI.Controllers
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", productPackageType.ProductId);
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", productPackageType.SupplierId);
 
-            return RedirectToAction("Details", "Requests", new { id = RequestDto.RequestId });
+            return RedirectToAction("Index", "ProductPackageTypes", new { id = productPackageType.ProductId });
 		}
 
         public async Task<IActionResult> Edit(int? id)

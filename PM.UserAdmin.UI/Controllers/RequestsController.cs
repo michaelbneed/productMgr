@@ -99,12 +99,15 @@ namespace PM.UserAdmin.UI.Controllers
 
 				request.CreatedOn = DateTime.Now;
 
+				var status = await _dbReadService.GetSingleRecordAsync<StatusType>(s => s.StatusTypeName.Equals("New Request"));
+				request.StatusTypeId = status.Id;
+
 				_dbWriteService.Add(request);
 				await _dbWriteService.SaveChangesAsync();
 			}
 
 			ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
-			ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
+			ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId).SelectedValue;
 			ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", request.SupplierId);
 
 			RequestDto.RequestId = request.Id;

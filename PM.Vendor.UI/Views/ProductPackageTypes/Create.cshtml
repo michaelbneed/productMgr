@@ -41,8 +41,8 @@
                 <label asp-for="SupplierId" class="control-label">Supplier</label>
                 <select asp-for="SupplierId" class ="form-control" asp-items="ViewBag.SupplierId"></select>
             </div>
-            <div class="form-group" hidden="hidden">
-                <label asp-for="AlternateProductPrice" class="control-label">Price (alt)</label>
+            <div class="form-group">
+                <label asp-for="AlternateProductPrice" class="control-label" disabled="disabled">Price (alt)</label>
                 <input asp-for="AlternateProductPrice" class="form-control" />
                 <span asp-validation-for="AlternateProductPrice" class="text-danger"></span>
             </div>

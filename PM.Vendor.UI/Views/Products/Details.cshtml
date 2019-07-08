@@ -29,7 +29,7 @@
             @Html.DisplayFor(model => model.Upccode)
         </dd>
         <dt class = "col-sm-2">
-            Location
+            Catapult Inventory Location
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ProductLocation)
@@ -41,13 +41,13 @@
             @Html.DisplayFor(model => model.ProductCost)
         </dd>
         <dt class = "col-sm-2">
-            Package Size
+	        Container Size
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PackageSize)
         </dd>
         <dt class = "col-sm-2">
-            Package Type
+	        Container Type
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PackageType)
@@ -102,7 +102,7 @@
 		<a asp-controller="Notes" asp-action="Index" asp-route-id="@RequestDto.RequestId" class="btn btn-warning">Notes</a>
 	}
 	
-	<a asp-controller="ProductPackageTypes" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-success">Packages</a>
+	<a asp-controller="ProductPackageTypes" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-success">Package Quantities</a>
 	
 	<br />
 	@if (@PM.Business.Dto.RequestDto.RequestId != null)

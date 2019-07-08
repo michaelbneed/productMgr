@@ -51,7 +51,10 @@ namespace PM.Business.Email
                            $"View the request <a href='{adminUrl}{requestEditPath}'>here</a> <br /><br />" +
                            $"Thanks, <br /> Vandivier Management";
 
-                Helper.Send(_configuration, subject, body, new List<string>() { user.EmailAddress });
+                if (user.EmailAddress != null)
+                {
+	                Helper.Send(_configuration, subject, body, new List<string>() { user.EmailAddress });
+				}
             }
         }
 
@@ -68,7 +71,10 @@ namespace PM.Business.Email
                            $"View the note <a href='{adminUrl}{noteDetailPath}'>here</a> <br /><br />" +
                            $"Thanks, <br /> Vandivier Management";
 
-                Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
+                if (emailAddress != null)
+                {
+					Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
+				}
             }
         }
 
@@ -85,7 +91,10 @@ namespace PM.Business.Email
                            $"View the note <a href='{adminUrl}{noteDetailPath}'>here</a> <br /><br />" +
                            $"Thanks, <br /> Vandivier Management";
 
-                Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
+                if (emailAddress != null)
+                {
+					Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
+				}
             }
         }
 
@@ -100,7 +109,10 @@ namespace PM.Business.Email
                         $"View the note <a href='{adminUrl}{noteDetailPath}'>here</a> <br /><br />" +
                         $"Thanks, <br /> Vandivier Management";
 
-            Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
+            if (emailAddress != null)
+            {
+	            Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
+			}
         }
 
         public async void SendNewNoteEmailToSuppliers(Entity.Models.Request request, Entity.Models.Note note)
@@ -119,7 +131,10 @@ namespace PM.Business.Email
                            $"View the note <a href='{vendorUrl}{noteDetailPath}'>here</a> <br /><br />" +
                            $"Thanks, <br /> Vandivier Management";
 
-                Helper.Send(_configuration, subject, body, new List<string>() { user.EmailAddress });
+                if (user.EmailAddress != null)
+                {
+	                Helper.Send(_configuration, subject, body, new List<string>() { user.EmailAddress });
+				}
             }
         }
     }

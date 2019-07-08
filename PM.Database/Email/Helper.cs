@@ -32,7 +32,10 @@ namespace PM.Business.Email
 
             foreach (var item in to)
             {
-                message.To.Add(new MailAddress(item));
+	            if (item != null)
+	            {
+					message.To.Add(new MailAddress(item));
+				}
             }
 
             smtp.Send(message);

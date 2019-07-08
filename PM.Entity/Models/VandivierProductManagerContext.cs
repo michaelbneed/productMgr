@@ -97,7 +97,7 @@ namespace PM.Entity.Models
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ProductCost).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.ProductCost).HasColumnType("money");
 
                 entity.Property(e => e.ProductLocation)
                     .HasMaxLength(100)
@@ -108,7 +108,7 @@ namespace PM.Entity.Models
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.ProductPrice).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.ProductPrice).HasColumnType("money");
 
                 entity.Property(e => e.Upccode)
                     .HasColumnName("UPCCode")
@@ -131,14 +131,14 @@ namespace PM.Entity.Models
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
-                entity.Property(e => e.AlternateProductCost).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.AlternateProductCost).HasColumnType("money");
 
                 entity.Property(e => e.AlternateProductName)
                     .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.AlternateProductPrice).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.AlternateProductPrice).HasColumnType("money");
 
                 entity.Property(e => e.AlternateProductUpccode)
                     .HasColumnName("AlternateProductUPCCode")
@@ -153,7 +153,7 @@ namespace PM.Entity.Models
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
-                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.Quantity).HasColumnType("money");
 
                 entity.Property(e => e.SupplierData)
                     .HasMaxLength(50)
@@ -196,14 +196,14 @@ namespace PM.Entity.Models
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
-                entity.Property(e => e.StoreCost).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.StoreCost).HasColumnType("money");
 
                 entity.Property(e => e.StoreName)
                     .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.StorePrice).HasColumnType("decimal(18, 0)");
+                entity.Property(e => e.StorePrice).HasColumnType("money");
 
 				entity.Property(e => e.UpdatedBy)
 					.HasMaxLength(100)
