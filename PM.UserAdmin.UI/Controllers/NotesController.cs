@@ -43,6 +43,7 @@ namespace PM.UserAdmin.UI.Controllers
 			{
 				notes = await _dbReadService.GetAllRecordsAsync<Note>();
 			}
+
 			notes.Reverse();
 			return View(notes);
 		}
@@ -79,7 +80,7 @@ namespace PM.UserAdmin.UI.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> CreateNote(int? id, [Bind("Id,NoteText,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
+		public async Task<IActionResult> CreateNote(int? id, [Bind("Id,NoteText,SendEmailRequestor,SendEmailSupplier,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
 		{
 			note.Id = 0;
 			if (ModelState.IsValid)
@@ -96,18 +97,17 @@ namespace PM.UserAdmin.UI.Controllers
 
 				await _dbWriteService.SaveChangesAsync();
 				var request = await _dbReadService.GetSingleRecordAsync<Request>(r => r.Id.Equals(id));
-				if (NoteDto.EmailSupplier) 
+
+				RequestEmail email = new RequestEmail(_configuration, _dbReadService);
+				if (note.SendEmailSupplier) 
 				{
-					RequestEmail supplierEmail = new RequestEmail(_configuration, _dbReadService);
-					supplierEmail.SendNewNoteEmailToSuppliers(request, note);
+					email.SendNewNoteEmailToSuppliers(request, note);
 				}
 
-				if (NoteDto.EmailRequestOriginator)
+				if (note.SendEmailRequestor)
 				{
-					RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
-					requestEmail.SendNewNoteEmailToOriginatingUser(request, note);
+					email.SendNewNoteEmailToOriginatingUser(request, note);
 				}
-				
 			}
 			return RedirectToAction("Index", "Notes", new { id = note.RequestId });
 		}
@@ -138,7 +138,7 @@ namespace PM.UserAdmin.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NoteText,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NoteText,SendEmailRequestor,SendEmailSupplier,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
         {
             if (id != note.Id)
             {

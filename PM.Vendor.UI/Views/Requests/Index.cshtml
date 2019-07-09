@@ -6,6 +6,13 @@
 
 <h1 >Product Requests</h1>
 
+@if (@ViewData["SupplierData"] != null)
+{
+	<p>
+		<a asp-action="CreateRequest" title="Add a new Request"><i class="material-icons">add</i>Add Request</a><br />
+	</p>
+}
+
 <br />
 @foreach (var item in Model)
 {

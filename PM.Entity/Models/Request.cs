@@ -16,7 +16,7 @@ namespace PM.Entity.Models
 		public string RequestDescription { get; set; }
         public int? RequestTypeId { get; set; }
         public int? StatusTypeId { get; set; }
-        public int? UserId { get; set; }
+        public string UserId { get; set; }
         public int? ProductId { get; set; }
         public int? SupplierId { get; set; }
         public DateTime? CreatedOn { get; set; }

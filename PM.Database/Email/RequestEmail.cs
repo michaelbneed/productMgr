@@ -100,11 +100,11 @@ namespace PM.Business.Email
 
         public void SendNewNoteEmailToOriginatingUser(Entity.Models.Request request, Entity.Models.Note note)
         {
-            // TODO: UserId needs to be a string.
             var adminUrl = _configuration.GetValue<string>("AdminWebsite:BaseUrl");
             var noteDetailPath = string.Format(_configuration.GetValue<string>("AdminWebsite:NoteDetail"), note.Id);
             var subject = $"Vandivier Product Request Note";
-            var emailAddress = new GraphClient(_configuration, false).GetUserEmail(request.UserId.ToString());
+
+            var emailAddress = new GraphClient(_configuration, false).GetUserEmail(request.UserId);
             var body = $"A new note has been added for a product request that requires your attention. <br /><br />" +
                         $"View the note <a href='{adminUrl}{noteDetailPath}'>here</a> <br /><br />" +
                         $"Thanks, <br /> Vandivier Management";

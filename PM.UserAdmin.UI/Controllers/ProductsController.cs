@@ -75,7 +75,9 @@ namespace PM.UserAdmin.UI.Controllers
 		        await _dbWriteService.SaveChangesAsync();
 
 		        RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
+
 		        requestEmail.SendNewRequestToHeadQuarters(request);
+				requestEmail.SendRequestToSuppliers(request);
 			}
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
 

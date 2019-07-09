@@ -6,7 +6,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PM.Business.Dto;
+using PM.Business.Email;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -17,10 +19,13 @@ namespace PM.Vendor.UI.Controllers
         private readonly VandivierProductManagerContext _context;
         private readonly IDbReadService _dbReadService;
         private readonly IDbWriteService _dbWriteService;
+        private readonly IConfiguration _configuration;
 
-		public NotesController(VandivierProductManagerContext context, IDbReadService dbReadService, IDbWriteService dbWriteService)
+		public NotesController(VandivierProductManagerContext context, IConfiguration configuration, 
+						IDbReadService dbReadService, IDbWriteService dbWriteService)
         {
             _context = context;
+            _configuration = configuration;
             _dbReadService = dbReadService;
             _dbWriteService = dbWriteService;
 		}
@@ -78,7 +83,7 @@ namespace PM.Vendor.UI.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> CreateNote(int? id, [Bind("Id,NoteText,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
+		public async Task<IActionResult> CreateNote(int? id, [Bind("Id,NoteText,SendEmailRequestor,SendEmailSupplier,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
 		{
 			note.Id = 0;
 			if (ModelState.IsValid)
@@ -95,6 +100,11 @@ namespace PM.Vendor.UI.Controllers
 				_dbWriteService.Add(note);
 
 				await _dbWriteService.SaveChangesAsync();
+
+				var request = await _dbReadService.GetSingleRecordAsync<Request>(r => r.Id.Equals(id));
+
+				RequestEmail email = new RequestEmail(_configuration, _dbReadService);
+				email.SendNewNoteEmailToOriginatingUser(request, note);
 			}
 			return RedirectToAction("Index", "Notes", new { id = note.RequestId });
 		}
@@ -127,7 +137,7 @@ namespace PM.Vendor.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NoteText,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,NoteText,SendEmailRequestor,SendEmailSupplier,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
         {
             if (id != note.Id)
             {

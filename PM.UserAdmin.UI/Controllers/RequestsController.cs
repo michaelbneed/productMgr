@@ -67,10 +67,10 @@ namespace PM.UserAdmin.UI.Controllers
 			RequestDto.RequestId = request.Id;
 			RequestDto.RequestDescription = request.RequestDescription;
 
-			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(id));
-			if (note != null)
+			var notes = await _dbReadService.GetAllRecordsAsync<Note>(s => s.RequestId.Equals(id));
+			if (notes != null)
 			{
-				ViewData["NoteId"] = note.Id;
+				ViewData["NoteId"] = notes;
 			}
 			
 			return View(request);
@@ -93,7 +93,9 @@ namespace PM.UserAdmin.UI.Controllers
 			{
 				if (User != null)
 				{
+					string claimTypeEmailAddress = $"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
 					var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+					request.UserId = User.Claims.FirstOrDefault(x => x.Type == claimTypeEmailAddress).Value;
 					request.CreatedBy = userFullName;
 				}
 

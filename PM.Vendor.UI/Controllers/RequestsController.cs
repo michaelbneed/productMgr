@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.AzureADB2C.UI.Internal;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -30,18 +31,34 @@ namespace PM.Vendor.UI.Controllers
 		[Authorize]
 		public async Task<IActionResult> Index()
 		{
-			// Restrict by SupplierId
-			var b2cUserAuthId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
-			var userToEnsure = await _dbReadService.GetSingleRecordAsync<User>(s => s.AuthId.Equals(b2cUserAuthId));
-			var supplierId = userToEnsure.SupplierId;
-
 			_dbReadService.IncludeEntityNavigation<Product>();
 			_dbReadService.IncludeEntityNavigation<RequestType>();
-	        _dbReadService.IncludeEntityNavigation<StatusType>();
-	        _dbReadService.IncludeEntityNavigation<Supplier>();
+			_dbReadService.IncludeEntityNavigation<StatusType>();
+			_dbReadService.IncludeEntityNavigation<Supplier>();
 
-			var requests = await _dbReadService.GetAllRecordsAsync<Request>(s => s.SupplierId.Equals(supplierId));
-			requests.Reverse();
+			// Restrict by SupplierId
+			var b2CUserAuthId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+			var userToEnsure = await _dbReadService.GetSingleRecordAsync<User>(s => s.AuthId.Equals(b2CUserAuthId));
+			int? supplierId = 0;
+
+			List<Request> requests = new List<Request>();
+
+			if (userToEnsure != null)
+			{
+				supplierId = userToEnsure.SupplierId;
+			}
+			
+			if (supplierId != 0)
+	        {
+		        ViewData["SupplierData"] = supplierId;
+				requests = await _dbReadService.GetAllRecordsAsync<Request>(s => s.SupplierId.Equals(supplierId));
+		        requests.Reverse();
+			}
+			else
+			{
+				TempData["notifyUser"] = "User not assigned to a supplier!";
+				ViewData["SupplierData"] = null;
+			}
 
 			RequestDto.RequestId = null;
 			RequestDto.RequestDescription = null;
@@ -79,6 +96,45 @@ namespace PM.Vendor.UI.Controllers
 			}
 			
 			return View(request);
+        }
+
+        public IActionResult CreateRequest()
+        {
+	        ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName");
+	        ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName");
+	        ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
+
+	        return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateRequest([Bind("Id,RequestDescription,RequestTypeId,StatusTypeId,UserId,ProductId,SupplierId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Request request)
+        {
+	        if (ModelState.IsValid)
+	        {
+		        if (User != null)
+		        {
+			        var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"emails").Value;
+			        request.CreatedBy = userFullName;
+		        }
+
+		        request.CreatedOn = DateTime.Now;
+
+		        var status = await _dbReadService.GetSingleRecordAsync<StatusType>(s => s.StatusTypeName.Equals("New Request"));
+		        request.StatusTypeId = status.Id;
+
+		        _dbWriteService.Add(request);
+		        await _dbWriteService.SaveChangesAsync();
+	        }
+
+	        ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
+	        ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId).SelectedValue;
+	        ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", request.SupplierId);
+
+	        RequestDto.RequestId = request.Id;
+
+	        return RedirectToAction("CreateProduct", "Products", new { id = request.Id });
         }
 
 		public async Task<IActionResult> Edit(int? id)

@@ -4,6 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using Microsoft.EntityFrameworkCore.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Clients.ActiveDirectory;
 using Newtonsoft.Json;
@@ -120,9 +121,8 @@ namespace PM.Auth.GraphApi
         {
             try
             {
-                var result = JObject.Parse(Get($"/users/{objectId}"));
-
-                return result.Value<string>("mail");
+                var result = objectId;
+                return result;
             }
             catch (Exception e)
             {

@@ -55,7 +55,13 @@ namespace PM.Entity.Models
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+                entity.Property(e => e.SendEmailRequestor).HasColumnName("SendEmailRequestor")
+	                .HasDefaultValue(false);
+
+                entity.Property(e => e.SendEmailSupplier).HasColumnName("SendEmailSupplier")
+	                .HasDefaultValue(false);
+
+				entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.NoteText).IsRequired();
 
@@ -248,9 +254,11 @@ namespace PM.Entity.Models
 
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
-                entity.Property(e => e.UserId).HasColumnName("UserID");
+                entity.Property(e => e.UserId)
+	                .HasMaxLength(100)
+	                .IsUnicode(false);
 
-                entity.HasOne(d => d.Product)
+				entity.HasOne(d => d.Product)
                     .WithMany(p => p.Request)
                     .HasForeignKey(d => d.ProductId)
                     .HasConstraintName("FK_Request_Product");

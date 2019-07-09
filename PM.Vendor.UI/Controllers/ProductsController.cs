@@ -42,7 +42,84 @@ namespace PM.Vendor.UI.Controllers
 			return View(products);
 		}
 
-        public async Task<IActionResult> Details(int? id)
+		public IActionResult CreateProduct(int? id)
+		{
+			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName");
+			return View();
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> CreateProduct(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
+		{
+			var requestId = id;
+			product.Id = 0;
+
+			if (ModelState.IsValid)
+			{
+				if (User != null)
+				{
+					var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"emails").Value;
+					product.CreatedBy = userFullName;
+				}
+
+				product.CreatedOn = DateTime.Now;
+
+				_dbWriteService.Add(product);
+				await _dbWriteService.SaveChangesAsync();
+
+				_dbReadService.IncludeEntityNavigation<Request>();
+				var request = await _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(requestId));
+
+				request.ProductId = product.Id;
+				_dbWriteService.Update(request);
+				await _dbWriteService.SaveChangesAsync();
+
+				RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
+				requestEmail.SendNewRequestToHeadQuarters(request);
+			}
+			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
+
+			return RedirectToAction("Details", "Requests", new { id = requestId });
+		}
+
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> CreateProductAndPackage(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
+		{
+			var requestId = RequestDto.RequestId;
+			product.Id = 0;
+
+			if (ModelState.IsValid)
+			{
+				if (User != null)
+				{
+					var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"emails").Value;
+					product.CreatedBy = userFullName;
+				}
+
+				product.CreatedOn = DateTime.Now;
+
+				_dbWriteService.Add(product);
+				await _dbWriteService.SaveChangesAsync();
+
+				_dbReadService.IncludeEntityNavigation<Request>();
+				var request = await _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(requestId));
+
+				request.ProductId = product.Id;
+				_dbWriteService.Update(request);
+				await _dbWriteService.SaveChangesAsync();
+
+				RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
+				requestEmail.SendNewRequestToHeadQuarters(request);
+			}
+
+			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
+
+			return RedirectToAction("Create", "ProductPackageTypes", new { id = product.Id });
+		}
+
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
