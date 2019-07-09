@@ -3,7 +3,7 @@
     [RequestDescription] NVARCHAR (MAX) NOT NULL,
     [RequestTypeID]      INT            NULL,
     [StatusTypeID]       INT            NULL,
-    [UserID]             INT            NULL,
+    [UserID]             VARCHAR (100)  NULL,
     [ProductID]          INT            NULL,
     [SupplierID]         INT            NULL,
     [CreatedOn]          DATETIME       NULL,
@@ -16,6 +16,8 @@
     CONSTRAINT [FK_Request_StatusTypes] FOREIGN KEY ([StatusTypeID]) REFERENCES [dbo].[StatusType] ([ID]),
     CONSTRAINT [FK_Request_Supplier] FOREIGN KEY ([SupplierID]) REFERENCES [dbo].[Supplier] ([ID])
 );
+
+
 
 
 
