@@ -39,19 +39,18 @@ namespace PM.Vendor.UI.Controllers
 			// Restrict by SupplierId
 			var b2CUserAuthId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 			var userToEnsure = await _dbReadService.GetSingleRecordAsync<User>(s => s.AuthId.Equals(b2CUserAuthId));
-			int? supplierId = 0;
-
+			
 			List<Request> requests = new List<Request>();
 
 			if (userToEnsure != null)
 			{
-				supplierId = userToEnsure.SupplierId;
+				RequestDto.SupplierId = userToEnsure.SupplierId;
 			}
 			
-			if (supplierId != 0)
+			if (RequestDto.SupplierId != 0)
 	        {
-		        ViewData["SupplierData"] = supplierId;
-				requests = await _dbReadService.GetAllRecordsAsync<Request>(s => s.SupplierId.Equals(supplierId));
+		        ViewData["SupplierData"] = RequestDto.SupplierId;
+				requests = await _dbReadService.GetAllRecordsAsync<Request>(s => s.SupplierId.Equals(RequestDto.SupplierId));
 		        requests.Reverse();
 			}
 			else
@@ -102,8 +101,7 @@ namespace PM.Vendor.UI.Controllers
         {
 	        ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName");
 	        ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName");
-	        ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
-
+	        
 	        return View();
         }
 
@@ -123,17 +121,17 @@ namespace PM.Vendor.UI.Controllers
 
 		        var status = await _dbReadService.GetSingleRecordAsync<StatusType>(s => s.StatusTypeName.Equals("New Request"));
 		        request.StatusTypeId = status.Id;
+		        request.SupplierId = RequestDto.SupplierId;
 
-		        _dbWriteService.Add(request);
+				_dbWriteService.Add(request);
 		        await _dbWriteService.SaveChangesAsync();
 	        }
 
 	        ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
 	        ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId).SelectedValue;
-	        ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", request.SupplierId);
-
-	        RequestDto.RequestId = request.Id;
-
+			
+			RequestDto.RequestId = request.Id;
+			
 	        return RedirectToAction("CreateProduct", "Products", new { id = request.Id });
         }
 
@@ -153,11 +151,10 @@ namespace PM.Vendor.UI.Controllers
 			ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", request.ProductId);
 			ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
 			ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
-			ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", request.SupplierId);
-
+			
 			RequestDto.RequestId = request.Id;
 			RequestDto.RequestDescription = request.RequestDescription;
-
+			
 			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(id));
 
 			if (note != null)
@@ -188,6 +185,7 @@ namespace PM.Vendor.UI.Controllers
 					}
 
 					request.UpdatedOn = DateTime.Now;
+					request.SupplierId = RequestDto.SupplierId;
 
 					_dbWriteService.Update(request);
 
@@ -210,7 +208,7 @@ namespace PM.Vendor.UI.Controllers
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", request.ProductId);
             ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
             ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
-            ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", request.SupplierId);
+
             return View(request);
         }
 
