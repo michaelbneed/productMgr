@@ -33,11 +33,12 @@
 					<a asp-controller="ProductPackageTypes" asp-action="Details" asp-route-id="@item.PackageTypeId" class="control-label">
 						<p class="card-text">Parent Package: @Html.DisplayFor(modelItem => item.PackageType.AlternateProductName)</p>
 					</a><br />
-						<p class="card-text">Store Price: @Html.DisplayFor(modelItem => item.StorePrice)</p>
+						<p class="card-text">Package UPC: @Html.DisplayFor(modelItem => item.PackageType.AlternateProductUpccode)</p>
 				</div>
 				<div class="col-sm-4" style="padding-bottom: 10px">
-					<p class="card-text">Package UPC: @Html.DisplayFor(modelItem => item.PackageType.AlternateProductUpccode)</p>
 					<p class="card-text">Store Cost: @Html.DisplayFor(modelItem => item.StoreCost)</p>
+					<p class="card-text">Store Retail Price: @Html.DisplayFor(modelItem => item.StorePrice)</p>
+					
 				</div>
 				</div>
 		</div>

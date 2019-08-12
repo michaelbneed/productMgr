@@ -37,21 +37,21 @@
                 <input asp-for="SupplierData" class="form-control" />
                 <span asp-validation-for="SupplierData" class="text-danger"></span>
             </div>
+	        <div class="form-group">
+		        <label asp-for="SupplierId" class="control-label">Supplier</label>
+		        <select asp-for="SupplierId" class ="form-control" asp-items="ViewBag.SupplierId"></select>
+	        </div>
+	        <div class="form-group">
+		        <label asp-for="AlternateProductCost" class="control-label">Cost (alt)</label>
+		        <input asp-for="AlternateProductCost" class="form-control" />
+		        <span asp-validation-for="AlternateProductCost" class="text-danger"></span>
+	        </div>
             <div class="form-group">
-                <label asp-for="SupplierId" class="control-label">Supplier</label>
-                <select asp-for="SupplierId" class ="form-control" asp-items="ViewBag.SupplierId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="AlternateProductPrice" class="control-label" disabled="disabled">Price (alt)</label>
+                <label asp-for="AlternateProductPrice" class="control-label">Suggested Retail Price (alt)</label>
                 <input asp-for="AlternateProductPrice" class="form-control" />
                 <span asp-validation-for="AlternateProductPrice" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="AlternateProductCost" class="control-label">Cost (alt)</label>
-                <input asp-for="AlternateProductCost" class="form-control" />
-                <span asp-validation-for="AlternateProductCost" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="CreatedBy" />
+	        <input type="hidden" asp-for="CreatedBy" />
 	        <input type="hidden" asp-for="CreatedOn" />
 	        <input type="hidden" asp-for="UpdatedBy" />
 	        <input type="hidden" asp-for="UpdatedOn" />
