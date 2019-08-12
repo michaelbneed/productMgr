@@ -124,6 +124,7 @@
     <Folder Include="dbo\Tables\" />
     <Folder Include="Security\" />
     <Folder Include="Profiles" />
+    <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="dbo\Tables\Product.sql">
@@ -167,10 +168,13 @@
       <AnsiNulls>On</AnsiNulls>
       <QuotedIdentifier>On</QuotedIdentifier>
     </Build>
+    <None Include="Scripts\PopulateRequestTypes.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Profiles\Development.publish.xml" />
     <None Include="Profiles\Local.publish.xml" />
     <None Include="Profiles\QA.publish.xml" />
+    <None Include="Scripts\PopulateRequestStatus.sql" />
+    <None Include="Scripts\PopulateCategories.sql" />
   </ItemGroup>
 </Project>
