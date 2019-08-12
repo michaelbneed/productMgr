@@ -16,33 +16,33 @@
 <br/>
 @foreach (var item in Model)
 {
-	<div class="card border-primary mb-3" style="max-width: 100%;">
-		<div class="card-header">
-			<div class="row">
-				<a asp-action="Details" title="Details" asp-route-id="@item.Id" class="col-sm-2">Store: <br />@Html.DisplayFor(modelItem => item.StoreName)</a>
-				<div class="col-sm-10" align="right">
-					<a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a>
-					<a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a>
-					<a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>
-				</div>
+<div class="card border-dark mb-3" style="max-width: 100%; color: #6A0D1F">
+	<div class="card-header">
+		<div class="row">
+			<a asp-action="Details" title="Details" asp-route-id="@item.Id" class="col-sm-2" style="color: #6A0D1F">Store: <br />@Html.DisplayFor(modelItem => item.StoreName)</a>
+			<div class="col-sm-10" align="right">
+				<a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a>
+				<a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a>
+				<a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>
 			</div>
 		</div>
-		<div class="card-body text-dark">
-			<div class="row">
-				<div class="col-sm-4" style="padding-bottom: 10px">
-					<a asp-controller="ProductPackageTypes" asp-action="Details" asp-route-id="@item.PackageTypeId" class="control-label">
-						<p class="card-text">Parent Package: @Html.DisplayFor(modelItem => item.PackageType.AlternateProductName)</p>
-					</a><br />
-						<p class="card-text">Package UPC: @Html.DisplayFor(modelItem => item.PackageType.AlternateProductUpccode)</p>
-				</div>
-				<div class="col-sm-4" style="padding-bottom: 10px">
-					<p class="card-text">Store Cost: @Html.DisplayFor(modelItem => item.StoreCost)</p>
-					<p class="card-text">Store Retail Price: @Html.DisplayFor(modelItem => item.StorePrice)</p>
-					
-				</div>
-				</div>
+	</div>
+	<div class="card-body text-dark">
+		<div class="row">
+			<div class="col-sm-4" style="padding-bottom: 10px">
+				<a asp-controller="ProductPackageTypes" asp-action="Details" asp-route-id="@item.PackageTypeId" class="control-label">
+					<p class="card-text">Parent Package: @Html.DisplayFor(modelItem => item.PackageType.AlternateProductName)</p>
+				</a><br />
+				<p class="card-text">Package UPC: @Html.DisplayFor(modelItem => item.PackageType.AlternateProductUpccode)</p>
+			</div>
+			<div class="col-sm-4" style="padding-bottom: 10px">
+				<p class="card-text">Store Cost: @Html.DisplayFor(modelItem => item.StoreCost)</p>
+				<p class="card-text">Store Retail Price: @Html.DisplayFor(modelItem => item.StorePrice)</p>
+
+			</div>
 		</div>
 	</div>
+</div>
 
 
 

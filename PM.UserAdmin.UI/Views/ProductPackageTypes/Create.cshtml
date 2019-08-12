@@ -1,4 +1,5 @@
 ﻿@using PM.Business.Dto
+@using PM.Entity.Models
 @model PM.Entity.Models.ProductPackageType
 
 @{
@@ -55,8 +56,16 @@
 			<input type="hidden" asp-for="CreatedOn" />
 			<input type="hidden" asp-for="UpdatedBy" />
 			<input type="hidden" asp-for="UpdatedOn" />
-			<div class="form-group">
+			
+			<div class="form-group" id="submitNormal">
 				<input type="submit" value="Create" class="btn btn-primary" />
+			</div>
+			<div class="form-group" id="submitAndRepeat" style="display: none">
+				<input type="submit" asp-action="Create" asp-route-id=@ViewData["ProductId"] asp-route-Multiple="true" value="Create and Repeat" class="btn btn-primary" />
+			</div>
+			<div class="form-group">
+				<label class="control-label">Create and Repeat</label>
+				<input type="checkbox" id="chkChoice" onchange="swapElements('submitAndRepeat', 'submitNormal', 'chkChoice');" />
 			</div>
 		</form>
 	</div>

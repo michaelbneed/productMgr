@@ -16,34 +16,34 @@
 <br />
 @foreach (var item in Model)
 {
-	<div class="card border-primary mb-3" style="max-width: 100%;">
-		<div class="card-header">
-			<div class="row">
-				<a asp-action="Details" title="Details" asp-route-id="@item.Id" class="col-sm-2">Request: <br />@Html.DisplayFor(modelItem => item.RequestDescription)</a>
-				<div class="col-sm-10" align="right">
+<div class="card border-dark mb-3" style="max-width: 100%; color: #6A0D1F">
+	<div class="card-header">
+		<div class="row">
+			<a asp-action="Details" title="Details" asp-route-id="@item.Id" class="col-sm-2" style="color: #6A0D1F">Request: <br />@Html.DisplayFor(modelItem => item.RequestDescription)</a>
+			<div class="col-sm-10" align="right">
 
-					@if (@item.StatusTypeId == 1)
-					{
-						<a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a>
-					}
-					<a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a>
+				@if (@item.StatusTypeId == 1)
+				{
+					<a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a>
+				}
+				<a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a>
 
-				</div>
-			</div>
-		</div>
-		<div class="card-body text-dark">
-			<div class="row">
-				<div class="col-sm-6" style="padding-bottom: 10px">
-					<p class="card-text">Product: @Html.DisplayFor(modelItem => item.Product.ProductName)</p>
-					<p class="card-text">Requester: @Html.DisplayFor(modelItem => item.CreatedBy)</p>
-					<p class="card-text">Type: @Html.DisplayFor(modelItem => item.RequestType.RequestTypeName)</p>
-				</div>
-				<div class="col-sm-6">
-					<p class="card-text">Supplier: @Html.DisplayFor(modelItem => item.Supplier.SupplierName)</p>
-					<p class="card-text">Submitted On: @Html.DisplayFor(modelItem => item.CreatedOn)</p>
-					<p class="card-text">Status: @Html.DisplayFor(modelItem => item.StatusType.StatusTypeName)</p>
-				</div>
 			</div>
 		</div>
 	</div>
+	<div class="card-body text-dark">
+		<div class="row">
+			<div class="col-sm-6" style="padding-bottom: 10px">
+				<p class="card-text">Product: @Html.DisplayFor(modelItem => item.Product.ProductName)</p>
+				<p class="card-text">Requester: @Html.DisplayFor(modelItem => item.CreatedBy)</p>
+				<p class="card-text">Type: @Html.DisplayFor(modelItem => item.RequestType.RequestTypeName)</p>
+			</div>
+			<div class="col-sm-6">
+				<p class="card-text">Supplier: @Html.DisplayFor(modelItem => item.Supplier.SupplierName)</p>
+				<p class="card-text">Submitted On: @Html.DisplayFor(modelItem => item.CreatedOn)</p>
+				<p class="card-text">Status: @Html.DisplayFor(modelItem => item.StatusType.StatusTypeName)</p>
+			</div>
+		</div>
+	</div>
+</div>
 }    

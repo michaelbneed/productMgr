@@ -26,7 +26,7 @@
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
 			<div class="container">
-				<a class="navbar-brand" asp-area="" asp-controller="Requests" asp-action="Index">Vandivier PM</a>
+				<a class="navbar-brand" asp-area="" asp-controller="Requests" asp-action="Index"><img src=@Url.Content("~/images/vanlogo.jpg") alt="Product Manager" /></a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
@@ -34,7 +34,7 @@
 				@if (@PM.Business.Dto.RequestDto.RequestId != null)
 				{
 					<a asp-controller="Requests" asp-action="Details" asp-route-id=@PM.Business.Dto.RequestDto.RequestId
-					   class="nav-link text-primary" style="font-size: 16pt">Request: @PM.Business.Dto.RequestDto.RequestDescription</a>
+					   class="nav-link" style="font-size: 16pt; color:#6A0D1F">Request: @PM.Business.Dto.RequestDto.RequestDescription</a>
 				}
 				<div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse dropdown">
 					<ul class="nav navbar-nav navbar-right">
@@ -60,6 +60,7 @@
 		<partial name="_CookieConsentPartial" />
 		<main role="main" class="pb-3">
 			<p style="color: red">@Html.Raw(TempData["notifyUser"])</p>
+			<p style="color: green">@Html.Raw(TempData["notifyUserSuccess"])</p>
 			@RenderBody()
 		</main>
 	</div>

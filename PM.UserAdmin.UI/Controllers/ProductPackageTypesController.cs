@@ -79,7 +79,7 @@ namespace PM.UserAdmin.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(int id, [Bind("Id,Quantity,Unit,AlternateProductName,AlternateProductUpcCode,SupplierData,SupplierId,AlternateProductPrice,AlternateProductCost,ProductId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] ProductPackageType productPackageType)
+        public async Task<IActionResult> Create(int id, bool multiple, [Bind("Id,Quantity,Unit,AlternateProductName,AlternateProductUpcCode,SupplierData,SupplierId,AlternateProductPrice,AlternateProductCost,ProductId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] ProductPackageType productPackageType)
         {
 	        productPackageType.Id = 0;
             if (ModelState.IsValid)
@@ -100,11 +100,17 @@ namespace PM.UserAdmin.UI.Controllers
 
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", productPackageType.ProductId);
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", productPackageType.SupplierId);
+			
+			if (multiple == true)
+            {
+	            TempData["notifyUserSuccess"] = "Alternate Package Saved.";
+				return RedirectToAction("Create", "ProductPackageTypes", new { id = productPackageType.ProductId });
+            }
 
-            return RedirectToAction("Index", "ProductPackageTypes", new { id = productPackageType.ProductId });
+			return RedirectToAction("Index", "ProductPackageTypes", new { id = productPackageType.ProductId });
 		}
 
-        public async Task<IActionResult> Edit(int? id)
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
