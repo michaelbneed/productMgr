@@ -31,9 +31,6 @@ namespace PM.UserAdmin.UI.Controllers
 
 		public async Task<IActionResult> Index(int? id)
 		{
-			_dbReadService.IncludeEntityNavigation<Product>();
-			_dbReadService.IncludeEntityNavigation<ProductPackageType>();
-
 			ViewData["PackageTypeId"] = id;
 
 			var package = await _dbReadService.GetSingleRecordAsync<ProductPackageType>(s => s.Id.Equals(id));
@@ -65,9 +62,6 @@ namespace PM.UserAdmin.UI.Controllers
 				ViewData["NoteId"] = note.Id;
 			}
 
-			_dbReadService.IncludeEntityNavigation<Product>();
-			_dbReadService.IncludeEntityNavigation<ProductPackageType>();
-
 			var productStoreSpecific = await _dbReadService.GetSingleRecordAsync<ProductStoreSpecific>(p => p.Id.Equals(id));
 
 			if (productStoreSpecific == null)
@@ -82,6 +76,7 @@ namespace PM.UserAdmin.UI.Controllers
 			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(package.ProductId)).Result;
 
 			ViewData["ProductName"] = product.ProductName;
+			ViewData["ProductId"] = product.Id;
 			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
 
 			return View(productStoreSpecific);
@@ -164,6 +159,7 @@ namespace PM.UserAdmin.UI.Controllers
 			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(package.ProductId)).Result;
 
 			ViewData["ProductName"] = product.ProductName;
+			ViewData["ProductId"] = product.Id;
 			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
 			
 			return View(productStoreSpecific);
@@ -228,10 +224,7 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            _dbReadService.IncludeEntityNavigation<Product>();
-            _dbReadService.IncludeEntityNavigation<ProductPackageType>();
-
-			var productStoreSpecific = await _dbReadService.GetSingleRecordAsync<ProductStoreSpecific>(p => p.Id.Equals(id));
+            var productStoreSpecific = await _dbReadService.GetSingleRecordAsync<ProductStoreSpecific>(p => p.Id.Equals(id));
 			if (productStoreSpecific == null)
             {
                 return NotFound();

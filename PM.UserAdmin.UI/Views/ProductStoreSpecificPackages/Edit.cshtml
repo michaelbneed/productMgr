@@ -50,7 +50,7 @@
 					<a asp-controller="Notes" asp-action="Index" asp-route-id="@RequestDto.RequestId" class="btn btn-warning">Notes</a>
 				}
 
-				<a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-success">Product</a> <br />
+				<a asp-controller="Products" asp-action="Details" asp-route-id="@ViewData["ProductId"]" class="btn btn-success">Product</a> <br />
 			</div>
 		</form>
 	</div>

@@ -14,12 +14,6 @@
 	<hr />
 	<dl class="row">
 		<dt class="col-sm-2">
-			@Html.DisplayNameFor(model => model.Product)
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.Product.ProductName)
-		</dd>
-		<dt class="col-sm-2">
 			Package Type
 		</dt>
 		<dd class="col-sm-10">
@@ -81,7 +75,7 @@
 		<a asp-controller="Notes" asp-action="Index" asp-route-id="@RequestDto.RequestId" class="btn btn-warning">Notes</a>
 	}
 
-	<a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-success">Product</a> <br />
+	<a asp-controller="Products" asp-action="Details" asp-route-id="@ViewData["ProductId"]" class="btn btn-success">Product</a> <br />
 </div>
 <div>
 	<a asp-action="Index" asp-route-id="@Model.PackageTypeId">Back to Store Pricing List</a> <br />

@@ -55,10 +55,7 @@ namespace PM.UserAdmin.UI.Controllers
             {
 	            ViewData["NoteId"] = note.Id;
             }
-
-			_dbReadService.IncludeEntityNavigation<Product>();
-			_dbReadService.IncludeEntityNavigation<ProductPackageType>();
-
+			
 			var productStoreSpecific = await _dbReadService.GetSingleRecordAsync<ProductStoreSpecific>(p => p.Id.Equals(id));
                 
             if (productStoreSpecific == null)
@@ -69,8 +66,7 @@ namespace PM.UserAdmin.UI.Controllers
             var product = _dbReadService.GetSingleRecordAsync<Product>(s => s.Id.Equals(productStoreSpecific.ProductId)).Result;
             ViewData["ProductName"] = product.ProductName;
             if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
-
-
+			
 			return View(productStoreSpecific);
         }
 
@@ -193,10 +189,7 @@ namespace PM.UserAdmin.UI.Controllers
             {
                 return NotFound();
             }
-
-            _dbReadService.IncludeEntityNavigation<Product>();
-            _dbReadService.IncludeEntityNavigation<ProductPackageType>();
-
+			
 			var productStoreSpecific = await _dbReadService.GetSingleRecordAsync<ProductStoreSpecific>(p => p.Id.Equals(id));
 			if (productStoreSpecific == null)
             {
