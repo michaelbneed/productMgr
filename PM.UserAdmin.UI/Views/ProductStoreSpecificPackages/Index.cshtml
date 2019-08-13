@@ -6,10 +6,11 @@
 }
 
 <h1>Store Packaging</h1>
+<h6>Original Product: @ViewData["ProductName"] (@ViewData["ProductPrice"])</h6>
 
 @if (@ViewData["PackageTypeId"] != null)
 {
-	<a asp-controller="ProductPackageTypes" asp-action="Details" asp-route-id="@ViewData["PackageTypeId"]">Back to Parent Package: @ViewData["PackageName"]</a> <br />
+<a asp-controller="ProductPackageTypes" asp-action="Details" asp-route-id="@ViewData["PackageTypeId"]">Back to Parent Package: @ViewData["PackageName"] (@ViewData["PackagePrice"])</a> <br />
 	<a asp-action="Create" asp-route-id="@ViewData["PackageTypeId"]" title="Add store specific data"><i class="material-icons">add</i>Add Store Data</a><br />
 }
 
@@ -33,7 +34,7 @@
 				<a asp-controller="ProductPackageTypes" asp-action="Details" asp-route-id="@item.PackageTypeId" class="control-label">
 					<p class="card-text">Parent Package: @Html.DisplayFor(modelItem => item.PackageType.AlternateProductName)</p>
 				</a><br />
-				<p class="card-text">Package UPC: @Html.DisplayFor(modelItem => item.PackageType.AlternateProductUpccode)</p>
+				<p class="card-text">Original Alt Package UPC: @ViewData["AltUpcCode"]</p>
 			</div>
 			<div class="col-sm-4" style="padding-bottom: 10px">
 				<p class="card-text">Store Cost: @Html.DisplayFor(modelItem => item.StoreCost)</p>

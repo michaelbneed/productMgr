@@ -31,14 +31,24 @@ namespace PM.UserAdmin.UI.Controllers
 
 		public async Task<IActionResult> Index(int? id)
 		{
+			_dbReadService.IncludeEntityNavigation<Product>();
+			_dbReadService.IncludeEntityNavigation<ProductPackageType>();
+
 			ViewData["PackageTypeId"] = id;
 
 			var package = await _dbReadService.GetSingleRecordAsync<ProductPackageType>(s => s.Id.Equals(id));
 			ViewData["PackageName"] = package.AlternateProductName;
+			ViewData["AltUpcCode"] = package.AlternateProductUpccode;
+			if (package.AlternateProductPrice != null) ViewData["PackagePrice"] = Math.Round((decimal)package.AlternateProductPrice, 2);
+			
+			var product = await _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(package.ProductId));
+
+			ViewData["ProductName"] = product.ProductName;
+			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
 
 			var productStoreSpecific = await _dbReadService.GetAllRecordsAsync<ProductStoreSpecific>(s => s.PackageTypeId.Equals(id));
 			productStoreSpecific.Reverse();
-
+			
 			return View(productStoreSpecific);
 		}
 
@@ -58,13 +68,21 @@ namespace PM.UserAdmin.UI.Controllers
 			_dbReadService.IncludeEntityNavigation<Product>();
 			_dbReadService.IncludeEntityNavigation<ProductPackageType>();
 
-			var productStoreSpecific =
-				await _dbReadService.GetSingleRecordAsync<ProductStoreSpecific>(p => p.Id.Equals(id));
+			var productStoreSpecific = await _dbReadService.GetSingleRecordAsync<ProductStoreSpecific>(p => p.Id.Equals(id));
 
 			if (productStoreSpecific == null)
 			{
 				return NotFound();
 			}
+
+			var package = _dbReadService.GetSingleRecordAsync<ProductPackageType>(s => s.Id.Equals(productStoreSpecific.PackageTypeId)).Result;
+			ViewData["PackageName"] = package.AlternateProductName;
+			if (package.AlternateProductPrice != null) ViewData["PackagePrice"] = Math.Round((decimal)package.AlternateProductPrice, 2);
+
+			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(package.ProductId)).Result;
+
+			ViewData["ProductName"] = product.ProductName;
+			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
 
 			return View(productStoreSpecific);
 		}
@@ -72,6 +90,16 @@ namespace PM.UserAdmin.UI.Controllers
 		public IActionResult Create(int? id)
 		{
 			ViewData["PackageTypeId"] = id;
+
+			var package = _dbReadService.GetSingleRecordAsync<ProductPackageType>(s => s.Id.Equals(id)).Result;
+			ViewData["PackageName"] = package.AlternateProductName;
+			if (package.AlternateProductPrice != null) ViewData["PackagePrice"] = Math.Round((decimal)package.AlternateProductPrice, 2);
+
+			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(package.ProductId)).Result;
+
+			ViewData["ProductName"] = product.ProductName;
+			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+
 			return View();
 		}
 
@@ -129,6 +157,15 @@ namespace PM.UserAdmin.UI.Controllers
 				ViewData["NoteId"] = note.Id;
 			}
 
+			var package = _dbReadService.GetSingleRecordAsync<ProductPackageType>(s => s.Id.Equals(productStoreSpecific.PackageTypeId)).Result;
+			ViewData["PackageName"] = package.AlternateProductName;
+			if (package.AlternateProductPrice != null) ViewData["PackagePrice"] = Math.Round((decimal)package.AlternateProductPrice, 2);
+
+			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(package.ProductId)).Result;
+
+			ViewData["ProductName"] = product.ProductName;
+			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+			
 			return View(productStoreSpecific);
 		}
 
@@ -200,7 +237,16 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            return View(productStoreSpecific);
+			var package = _dbReadService.GetSingleRecordAsync<ProductPackageType>(s => s.Id.Equals(productStoreSpecific.PackageTypeId)).Result;
+			ViewData["PackageName"] = package.AlternateProductName;
+			if (package.AlternateProductPrice != null) ViewData["PackagePrice"] = Math.Round((decimal)package.AlternateProductPrice, 2);
+
+			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(package.ProductId)).Result;
+
+			ViewData["ProductName"] = product.ProductName;
+			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+
+			return View(productStoreSpecific);
         }
 
         [HttpPost, ActionName("Delete")]
