@@ -70,7 +70,7 @@ namespace PM.UserAdmin.UI.Controllers
 
         public IActionResult Create(int? id)
         {
-            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName");
+            ViewData["ProductId"] = id;
             return View();
         }
 

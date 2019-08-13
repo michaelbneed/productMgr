@@ -6,7 +6,7 @@
 
 <h1>Create</h1>
 
-<h4>Store Pricing</h4>
+<h4>Store Packaging</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -39,7 +39,7 @@
 </div>
 
 <div>
-	<a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId">Back to Product</a> <br />
+	<a asp-controller="ProductStoreSpecificPackages" asp-action="Index" asp-route-id=@ViewData["PackageTypeId"]>Back to Store Packaging</a> <br />
 	<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a>
 </div>
 @section Scripts {
