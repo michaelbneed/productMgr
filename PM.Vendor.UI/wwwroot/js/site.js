@@ -12,3 +12,11 @@
         btnOp1.style.display = "none";
     }
 }
+
+function getTotalCost() {
+    var multiplier = document.getElementById("quantityEntered");
+    var value = document.getElementById("costEntered");
+    var product = multiplier.value * value.value;
+    var roundedProduct = Math.round(100 * product) / 100;
+    document.getElementById("totalCostAltPackage").innerHTML = "Total Cost " + roundedProduct;
+}

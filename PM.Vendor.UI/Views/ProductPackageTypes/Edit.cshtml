@@ -15,19 +15,25 @@
 			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 			<input type="hidden" asp-for="Id" />
 			<div class="form-group">
-				<label asp-for="Quantity" class="control-label">Quantity</label>
-				<input asp-for="Quantity" class="form-control" />
-				<span asp-validation-for="Quantity" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="Unit" class="control-label">Units Per Case</label>
-				<input asp-for="Unit" class="form-control" />
-				<span asp-validation-for="Unit" class="text-danger"></span>
-			</div>
-			<div class="form-group">
 				<label asp-for="AlternateProductName" class="control-label">Product (alt)</label>
 				<input asp-for="AlternateProductName" class="form-control" />
 				<span asp-validation-for="AlternateProductName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Unit" class="control-label">Units Per Case</label>
+				<input id="quantityEntered" asp-for="Unit" class="form-control" />
+				<span asp-validation-for="Unit" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="AlternateProductCost" class="control-label">Cost Per Case (alt)</label>
+				<input id="costEntered" asp-for="AlternateProductCost" class="form-control" onkeyup="getTotalCost()" />
+				<span asp-validation-for="AlternateProductCost" class="text-danger"></span>
+				<label id="totalCostAltPackage" class="small" style="color:green"></label>
+			</div>
+			<div class="form-group">
+				<label asp-for="AlternateProductPrice" class="control-label">Suggested Retail Price (alt)</label>
+				<input asp-for="AlternateProductPrice" class="form-control" />
+				<span asp-validation-for="AlternateProductPrice" class="text-danger"></span>
 			</div>
 			<div class="form-group">
 				<label asp-for="AlternateProductUpccode" class="control-label">UPC Code (alt)</label>
@@ -43,16 +49,6 @@
 				<label asp-for="SupplierId" class="control-label">Supplier</label>
 				<select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
 				<span asp-validation-for="SupplierId" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="AlternateProductCost" class="control-label">Cost (alt)</label>
-				<input asp-for="AlternateProductCost" class="form-control" />
-				<span asp-validation-for="AlternateProductCost" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="AlternateProductPrice" class="control-label">Suggested Retail Price (alt)</label>
-				<input asp-for="AlternateProductPrice" class="form-control" />
-				<span asp-validation-for="AlternateProductPrice" class="text-danger"></span>
 			</div>
 			<div class="form-group">
 				<label asp-for="ProductId" class="control-label">Product</label>
