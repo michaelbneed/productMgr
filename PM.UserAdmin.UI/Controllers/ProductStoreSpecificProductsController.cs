@@ -35,6 +35,7 @@ namespace PM.UserAdmin.UI.Controllers
 
 	        var product = await _dbReadService.GetSingleRecordAsync<Product>(s => s.Id.Equals(id));
 	        ViewData["ProductName"] = product.ProductName;
+	        if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal) product.ProductPrice, 2);
 
 	        var productStoreSpecific = await _dbReadService.GetAllRecordsAsync<ProductStoreSpecific>(s => s.ProductId.Equals(id));
 			productStoreSpecific.Reverse();
@@ -65,13 +66,23 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            return View(productStoreSpecific);
+            var product = _dbReadService.GetSingleRecordAsync<Product>(s => s.Id.Equals(productStoreSpecific.ProductId)).Result;
+            ViewData["ProductName"] = product.ProductName;
+            if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+
+
+			return View(productStoreSpecific);
         }
 
         public IActionResult Create(int? id)
         {
             ViewData["ProductId"] = id;
-            return View();
+
+            var product = _dbReadService.GetSingleRecordAsync<Product>(s => s.Id.Equals(id)).Result;
+            ViewData["ProductName"] = product.ProductName;
+            if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+
+			return View();
         }
 
         [HttpPost]
@@ -119,8 +130,12 @@ namespace PM.UserAdmin.UI.Controllers
             }
             
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", productStoreSpecific.ProductId);
+            
+            var product = _dbReadService.GetSingleRecordAsync<Product>(s => s.Id.Equals(productStoreSpecific.ProductId)).Result;
+            ViewData["ProductName"] = product.ProductName;
+            if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
 
-            var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
+			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
             if (note != null)
             {
 	            ViewData["NoteId"] = note.Id;
@@ -188,7 +203,12 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            return View(productStoreSpecific);
+			var product = _dbReadService.GetSingleRecordAsync<Product>(s => s.Id.Equals(productStoreSpecific.ProductId)).Result;
+			ViewData["ProductName"] = product.ProductName;
+			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+
+
+			return View(productStoreSpecific);
         }
 
         [HttpPost, ActionName("Delete")]
