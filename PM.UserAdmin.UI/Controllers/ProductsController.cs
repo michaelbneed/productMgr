@@ -20,8 +20,7 @@ namespace PM.UserAdmin.UI.Controllers
         private readonly IDbReadService _dbReadService;
         private readonly IDbWriteService _dbWriteService;
         private readonly IConfiguration _configuration;
-
-
+		
 		public ProductsController(IDbReadService dbReadService, IDbWriteService dbWriteService, 
 	        VandivierProductManagerContext context, IConfiguration configuration)
         {

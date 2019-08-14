@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -9,9 +7,10 @@ using Microsoft.EntityFrameworkCore;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
-namespace PM.UserAdmin.UI.Controllers
+namespace PM.UserAdmin.UI.Areas.Areas.Controllers
 {
-    public class SuppliersController : Controller
+	[Area("Admin")]
+	public class SuppliersController : Controller
     {
         private readonly IDbReadService _dbReadService;
         private readonly IDbWriteService _dbWriteService;

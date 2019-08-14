@@ -91,6 +91,10 @@ namespace PM.UserAdmin.UI
 				routes.MapRoute(
 					name: "default",
 					template: "{controller=Requests}/{action=Index}/{id?}");
+
+				routes.MapRoute(
+					name: "areas",
+					template: "{area:exists}/{controller=Users}/{action=Index}/{id?}");
 			});
 		}
 	}

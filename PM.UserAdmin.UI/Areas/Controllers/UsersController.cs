@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -9,12 +7,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PM.Auth.GraphApi;
-using PM.Entity.Services;
 using PM.Entity.Models;
+using PM.Entity.Services;
 
-namespace PM.UserAdmin.UI.Controllers
+namespace PM.UserAdmin.UI.Areas.Areas.Controllers
 {
-    public class UsersController : Controller
+	[Area("Admin")]
+	public class UsersController : Controller
     {
         private VandivierProductManagerContext _context;
         private readonly Microsoft.Extensions.Configuration.IConfiguration Configuration;

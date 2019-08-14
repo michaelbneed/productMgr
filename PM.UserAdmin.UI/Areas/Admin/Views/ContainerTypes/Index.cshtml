@@ -1,0 +1,35 @@
+﻿@model IEnumerable<PM.Entity.Models.ContainerType>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Container Types</h1>
+
+<p>
+	<a asp-action="Create" title="Add a new Container Type"><i class="material-icons">add</i>Container Type</a>
+</p>
+<table class="table table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+	            Container Type
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ContainerTypeName)
+            </td>
+	        <td>
+		        <a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a> 
+		        <a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a> 
+		        <a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>
+	        </td>
+        </tr>
+}
+    </tbody>
+</table>
