@@ -43,6 +43,7 @@ namespace PM.UserAdmin.UI.Controllers
 			ViewData["ProductName"] = product.ProductName;
 			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
 
+			_dbReadService.IncludeEntityNavigation<ProductStoreSpecific, Store>();
 			var productStoreSpecific = await _dbReadService.GetAllRecordsAsync<ProductStoreSpecific>(s => s.PackageTypeId.Equals(id));
 			productStoreSpecific.Reverse();
 			
@@ -62,6 +63,7 @@ namespace PM.UserAdmin.UI.Controllers
 				ViewData["NoteId"] = note.Id;
 			}
 
+			_dbReadService.IncludeEntityNavigation<ProductStoreSpecific, Store>();
 			var productStoreSpecific = await _dbReadService.GetSingleRecordAsync<ProductStoreSpecific>(p => p.Id.Equals(id));
 
 			if (productStoreSpecific == null)
@@ -85,7 +87,8 @@ namespace PM.UserAdmin.UI.Controllers
 		public IActionResult Create(int? id)
 		{
 			ViewData["PackageTypeId"] = id;
-
+			ViewData["StoreId"] = new SelectList(_context.Store, "Id", "StoreName");
+			
 			var package = _dbReadService.GetSingleRecordAsync<ProductPackageType>(s => s.Id.Equals(id)).Result;
 			ViewData["PackageName"] = package.AlternateProductName;
 			if (package.AlternateProductPrice != null) ViewData["PackagePrice"] = Math.Round((decimal)package.AlternateProductPrice, 2);
@@ -100,7 +103,7 @@ namespace PM.UserAdmin.UI.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Create(int? id, [Bind("Id,ProductId,PackageTypeId,StoreName,StorePrice,StoreCost,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")]
+		public async Task<IActionResult> Create(int? id, [Bind("Id,ProductId,PackageTypeId,StoreId,StorePrice,StoreCost,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")]
 			ProductStoreSpecific productStoreSpecific)
 		{
 			productStoreSpecific.Id = 0;
@@ -138,6 +141,7 @@ namespace PM.UserAdmin.UI.Controllers
 				return NotFound();
 			}
 
+			_dbReadService.IncludeEntityNavigation<ProductStoreSpecific, Store>();
 			var productStoreSpecific = await _dbReadService.GetSingleRecordAsync<ProductStoreSpecific>(p => p.Id.Equals(id));
 			if (productStoreSpecific == null)
 			{
@@ -145,6 +149,7 @@ namespace PM.UserAdmin.UI.Controllers
 			}
 
 			ViewData["PackageTypeId"] = productStoreSpecific.PackageTypeId;
+			ViewData["StoreId"] = new SelectList(_context.Store, "Id", "StoreName");
 
 			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
 			if (note != null)
@@ -167,7 +172,7 @@ namespace PM.UserAdmin.UI.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Edit(int id, [Bind("Id,ProductId,PackageTypeId,StoreName,StorePrice,StoreCost,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")]
+		public async Task<IActionResult> Edit(int id, [Bind("Id,ProductId,PackageTypeId,StoreId,StorePrice,StoreCost,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")]
 			ProductStoreSpecific productStoreSpecific)
 		{
 			var fullProductStoreSpecific = await _dbReadService.GetSingleRecordAsync<ProductStoreSpecific>(p => p.Id.Equals(id));
@@ -224,7 +229,8 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            var productStoreSpecific = await _dbReadService.GetSingleRecordAsync<ProductStoreSpecific>(p => p.Id.Equals(id));
+            _dbReadService.IncludeEntityNavigation<ProductStoreSpecific, Store>();
+			var productStoreSpecific = await _dbReadService.GetSingleRecordAsync<ProductStoreSpecific>(p => p.Id.Equals(id));
 			if (productStoreSpecific == null)
             {
                 return NotFound();

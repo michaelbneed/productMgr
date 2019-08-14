@@ -51,12 +51,17 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.PackageSize)
-        </dd>
+        </dd><dt class = "col-sm-2">
+		    Units of Measure
+	    </dt>
+	    <dd class = "col-sm-10">
+		    @Html.DisplayFor(model => model.ContainerSizeType.ContainerSizeTypeName)
+	    </dd>
         <dt class = "col-sm-2">
 	        Container Type
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.PackageType)
+            @Html.DisplayFor(model => model.ContainerType.ContainerTypeName)
         </dd>
         <dt class = "col-sm-2">
             Order Week

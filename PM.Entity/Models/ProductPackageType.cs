@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace PM.Entity.Models
 {
@@ -14,8 +13,7 @@ namespace PM.Entity.Models
         public int Id { get; set; }
         public decimal? Quantity { get; set; }
         public string Unit { get; set; }
-        [Required]
-		public string AlternateProductName { get; set; }
+        public string AlternateProductName { get; set; }
         public string AlternateProductUpccode { get; set; }
         public string SupplierData { get; set; }
         public int? SupplierId { get; set; }

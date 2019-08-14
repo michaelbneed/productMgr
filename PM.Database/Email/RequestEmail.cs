@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using PM.Auth.GraphApi;
+using PM.Entity.Models;
 using PM.Entity.Services;
 
 namespace PM.Business.Email
@@ -98,7 +99,26 @@ namespace PM.Business.Email
             }
         }
 
-        public void SendNewNoteEmailToOriginatingUser(Entity.Models.Request request, Entity.Models.Note note)
+		public void SendRequestToStoreManager(Entity.Models.Request request)
+		{
+			var adminUrl = _configuration.GetValue<string>("AdminWebsite:BaseUrl");
+			var requestEditPath = string.Format(_configuration.GetValue<string>("AdminWebsite:RequestEdit"), request.Id);
+			var subject = $"Vandivier Product Request";
+			var store = _dbReadService.GetSingleRecordAsync<Store>(s => s.Id.Equals(1)).Result;
+			var email = store.StoreSupervisorEmail;
+
+			var body = $"A new product request has been added that requires your attention. <br /><br />" +
+				           $"View the request <a href='{adminUrl}{requestEditPath}'>here</a> <br /><br />" +
+				           $"Thanks, <br /> Vandivier Management";
+
+			if (email != null)
+			{
+				Helper.Send(_configuration, subject, body, new List<string>() { email });
+			}
+
+		}
+
+		public void SendNewNoteEmailToOriginatingUser(Entity.Models.Request request, Entity.Models.Note note)
         {
             var adminUrl = _configuration.GetValue<string>("AdminWebsite:BaseUrl");
             var noteDetailPath = string.Format(_configuration.GetValue<string>("AdminWebsite:NoteDetail"), note.Id);

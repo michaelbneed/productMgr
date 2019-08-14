@@ -45,12 +45,14 @@ namespace PM.Vendor.UI.Controllers
 		public IActionResult CreateProduct(int? id)
 		{
 			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName");
+			ViewData["ContainerTypeId"] = new SelectList(_context.ContainerType, "Id", "ContainerTypeName");
+			ViewData["ContainerSizeTypeId"] = new SelectList(_context.ContainerSizeType, "Id", "ContainerSizeTypeName");
 			return View();
 		}
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> CreateProduct(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
+		public async Task<IActionResult> CreateProduct(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
 		{
 			var requestId = id;
 			product.Id = 0;
@@ -85,7 +87,7 @@ namespace PM.Vendor.UI.Controllers
 
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> CreateProductAndPackage(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
+		public async Task<IActionResult> CreateProductAndPackage(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
 		{
 			var requestId = RequestDto.RequestId;
 			product.Id = 0;
@@ -126,7 +128,9 @@ namespace PM.Vendor.UI.Controllers
                 return NotFound();
             }
 
-			_dbReadService.IncludeEntityNavigation<Category>();
+            _dbReadService.IncludeEntityNavigation<ContainerSizeType>();
+            _dbReadService.IncludeEntityNavigation<ContainerType>();
+            _dbReadService.IncludeEntityNavigation<Category>();
 			var product = await _dbReadService.GetSingleRecordAsync<Product>(s => s.Id.Equals(id));
 
 			if (product == null)
@@ -158,8 +162,10 @@ namespace PM.Vendor.UI.Controllers
                 return NotFound();
             }
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
+            ViewData["ContainerTypeId"] = new SelectList(_context.ContainerType, "Id", "ContainerTypeName");
+            ViewData["ContainerSizeTypeId"] = new SelectList(_context.ContainerSizeType, "Id", "ContainerSizeTypeName");
 
-            var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
+			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
 
             if (note != null)
             {
@@ -171,7 +177,7 @@ namespace PM.Vendor.UI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
         {
             if (id != product.Id)
             {
@@ -207,8 +213,10 @@ namespace PM.Vendor.UI.Controllers
                 }
             }
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
+            ViewData["ContainerTypeId"] = new SelectList(_context.ContainerType, "Id", "ContainerTypeName");
+            ViewData["ContainerSizeTypeId"] = new SelectList(_context.ContainerSizeType, "Id", "ContainerSizeTypeName");
 
-            return RedirectToAction("Details", "Products", new { id = product.Id });
+			return RedirectToAction("Details", "Products", new { id = product.Id });
 		}
 
         private async Task<bool> ProductExists(int id)

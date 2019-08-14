@@ -16,6 +16,8 @@ namespace PM.Entity.Models
         }
 
         public virtual DbSet<Category> Category { get; set; }
+        public virtual DbSet<ContainerSizeType> ContainerSizeType { get; set; }
+        public virtual DbSet<ContainerType> ContainerType { get; set; }
         public virtual DbSet<Note> Note { get; set; }
         public virtual DbSet<Product> Product { get; set; }
         public virtual DbSet<ProductPackageType> ProductPackageType { get; set; }
@@ -23,6 +25,7 @@ namespace PM.Entity.Models
         public virtual DbSet<Request> Request { get; set; }
         public virtual DbSet<RequestType> RequestType { get; set; }
         public virtual DbSet<StatusType> StatusType { get; set; }
+        public virtual DbSet<Store> Store { get; set; }
         public virtual DbSet<Supplier> Supplier { get; set; }
         public virtual DbSet<User> User { get; set; }
 
@@ -30,7 +33,7 @@ namespace PM.Entity.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-				optionsBuilder.UseSqlServer("Server=user-pc;Database=VandivierProductManager;Trusted_Connection=True;");
+				optionsBuilder.UseSqlServer("Server=SQL2.corp.adaptivesys.com,1470;Database=Vandivier_PM_DEV;User ID=vandivierPmDev;Password=dev;");
             }
         }
 
@@ -47,6 +50,20 @@ namespace PM.Entity.Models
                     .IsUnicode(false);
             });
 
+            modelBuilder.Entity<ContainerSizeType>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.ContainerSizeTypeName).HasMaxLength(100);
+            });
+
+            modelBuilder.Entity<ContainerType>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.ContainerTypeName).HasMaxLength(100);
+            });
+
             modelBuilder.Entity<Note>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -55,17 +72,15 @@ namespace PM.Entity.Models
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
-                entity.Property(e => e.SendEmailRequestor).HasColumnName("SendEmailRequestor")
-	                .HasDefaultValue(false);
-
-                entity.Property(e => e.SendEmailSupplier).HasColumnName("SendEmailSupplier")
-	                .HasDefaultValue(false);
-
-				entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.NoteText).IsRequired();
 
                 entity.Property(e => e.RequestId).HasColumnName("RequestID");
+
+                entity.Property(e => e.SendEmailRequestor).HasDefaultValueSql("((0))");
+
+                entity.Property(e => e.SendEmailSupplier).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.UpdatedBy)
                     .HasMaxLength(100)
@@ -85,6 +100,10 @@ namespace PM.Entity.Models
 
                 entity.Property(e => e.CategoryId).HasColumnName("CategoryID");
 
+                entity.Property(e => e.ContainerSizeTypeId).HasColumnName("ContainerSizeTypeID");
+
+                entity.Property(e => e.ContainerTypeId).HasColumnName("ContainerTypeID");
+
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)
                     .IsUnicode(false);
@@ -96,10 +115,6 @@ namespace PM.Entity.Models
                     .IsUnicode(false);
 
                 entity.Property(e => e.PackageSize)
-                    .HasMaxLength(50)
-                    .IsUnicode(false);
-
-                entity.Property(e => e.PackageType)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
@@ -131,6 +146,16 @@ namespace PM.Entity.Models
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.CategoryId)
                     .HasConstraintName("FK_Product_Category");
+
+                entity.HasOne(d => d.ContainerSizeType)
+                    .WithMany(p => p.Product)
+                    .HasForeignKey(d => d.ContainerSizeTypeId)
+                    .HasConstraintName("FK_Product_ContainerSizeType");
+
+                entity.HasOne(d => d.ContainerType)
+                    .WithMany(p => p.Product)
+                    .HasForeignKey(d => d.ContainerTypeId)
+                    .HasConstraintName("FK_Product_ContainerType");
             });
 
             modelBuilder.Entity<ProductPackageType>(entity =>
@@ -159,7 +184,7 @@ namespace PM.Entity.Models
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
-                entity.Property(e => e.Quantity).HasColumnType("money");
+                entity.Property(e => e.Quantity).HasColumnType("decimal(18, 0)");
 
                 entity.Property(e => e.SupplierData)
                     .HasMaxLength(50)
@@ -204,18 +229,15 @@ namespace PM.Entity.Models
 
                 entity.Property(e => e.StoreCost).HasColumnType("money");
 
-                entity.Property(e => e.StoreName)
-                    .IsRequired()
-                    .HasMaxLength(100)
-                    .IsUnicode(false);
+                entity.Property(e => e.StoreId).HasColumnName("StoreID");
 
                 entity.Property(e => e.StorePrice).HasColumnType("money");
 
-				entity.Property(e => e.UpdatedBy)
-					.HasMaxLength(100)
-					.IsUnicode(false);
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
-				entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
                 entity.HasOne(d => d.PackageType)
                     .WithMany(p => p.ProductStoreSpecific)
@@ -226,6 +248,12 @@ namespace PM.Entity.Models
                     .WithMany(p => p.ProductStoreSpecific)
                     .HasForeignKey(d => d.ProductId)
                     .HasConstraintName("FK_ProductStoreSpecific_Product");
+
+                entity.HasOne(d => d.Store)
+                    .WithMany(p => p.ProductStoreSpecific)
+                    .HasForeignKey(d => d.StoreId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProductStoreSpecific_Store");
             });
 
             modelBuilder.Entity<Request>(entity =>
@@ -255,10 +283,11 @@ namespace PM.Entity.Models
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
                 entity.Property(e => e.UserId)
-	                .HasMaxLength(100)
-	                .IsUnicode(false);
+                    .HasColumnName("UserID")
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
 
-				entity.HasOne(d => d.Product)
+                entity.HasOne(d => d.Product)
                     .WithMany(p => p.Request)
                     .HasForeignKey(d => d.ProductId)
                     .HasConstraintName("FK_Request_Product");
@@ -293,6 +322,36 @@ namespace PM.Entity.Models
                 entity.Property(e => e.StatusTypeName)
                     .HasMaxLength(100)
                     .IsUnicode(false);
+            });
+
+            modelBuilder.Entity<Store>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CreatedBy)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.StoreName)
+                    .IsRequired()
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StoreSupervisorEmail)
+                    .HasMaxLength(200)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.StoreSupervisorName)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UpdatedBy)
+                    .HasMaxLength(100)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
             });
 
             modelBuilder.Entity<Supplier>(entity =>

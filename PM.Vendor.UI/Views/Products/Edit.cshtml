@@ -43,17 +43,20 @@
                 <input asp-for="ProductPrice" class="form-control" />
                 <span asp-validation-for="ProductPrice" class="text-danger"></span>
             </div>
-			<div class="form-group">
-				<label asp-for="PackageSize" class="control-label">Container Size</label><br/>
-				<label asp-for="PackageSize" class="small">(Example: oz, ml, L)</label>
-				<input asp-for="PackageSize" class="form-control" />
-				<span asp-validation-for="PackageSize" class="text-danger"></span>
-			</div>
             <div class="form-group">
-	            <label asp-for="PackageType" class="control-label">Container Type</label><br />
-	            <label asp-for="PackageType" class="small">(Example: Glass Bottle, Plastic Bottle, Can, Bag, Box, Keg)</label>
-	            <input asp-for="PackageType" class="form-control" />
-                <span asp-validation-for="PackageType" class="text-danger"></span>
+	            <label asp-for="PackageSize" class="control-label">Container Size</label><br />
+	            <input asp-for="PackageSize" class="form-control" />
+	            <span asp-validation-for="PackageSize" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+	            <label asp-for="ContainerSizeTypeId" class="control-label">Units of Measure</label><br />
+	            <select asp-for="ContainerSizeTypeId" class="form-control" asp-items="ViewBag.ContainerSizeTypeId"></select>
+	            <span asp-validation-for="ContainerSizeTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+	            <label asp-for="ContainerTypeId" class="control-label">Container Type</label><br />
+	            <select asp-for="ContainerTypeId" class="form-control" asp-items="ViewBag.ContainerTypeId"></select>
+	            <span asp-validation-for="ContainerTypeId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="OrderWeek" class="control-label">Order Week</label>

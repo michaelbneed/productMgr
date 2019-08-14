@@ -34,7 +34,7 @@
                 @Html.DisplayNameFor(model => model.PackageSize)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.PackageType)
+                @Html.DisplayNameFor(model => model.ContainerSizeType.ContainerSizeTypeName)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.OrderWeek)
@@ -70,7 +70,7 @@
                 @Html.DisplayFor(modelItem => item.PackageSize)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.PackageType)
+                @Html.DisplayFor(modelItem => item.ContainerType.ContainerTypeName)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OrderWeek)

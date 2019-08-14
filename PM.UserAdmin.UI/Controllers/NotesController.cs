@@ -99,12 +99,12 @@ namespace PM.UserAdmin.UI.Controllers
 				var request = await _dbReadService.GetSingleRecordAsync<Request>(r => r.Id.Equals(id));
 
 				RequestEmail email = new RequestEmail(_configuration, _dbReadService);
-				if (note.SendEmailSupplier) 
+				if (note.SendEmailSupplier ==true) 
 				{
 					email.SendNewNoteEmailToSuppliers(request, note);
 				}
 
-				if (note.SendEmailRequestor)
+				if (note.SendEmailRequestor == true)
 				{
 					email.SendNewNoteEmailToOriginatingUser(request, note);
 				}

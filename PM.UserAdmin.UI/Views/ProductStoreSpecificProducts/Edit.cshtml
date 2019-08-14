@@ -25,10 +25,15 @@
 	            <input asp-for="Product.ProductName" class="form-control" disabled="disabled"/>
             </div>
             <div class="form-group">
-	            <label asp-for="StoreName" class="control-label">Store</label>
-	            <input asp-for="StoreName" class="form-control" />
-	            <span asp-validation-for="StoreName" class="text-danger"></span>
+	            <label asp-for="StoreId" class="control-label">Store Name</label>
+				<select asp-for="StoreId" class="form-control" asp-items="ViewBag.StoreId"></select>
+	            <span asp-validation-for="StoreId" class="text-danger"></span>
             </div>
+            @*<div class="form-group">
+				<label asp-for="StoreName" class="control-label">Store Name</label>
+				<input asp-for="StoreName" class="form-control" />
+				<span asp-validation-for="StoreName" class="text-danger"></span>
+			</div>*@
             <div class="form-group">
 	            <label asp-for="StoreCost" class="control-label">Store Cost</label>
 	            <input asp-for="StoreCost" class="form-control" />
