@@ -6,15 +6,15 @@ using Microsoft.EntityFrameworkCore;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
-namespace PM.UserAdmin.UI.Areas.Areas.Controllers
+namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 {
 	[Area("Admin")]
-	public class ContainerTypesController : Controller
+	public class ContainerSizeTypesController : Controller
     {
 	    private readonly IDbReadService _dbReadService;
 	    private readonly IDbWriteService _dbWriteService;
 	    
-	    public ContainerTypesController(IDbReadService dbReadService, IDbWriteService dbWriteService)
+	    public ContainerSizeTypesController(IDbReadService dbReadService, IDbWriteService dbWriteService)
         {
 	        _dbReadService = dbReadService;
 	        _dbWriteService = dbWriteService;
@@ -23,8 +23,8 @@ namespace PM.UserAdmin.UI.Areas.Areas.Controllers
 	    [Authorize]
 		public async Task<IActionResult> Index()
         {
-	        var containerTypes = await _dbReadService.GetAllRecordsAsync<ContainerType>();
-			return View(containerTypes.OrderBy(s => s.ContainerTypeName));
+	        var containerSizeTypes = await _dbReadService.GetAllRecordsAsync<ContainerSizeType>();
+			return View(containerSizeTypes.OrderBy(s => s.ContainerSizeTypeName));
         }
 
         public async Task<IActionResult> Details(int? id)
@@ -34,14 +34,14 @@ namespace PM.UserAdmin.UI.Areas.Areas.Controllers
                 return NotFound();
             }
 
-            var ContainerType = await _dbReadService.GetSingleRecordAsync<ContainerType>(u => u.Id.Equals(id));
+            var containerSizeType = await _dbReadService.GetSingleRecordAsync<ContainerSizeType>(u => u.Id.Equals(id));
             
-            if (ContainerType == null)
+            if (containerSizeType == null)
             {
                 return NotFound();
             }
 
-            return View(ContainerType);
+            return View(containerSizeType);
         }
 
         public IActionResult Create()
@@ -51,16 +51,16 @@ namespace PM.UserAdmin.UI.Areas.Areas.Controllers
 
         [HttpPost]
 		[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,ContainerTypeName")] ContainerType containerType)
+        public async Task<IActionResult> Create([Bind("Id,ContainerSizeTypeName")] ContainerSizeType containerSizeType)
         {
 			if (ModelState.IsValid)
 			{
-				_dbWriteService.Add(containerType);
+				_dbWriteService.Add(containerSizeType);
 
 				await _dbWriteService.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(containerType);
+            return View(containerSizeType);
         }
 
         public async Task<IActionResult> Edit(int? id)
@@ -70,20 +70,20 @@ namespace PM.UserAdmin.UI.Areas.Areas.Controllers
 				return NotFound();
 			}
 
-			var ContainerType = await _dbReadService.GetSingleRecordAsync<ContainerType>(s => s.Id.Equals(id));
+			var containerSizeType = await _dbReadService.GetSingleRecordAsync<ContainerSizeType>(s => s.Id.Equals(id));
 
-			if (ContainerType == null)
+			if (containerSizeType == null)
 			{
 				return NotFound();
 			}
-			return View(ContainerType);
+			return View(containerSizeType);
 		}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ContainerTypeName")] ContainerType containerType)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ContainerSizeTypeName")] ContainerSizeType containerSizeType)
         {
-            if (id != containerType.Id)
+            if (id != containerSizeType.Id)
             {
                 return NotFound();
             }
@@ -92,12 +92,12 @@ namespace PM.UserAdmin.UI.Areas.Areas.Controllers
             {
                 try
                 {
-	                _dbWriteService.Update(containerType);
+	                _dbWriteService.Update(containerSizeType);
 					await _dbWriteService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-					bool result = await ContainerTypeExists(containerType.Id);
+					bool result = await ContainerSizeTypeExists(containerSizeType.Id);
 					if (!result)
 					{
 						return NotFound();
@@ -109,7 +109,7 @@ namespace PM.UserAdmin.UI.Areas.Areas.Controllers
 				}
                 return RedirectToAction(nameof(Index));
             }
-            return View(containerType);
+            return View(containerSizeType);
         }
 
         public async Task<IActionResult> Delete(int? id)
@@ -119,23 +119,23 @@ namespace PM.UserAdmin.UI.Areas.Areas.Controllers
                 return NotFound();
             }
 
-            var containerType = await _dbReadService.GetSingleRecordAsync<ContainerType>(s => s.Id.Equals(id));
+            var containerSizeType = await _dbReadService.GetSingleRecordAsync<ContainerSizeType>(s => s.Id.Equals(id));
 			
-            if (containerType == null)
+            if (containerSizeType == null)
             {
                 return NotFound();
             }
 
-            return View(containerType);
+            return View(containerSizeType);
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var ContainerType = await _dbReadService.GetSingleRecordAsync<ContainerType>(s => s.Id.Equals(id));
+            var containerSizeType = await _dbReadService.GetSingleRecordAsync<ContainerSizeType>(s => s.Id.Equals(id));
 
-            _dbWriteService.Delete(ContainerType);
+            _dbWriteService.Delete(containerSizeType);
 
             var response = await _dbWriteService.SaveChangesAsync();
 
@@ -147,10 +147,10 @@ namespace PM.UserAdmin.UI.Areas.Areas.Controllers
             return RedirectToAction(nameof(Index));
 		}
 
-		private async Task<bool> ContainerTypeExists(int id)
+		private async Task<bool> ContainerSizeTypeExists(int id)
 		{
-			var ContainerType = _dbReadService.GetSingleRecordAsync<ContainerType>(s => s.Id.Equals(id));
-			return await _dbReadService.DoesRecordExist<ContainerType>(e => ContainerType.Id == id);
+			var containerSizeType = _dbReadService.GetSingleRecordAsync<ContainerSizeType>(s => s.Id.Equals(id));
+			return await _dbReadService.DoesRecordExist<ContainerSizeType>(e => containerSizeType.Id == id);
 		}
 	}
 }

@@ -10,7 +10,7 @@ using PM.Auth.GraphApi;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
-namespace PM.UserAdmin.UI.Areas.Areas.Controllers
+namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 {
 	[Area("Admin")]
 	public class UsersController : Controller
