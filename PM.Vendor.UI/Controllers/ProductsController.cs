@@ -78,7 +78,7 @@ namespace PM.Vendor.UI.Controllers
 				await _dbWriteService.SaveChangesAsync();
 
 				RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
-				requestEmail.SendNewRequestToHeadQuarters(request);
+				requestEmail.SendRequestToStoreManager(request);
 			}
 			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
 
@@ -113,7 +113,7 @@ namespace PM.Vendor.UI.Controllers
 				await _dbWriteService.SaveChangesAsync();
 
 				RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
-				requestEmail.SendNewRequestToHeadQuarters(request);
+				requestEmail.SendRequestToStoreManager(request);
 			}
 
 			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
