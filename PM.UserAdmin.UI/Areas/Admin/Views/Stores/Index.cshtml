@@ -1,0 +1,47 @@
+﻿@model IEnumerable<PM.Entity.Models.Store>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Stores</h1>
+
+<p>
+	<a asp-action="Create" title="Add a new Store"><i class="material-icons">add</i>Add Store</a>
+</p>
+<table class="table table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreSupervisorName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StoreSupervisorEmail)
+            </th>
+	        <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StoreName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StoreSupervisorName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StoreSupervisorEmail)
+            </td>
+	        <td>
+		        <a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a> 
+		        <a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a> 
+		        <a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>
+	        </td>
+        </tr>
+}
+    </tbody>
+</table>
