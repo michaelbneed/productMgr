@@ -46,7 +46,8 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            _dbReadService.IncludeEntityNavigation<Supplier>();
+            _dbReadService.IncludeEntityNavigation<Product>();
+			_dbReadService.IncludeEntityNavigation<Supplier>();
 			var productPackageType = await _dbReadService.GetSingleRecordAsync<ProductPackageType>(p => p.Id.Equals(id));
 
 			if (productPackageType == null)
@@ -184,7 +185,8 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            _dbReadService.IncludeEntityNavigation<Supplier>();
+            _dbReadService.IncludeEntityNavigation<Product>();
+			_dbReadService.IncludeEntityNavigation<Supplier>();
 			var productPackageType = await _dbReadService.GetSingleRecordAsync<ProductPackageType>(p => p.Id.Equals(id));
 			if (productPackageType == null)
             {
