@@ -19,6 +19,7 @@ namespace PM.Entity.Models
         public string ProductLocation { get; set; }
         public decimal? ProductCost { get; set; }
         public decimal? ProductPrice { get; set; }
+        public decimal? SuggestedPrice { get; set; }
         public string PackageSize { get; set; }
         public int? ContainerSizeTypeId { get; set; }
         public int? ContainerTypeId { get; set; }

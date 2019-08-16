@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace PM.Entity.Models
 {
-    public partial class VandivierProductManagerContext : DbContext
-    {
-        public VandivierProductManagerContext()
+	public partial class VandivierProductManagerContext : DbContext
+	{
+		public VandivierProductManagerContext()
 		{
 		}
 
@@ -33,8 +33,7 @@ namespace PM.Entity.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Server=SQL2.corp.adaptivesys.com,1470;Database=Vandivier_PM_DEV;User ID=vandivierPmDev;Password=dev;");
+				optionsBuilder.UseSqlServer("Server=SQL2.corp.adaptivesys.com,1470;Database=Vandivier_PM_DEV;User ID=vandivierPmDev;Password=dev;");
             }
         }
 
@@ -78,10 +77,6 @@ namespace PM.Entity.Models
                 entity.Property(e => e.NoteText).IsRequired();
 
                 entity.Property(e => e.RequestId).HasColumnName("RequestID");
-
-                entity.Property(e => e.SendEmailRequestor).HasDefaultValueSql("((0))");
-
-                entity.Property(e => e.SendEmailSupplier).HasDefaultValueSql("((0))");
 
                 entity.Property(e => e.UpdatedBy)
                     .HasMaxLength(100)
@@ -132,6 +127,8 @@ namespace PM.Entity.Models
 
                 entity.Property(e => e.ProductPrice).HasColumnType("money");
 
+                entity.Property(e => e.SuggestedPrice).HasColumnType("money");
+
                 entity.Property(e => e.Upccode)
                     .HasColumnName("UPCCode")
                     .HasMaxLength(50)
@@ -176,6 +173,8 @@ namespace PM.Entity.Models
                     .HasColumnName("AlternateProductUPCCode")
                     .HasMaxLength(50)
                     .IsUnicode(false);
+
+                entity.Property(e => e.AlternateSuggestedPrice).HasColumnType("money");
 
                 entity.Property(e => e.CreatedBy)
                     .HasMaxLength(100)

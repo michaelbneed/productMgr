@@ -30,18 +30,7 @@ namespace PM.Vendor.UI.Controllers
             _dbWriteService = dbWriteService;
             _configuration = configuration;
         }
-
-		//      [Authorize]
-		//      public async Task<IActionResult> Index()
-		//      {
-		//	_dbReadService.IncludeEntityNavigation<Category>();
-		//	var products = await _dbReadService.GetAllRecordsAsync<Product>();
-
-		//	products.Reverse();
-
-		//	return View(products);
-		//}
-
+		
 		[Authorize]
 		public IActionResult CreateProduct(int? id)
 		{

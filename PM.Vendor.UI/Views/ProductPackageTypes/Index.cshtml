@@ -37,14 +37,15 @@
 				<p class="card-text">Supplier: @Html.DisplayFor(modelItem => item.Supplier.SupplierName)</p>
 			</div>
 			<div class="col-sm-4" style="padding-bottom: 10px">
+				<p class="card-text">Units Per Case: @Html.DisplayFor(modelItem => item.Unit)</p>
 				<p class="card-text">Category: @Html.DisplayFor(modelItem => item.Product.Category.CategoryName)</p>
 				<p class="card-text">Parent Product UPC: @Html.DisplayFor(modelItem => item.Product.Upccode)</p>
 				<p class="card-text">Supplier ID: @Html.DisplayFor(modelItem => item.SupplierData)</p>
 			</div>
 			<div class="col-sm-4" style="padding-bottom: 10px">
 				<p class="card-text">Cost (alt): @Html.DisplayFor(modelItem => item.AlternateProductCost)</p>
-				<p class="card-text">Suggested Retail Price (alt): @Html.DisplayFor(modelItem => item.AlternateProductPrice)</p>
-				<p class="card-text">Units Per Case: @Html.DisplayFor(modelItem => item.Unit)</p>
+				<p class="card-text">Retail Price (alt): @Html.DisplayFor(modelItem => item.AlternateProductPrice)</p>
+				<p class="card-text">Suggested Retail Price (alt): @Html.DisplayFor(modelItem => item.AlternateSuggestedPrice)</p>
 				<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId" class="control-label">
 					<p class="card-text">Request: @Html.DisplayFor(modelItem => @PM.Business.Dto.RequestDto.RequestDescription)</p>
 				</a><br />

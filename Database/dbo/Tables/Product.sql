@@ -6,6 +6,7 @@
     [ProductLocation]     VARCHAR (100)  NULL,
     [ProductCost]         MONEY          NULL,
     [ProductPrice]        MONEY          NULL,
+    [SuggestedPrice]      MONEY          NULL,
     [PackageSize]         VARCHAR (50)   NULL,
     [ContainerSizeTypeID] INT            NULL,
     [ContainerTypeID]     INT            NULL,
@@ -20,6 +21,16 @@
     CONSTRAINT [FK_Product_ContainerSizeType] FOREIGN KEY ([ContainerSizeTypeID]) REFERENCES [dbo].[ContainerSizeType] ([ID]),
     CONSTRAINT [FK_Product_ContainerType] FOREIGN KEY ([ContainerTypeID]) REFERENCES [dbo].[ContainerType] ([ID])
 );
+
+
+GO
+ALTER TABLE [dbo].[Product] NOCHECK CONSTRAINT [FK_Product_ContainerSizeType];
+
+
+GO
+ALTER TABLE [dbo].[Product] NOCHECK CONSTRAINT [FK_Product_ContainerType];
+
+
 
 
 GO

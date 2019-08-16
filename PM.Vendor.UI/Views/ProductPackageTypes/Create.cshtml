@@ -30,9 +30,9 @@
 				<label id="costAltPackage" class="small" style="color:green"></label>
 			</div>
 			<div class="form-group">
-				<label asp-for="AlternateProductPrice" class="control-label">Suggested Retail Price (alt)</label>
-				<input asp-for="AlternateProductPrice" class="form-control" />
-				<span asp-validation-for="AlternateProductPrice" class="text-danger"></span>
+				<label asp-for="AlternateSuggestedPrice" class="control-label">Suggested Retail Price (alt)</label>
+				<input asp-for="AlternateSuggestedPrice" class="form-control" />
+				<span asp-validation-for="AlternateSuggestedPrice" class="text-danger"></span>
 			</div>
 			<div class="form-group">
 				<label asp-for="AlternateProductUpccode" class="control-label">UPC Code (alt)</label>
@@ -48,6 +48,7 @@
 				<label asp-for="SupplierId" class="control-label">Supplier</label>
 				<select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
 			</div>
+			<input type="hidden" asp-for="AlternateProductPrice" />
 			<input type="hidden" asp-for="CreatedBy" />
 			<input type="hidden" asp-for="CreatedOn" />
 			<input type="hidden" asp-for="UpdatedBy" />

@@ -19,6 +19,7 @@ namespace PM.Entity.Models
         public int? SupplierId { get; set; }
         public decimal? AlternateProductPrice { get; set; }
         public decimal? AlternateProductCost { get; set; }
+        public decimal? AlternateSuggestedPrice { get; set; }
         public int? ProductId { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }

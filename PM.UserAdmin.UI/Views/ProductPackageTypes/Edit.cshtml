@@ -36,6 +36,11 @@
 				<span asp-validation-for="AlternateProductPrice" class="text-danger"></span>
 			</div>
 			<div class="form-group">
+				<label asp-for="AlternateSuggestedPrice" class="control-label">Suggested Retail Price (alt)</label>
+				<input asp-for="AlternateSuggestedPrice" class="form-control" />
+				<span asp-validation-for="AlternateSuggestedPrice" class="text-danger"></span>
+			</div>
+			<div class="form-group">
 				<label asp-for="AlternateProductUpccode" class="control-label">UPC Code (alt)</label>
 				<input asp-for="AlternateProductUpccode" class="form-control" />
 				<span asp-validation-for="AlternateProductUpccode" class="text-danger"></span>
@@ -52,7 +57,8 @@
 			</div>
 			<div class="form-group">
 				<label asp-for="ProductId" class="control-label">Product</label>
-				<select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId"></select>
+				<select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId" disabled="disabled"></select>
+				<input type="hidden" asp-for="ProductId" />
 				<span asp-validation-for="ProductId" class="text-danger"></span>
 			</div>
 			<input type="hidden" asp-for="CreatedBy" />
