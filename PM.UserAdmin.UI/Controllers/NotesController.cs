@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PM.Business.Dto;
 using PM.Business.Email;
+using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -30,7 +32,7 @@ namespace PM.UserAdmin.UI.Controllers
             _dbWriteService = dbWriteService;
 		}
 
-		[Authorize]
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Index(int? id)
 		{
 			_dbReadService.IncludeEntityNavigation<Request>();
@@ -48,9 +50,12 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(notes);
 		}
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Details(int? id)
         {
-	        _dbReadService.IncludeEntityNavigation<Request>();
+	        UserDto.SetUserRole(User.FindFirstValue("groups"), _configuration);
+
+			_dbReadService.IncludeEntityNavigation<Request>();
 			if (id == null)
             {
                 return NotFound();
@@ -78,6 +83,7 @@ namespace PM.UserAdmin.UI.Controllers
 			return View();
 		}
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> CreateNote(int? id, [Bind("Id,NoteText,SendEmailRequestor,SendEmailSupplier,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
@@ -98,20 +104,22 @@ namespace PM.UserAdmin.UI.Controllers
 				await _dbWriteService.SaveChangesAsync();
 				var request = await _dbReadService.GetSingleRecordAsync<Request>(r => r.Id.Equals(id));
 
-				RequestEmail email = new RequestEmail(_configuration, _dbReadService);
-				if (note.SendEmailSupplier ==true) 
+				if (note.SendEmailSupplier) 
 				{
-					email.SendNewNoteEmailToSuppliers(request, note);
+					RequestEmail emailSupplier = new RequestEmail(_configuration, _dbReadService);
+					emailSupplier.SendNewNoteEmailToSuppliers(request, note);
 				}
 
-				if (note.SendEmailRequestor == true)
+				if (note.SendEmailRequestor)
 				{
-					email.SendNewNoteEmailToOriginatingUser(request, note);
+					RequestEmail emailOriginator = new RequestEmail(_configuration, _dbReadService);
+					emailOriginator.SendNewNoteEmailToOriginatingUser(request, note);
 				}
 			}
 			return RedirectToAction("Index", "Notes", new { id = note.RequestId });
 		}
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -136,7 +144,8 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(note);
         }
 
-        [HttpPost]
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,NoteText,SendEmailRequestor,SendEmailSupplier,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
         {
@@ -177,7 +186,8 @@ namespace PM.UserAdmin.UI.Controllers
 			return RedirectToAction("Index", "Notes", new { id = note.RequestId });
 		}
 
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -195,7 +205,8 @@ namespace PM.UserAdmin.UI.Controllers
             return View(note);
         }
 
-        [HttpPost, ActionName("Delete")]
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

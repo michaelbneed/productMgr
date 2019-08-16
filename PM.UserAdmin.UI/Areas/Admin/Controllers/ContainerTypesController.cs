@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -20,14 +21,15 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 	        _dbWriteService = dbWriteService;
         }
 
-	    [Authorize]
+	    [Authorize(Policy = GroupAuthorization.AdminPolicyName)]
 		public async Task<IActionResult> Index()
         {
 	        var containerTypes = await _dbReadService.GetAllRecordsAsync<ContainerType>();
 			return View(containerTypes.OrderBy(s => s.ContainerTypeName));
         }
 
-        public async Task<IActionResult> Details(int? id)
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -44,12 +46,14 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             return View(ContainerType);
         }
 
-        public IActionResult Create()
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		public IActionResult Create()
         {
             return View();
         }
 
-        [HttpPost]
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		[HttpPost]
 		[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,ContainerTypeName")] ContainerType containerType)
         {
@@ -63,7 +67,8 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             return View(containerType);
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        [Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		public async Task<IActionResult> Edit(int? id)
         {
 			if (id == null)
 			{
@@ -79,7 +84,8 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 			return View(ContainerType);
 		}
 
-        [HttpPost]
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ContainerTypeName")] ContainerType containerType)
         {
@@ -112,7 +118,8 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             return View(containerType);
         }
 
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -129,7 +136,8 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             return View(containerType);
         }
 
-        [HttpPost, ActionName("Delete")]
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PM.Business.Dto;
 using PM.Business.Email;
+using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -30,8 +31,8 @@ namespace PM.UserAdmin.UI.Controllers
             _configuration = configuration;
         }
 
-        [Authorize]
-        public async Task<IActionResult> Index()
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		public async Task<IActionResult> Index()
         {
 			_dbReadService.IncludeEntityNavigation<Category>();
 
@@ -43,7 +44,8 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(products);
 		}
 
-        public IActionResult CreateProduct(int? id)
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		public IActionResult CreateProduct(int? id)
         {
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName");
 	        ViewData["ContainerTypeId"] = new SelectList(_context.ContainerType, "Id", "ContainerTypeName");
@@ -51,6 +53,7 @@ namespace PM.UserAdmin.UI.Controllers
 			return View();
         }
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProduct(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
@@ -86,7 +89,8 @@ namespace PM.UserAdmin.UI.Controllers
 			return RedirectToAction("Details", "Requests", new { id = requestId });
         }
 
-        [HttpPost]
+        [Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateProductAndPackage(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
         {
@@ -114,7 +118,7 @@ namespace PM.UserAdmin.UI.Controllers
 		        await _dbWriteService.SaveChangesAsync();
 
 		        RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
-		        requestEmail.SendNewRequestToHeadQuarters(request);
+		        requestEmail.SendRequestToStoreManager(request);
 			}
 
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
@@ -124,6 +128,7 @@ namespace PM.UserAdmin.UI.Controllers
 			return RedirectToAction("Create", "ProductPackageTypes", new { id = product.Id });
 		}
 
+        [Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -156,6 +161,7 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(product);
         }
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -182,7 +188,8 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(product);
         }
 
-        [HttpPost]
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
         {
@@ -224,7 +231,8 @@ namespace PM.UserAdmin.UI.Controllers
             return RedirectToAction("Details", "Products", new { id = product.Id });
 		}
 
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -244,7 +252,8 @@ namespace PM.UserAdmin.UI.Controllers
             return View(product);
         }
 
-        [HttpPost, ActionName("Delete")]
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

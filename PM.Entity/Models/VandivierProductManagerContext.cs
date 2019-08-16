@@ -7,15 +7,15 @@ namespace PM.Entity.Models
     public partial class VandivierProductManagerContext : DbContext
     {
         public VandivierProductManagerContext()
-        {
-        }
+		{
+		}
 
-        public VandivierProductManagerContext(DbContextOptions<VandivierProductManagerContext> options)
-            : base(options)
-        {
-        }
+		public VandivierProductManagerContext(DbContextOptions<VandivierProductManagerContext> options)
+			: base(options)
+		{
+		}
 
-        public virtual DbSet<Category> Category { get; set; }
+		public virtual DbSet<Category> Category { get; set; }
         public virtual DbSet<ContainerSizeType> ContainerSizeType { get; set; }
         public virtual DbSet<ContainerType> ContainerType { get; set; }
         public virtual DbSet<Note> Note { get; set; }
@@ -33,7 +33,8 @@ namespace PM.Entity.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-				optionsBuilder.UseSqlServer("Server=SQL2.corp.adaptivesys.com,1470;Database=Vandivier_PM_DEV;User ID=vandivierPmDev;Password=dev;");
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Server=SQL2.corp.adaptivesys.com,1470;Database=Vandivier_PM_DEV;User ID=vandivierPmDev;Password=dev;");
             }
         }
 
@@ -274,6 +275,8 @@ namespace PM.Entity.Models
 
                 entity.Property(e => e.StatusTypeId).HasColumnName("StatusTypeID");
 
+                entity.Property(e => e.StoreId).HasColumnName("StoreID");
+
                 entity.Property(e => e.SupplierId).HasColumnName("SupplierID");
 
                 entity.Property(e => e.UpdatedBy)
@@ -301,6 +304,11 @@ namespace PM.Entity.Models
                     .WithMany(p => p.Request)
                     .HasForeignKey(d => d.StatusTypeId)
                     .HasConstraintName("FK_Request_StatusTypes");
+
+                entity.HasOne(d => d.Store)
+                    .WithMany(p => p.Request)
+                    .HasForeignKey(d => d.StoreId)
+                    .HasConstraintName("FK_Request_Store");
 
                 entity.HasOne(d => d.Supplier)
                     .WithMany(p => p.Request)

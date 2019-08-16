@@ -6,8 +6,8 @@
 }
 
 <h1>Edit</h1>
-
 <h4>Alt Packaging</h4>
+<h6>Original Product: @ViewData["ProductName"] (@ViewData["ProductPrice"])</h6>
 <hr />
 <div class="row">
 	<div class="col-md-4">
@@ -26,9 +26,9 @@
 			</div>
 			<div class="form-group">
 				<label asp-for="AlternateProductCost" class="control-label">Cost Per Case (alt)</label>
-				<input id="costEntered" asp-for="AlternateProductCost" class="form-control" onkeyup="getTotalCost()" />
+				<input id="costEntered" asp-for="AlternateProductCost" class="form-control" onkeyup="getCost()" />
 				<span asp-validation-for="AlternateProductCost" class="text-danger"></span>
-				<label id="totalCostAltPackage" class="small" style="color:green"></label>
+				<label id="costAltPackage" class="small" style="color:green"></label>
 			</div>
 			<div class="form-group">
 				<label asp-for="AlternateProductPrice" class="control-label">Retail Price (alt)</label>

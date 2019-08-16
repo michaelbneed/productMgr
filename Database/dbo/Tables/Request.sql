@@ -6,6 +6,7 @@
     [UserID]             VARCHAR (100)  NULL,
     [ProductID]          INT            NULL,
     [SupplierID]         INT            NULL,
+    [StoreID]            INT            NULL,
     [CreatedOn]          DATETIME       NULL,
     [CreatedBy]          VARCHAR (100)  NULL,
     [UpdatedOn]          DATETIME       NULL,
@@ -14,8 +15,15 @@
     CONSTRAINT [FK_Request_Product] FOREIGN KEY ([ProductID]) REFERENCES [dbo].[Product] ([ID]),
     CONSTRAINT [FK_Request_RequestTypes] FOREIGN KEY ([RequestTypeID]) REFERENCES [dbo].[RequestType] ([ID]),
     CONSTRAINT [FK_Request_StatusTypes] FOREIGN KEY ([StatusTypeID]) REFERENCES [dbo].[StatusType] ([ID]),
+    CONSTRAINT [FK_Request_Store] FOREIGN KEY ([StoreID]) REFERENCES [dbo].[Store] ([ID]),
     CONSTRAINT [FK_Request_Supplier] FOREIGN KEY ([SupplierID]) REFERENCES [dbo].[Supplier] ([ID])
 );
+
+
+GO
+ALTER TABLE [dbo].[Request] NOCHECK CONSTRAINT [FK_Request_Store];
+
+
 
 
 

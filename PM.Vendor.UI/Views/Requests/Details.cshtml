@@ -10,59 +10,71 @@
 <div>
 	<hr />
 	<dl class="row">
-		<dt class = "col-sm-2">
+		<dt class="col-sm-2">
 			Request
 		</dt>
-		<dd class = "col-sm-10">
+		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.RequestDescription)
 		</dd>
-		<dt class = "col-sm-2">
+		<dt class="col-sm-2">
 			Date
 		</dt>
-		<dd class = "col-sm-10">
+		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.CreatedOn)
 		</dd>
-		<dt class = "col-sm-2">
+		<dt class="col-sm-2">
 			Requester
 		</dt>
-		<dd class = "col-sm-10">
+		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.CreatedBy)
 		</dd>
-		<dt class = "col-sm-2">
+		<dt class="col-sm-2">
 			Updated
 		</dt>
-		<dd class = "col-sm-10">
+		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.UpdatedOn)
 		</dd>
-		<dt class = "col-sm-2">
+		<dt class="col-sm-2">
 			User
 		</dt>
-		<dd class = "col-sm-10">
+		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.UpdatedBy)
 		</dd>
-		<dt class = "col-sm-2">
+		<dt class="col-sm-2">
 			@Html.DisplayNameFor(model => model.Product)
 		</dt>
-		<dd class = "col-sm-10">
+		<dd class="col-sm-10">
 			<a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId">@Html.DisplayFor(model => model.Product.ProductName)</a>
 		</dd>
-		<dt class = "col-sm-2">
+		<dt class="col-sm-2">
 			Type
 		</dt>
-		<dd class = "col-sm-10">
+		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.RequestType.RequestTypeName)
 		</dd>
-		<dt class = "col-sm-2">
+		<dt class="col-sm-2">
 			Status
 		</dt>
-		<dd class = "col-sm-10">
+		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.StatusType.StatusTypeName)
 		</dd>
-		<dt class = "col-sm-2">
+		<dt class="col-sm-2">
 			@Html.DisplayNameFor(model => model.Supplier)
 		</dt>
-		<dd class = "col-sm-10">
+		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.Supplier.SupplierName)
+		</dd>
+		<dt class="col-sm-2">
+			Supervisor
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Store.StoreSupervisorName)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Store)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Store.StoreName)
 		</dd>
 	</dl>
 </div>

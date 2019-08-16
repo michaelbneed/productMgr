@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -22,13 +24,15 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 			_dbWriteService = dbWriteService;
 		}
 
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
 		public async Task<IActionResult> Index()
         {
 	        var stores = await _dbReadService.GetAllRecordsAsync<Store>();
 	        return View(stores.OrderBy(s => s.StoreName));
         }
 
-        public async Task<IActionResult> Details(int? id)
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -45,12 +49,14 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             return View(store);
         }
 
-        public IActionResult Create()
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		public IActionResult Create()
         {
             return View();
         }
 
-        [HttpPost]
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,StoreName,StoreSupervisorName,StoreSupervisorEmail,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Store store)
         {
@@ -73,7 +79,8 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             return View(store);
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        [Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -89,7 +96,8 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             return View(store);
         }
 
-        [HttpPost]
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,StoreName,StoreSupervisorName,StoreSupervisorEmail,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Store store)
         {
@@ -131,7 +139,8 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             return View(store);
         }
 
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -148,8 +157,8 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             return View(store);
         }
 
-        // POST: Admin/Stores/Delete/5
-        [HttpPost, ActionName("Delete")]
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

@@ -1,12 +1,19 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.PortableExecutable;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using PM.Auth.GraphApi;
 using PM.Business.Dto;
+using PM.Business.Email;
 using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
@@ -18,20 +25,24 @@ namespace PM.UserAdmin.UI.Controllers
         private readonly VandivierProductManagerContext _context;
         private readonly IDbReadService _dbReadService;
         private readonly IDbWriteService _dbWriteService;
-
-        private int? requestStatusBeforeEdit;
-
-		public RequestsController(IDbReadService dbReadService, IDbWriteService dbWriteService, VandivierProductManagerContext context)
+        private readonly IConfiguration _configuration;
+        
+		public RequestsController(IDbReadService dbReadService, IDbWriteService dbWriteService, 
+			VandivierProductManagerContext context, IConfiguration configuration)
 		{
 			_dbReadService = dbReadService;
 			_dbWriteService = dbWriteService;
 	        _context = context;
-        }
+	        _configuration = configuration;
+		}
 
 		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Index()
-        {
-	        _dbReadService.IncludeEntityNavigation<Product>();
+		{
+			UserDto.SetUserRole(User.FindFirstValue("groups"), _configuration);
+
+			_dbReadService.IncludeEntityNavigation<Product>();
+	        _dbReadService.IncludeEntityNavigation<Store>();
 			_dbReadService.IncludeEntityNavigation<RequestType>();
 	        _dbReadService.IncludeEntityNavigation<StatusType>();
 	        _dbReadService.IncludeEntityNavigation<Supplier>();
@@ -45,14 +56,18 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(requests);
 		}
 
-        public async Task<IActionResult> Details(int? id)
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		public async Task<IActionResult> Details(int? id)
         {
-	        if (id == null)
+	        UserDto.SetUserRole(User.FindFirstValue("groups"), _configuration);
+
+			if (id == null)
             {
                 return NotFound();
             }
 
 			_dbReadService.IncludeEntityNavigation<Product>();
+			_dbReadService.IncludeEntityNavigation<Store>();
 			_dbReadService.IncludeEntityNavigation<RequestType>();
 			_dbReadService.IncludeEntityNavigation<StatusType>();
 			_dbReadService.IncludeEntityNavigation<Supplier>();
@@ -76,18 +91,21 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(request);
         }
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public IActionResult CreateRequest()
 		{
 			ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName");
 			ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName");
 			ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
+			ViewData["StoreId"] = new SelectList(_context.Store, "Id", "StoreSupervisorName");
 
 			return View();
 		}
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> CreateRequest([Bind("Id,RequestDescription,RequestTypeId,StatusTypeId,UserId,ProductId,SupplierId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Request request)
+		public async Task<IActionResult> CreateRequest([Bind("Id,RequestDescription,RequestTypeId,StatusTypeId,UserId,SupplierId,StoreId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Request request)
 		{
 			if (ModelState.IsValid)
 			{
@@ -108,15 +126,12 @@ namespace PM.UserAdmin.UI.Controllers
 				await _dbWriteService.SaveChangesAsync();
 			}
 
-			ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
-			ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId).SelectedValue;
-			ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", request.SupplierId);
-
 			RequestDto.RequestId = request.Id;
 
 			return RedirectToAction("CreateProduct", "Products", new { id = request.Id });
 		}
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Edit(int? id)
         { 
 			if (id == null)
@@ -125,16 +140,18 @@ namespace PM.UserAdmin.UI.Controllers
             }
 
             var request = await _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(id));
-            requestStatusBeforeEdit = request.StatusTypeId;
+            RequestDto.StatusId = request.StatusTypeId;
 
 			if (request == null)
             {
                 return NotFound();
             }
-			ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", request.ProductId);
-			ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
-			ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
-			ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", request.SupplierId);
+
+			ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", selectedValue: request.ProductId);
+			ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName");
+			ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName");
+			ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
+			ViewData["StoreId"] = new SelectList(_context.Store, "Id", "StoreSupervisorName");
 
 			RequestDto.RequestId = request.Id;
 			RequestDto.RequestDescription = request.RequestDescription;
@@ -148,11 +165,12 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(request);
         }
 
-        [HttpPost]
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		[HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,RequestDescription,RequestTypeId,StatusTypeId,UserId,ProductId,SupplierId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Request request)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,RequestDescription,RequestTypeId,StatusTypeId,UserId,ProductId,SupplierId,StoreId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Request request)
         {
-            if (id != request.Id)
+	        if (id != request.Id)
             {
                 return NotFound();
             }
@@ -161,23 +179,43 @@ namespace PM.UserAdmin.UI.Controllers
             {
                 try
                 {
-					if (User != null)
-					{
-						var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
-						request.UpdatedBy = userFullName;
-					}
+	                if (User != null)
+	                {
+		                string claimTypeEmailAddress = $"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
+		                var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
+		                request.UserId = User.Claims.FirstOrDefault(x => x.Type == claimTypeEmailAddress).Value;
+		                request.CreatedBy = userFullName;
+	                }
 
 					request.UpdatedOn = DateTime.Now;
+
+					request.ProductId = _dbReadService.GetSingleRecordAsync<Request>(p => p.Id.Equals(request.Id)).Result.ProductId;
 
 					_dbWriteService.Update(request);
 					await _dbWriteService.SaveChangesAsync();
 
-					//TODO Send email on completed status
-					//if (request.StatusTypeId != requestStatusBeforeEdit && request.StatusTypeId == 5)
-					//{
-
-					//}
-				}
+					var status = await _dbReadService.GetSingleRecordAsync<StatusType>(s => s.Id.Equals(request.StatusTypeId));
+					if (request.StatusTypeId != RequestDto.StatusId)
+					{
+						switch (status.StatusTypeName)
+						{
+							case "New Product":
+								break;
+							case "Approved":
+								RequestEmail requestEmailManager = new RequestEmail(_configuration, _dbReadService);
+								requestEmailManager.SendApprovedRequestEmailToHeadQuarters(request);
+								break;
+							case "Denied":
+								RequestEmail requestEmailOriginator = new RequestEmail(_configuration, _dbReadService);
+								requestEmailOriginator.SendDeniedRequestEmailToOriginatingUser(request);
+								break;
+							case "Complete":
+								RequestEmail requestEmailCompletedStatus = new RequestEmail(_configuration, _dbReadService);
+								requestEmailCompletedStatus.SendRequestCompletedToGroup(request);
+								break;
+						}
+					}
+                }
 				catch (DbUpdateConcurrencyException)
                 {
 	                bool result = await RequestExists(request.Id);
@@ -192,15 +230,13 @@ namespace PM.UserAdmin.UI.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", request.ProductId);
-            ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
-            ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
-            ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", request.SupplierId);
 
+            RequestDto.StatusId = null;
             return View(request);
         }
 
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -211,6 +247,7 @@ namespace PM.UserAdmin.UI.Controllers
 			_dbReadService.IncludeEntityNavigation<RequestType>();
 			_dbReadService.IncludeEntityNavigation<StatusType>();
 			_dbReadService.IncludeEntityNavigation<Supplier>();
+			_dbReadService.IncludeEntityNavigation<Store>();
 
 			var request = await _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(id));
 			
@@ -222,7 +259,8 @@ namespace PM.UserAdmin.UI.Controllers
             return View(request);
 		}
 
-        [HttpPost, ActionName("Delete")]
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

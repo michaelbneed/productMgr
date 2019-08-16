@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -21,14 +22,15 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             _dbWriteService = dbWriteService;
         }
 
-		[Authorize]
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
 		public async Task<IActionResult> Index()
         {
 	        var suppliers = await _dbReadService.GetAllRecordsAsync<Supplier>();
 			return View(suppliers.OrderBy(s => s.SupplierName));
         }
 
-        public async Task<IActionResult> Details(int? id)
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -45,12 +47,14 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             return View(supplier);
         }
 
-        public IActionResult Create()
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		public IActionResult Create()
         {
             return View();
         }
 
-        [HttpPost]
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,SupplierName,SupplierEmail,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Supplier supplier)
         {
@@ -73,7 +77,8 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             return View(supplier);
         }
 
-        public async Task<IActionResult> Edit(int? id)
+        [Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -89,7 +94,8 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             return View(supplier);
         }
 
-        [HttpPost]
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,SupplierName,SupplierEmail,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Supplier supplier)
         {
@@ -131,7 +137,8 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             return View(supplier);
         }
 
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -148,7 +155,8 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
             return View(supplier);
         }
 
-        [HttpPost, ActionName("Delete")]
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

@@ -17,6 +17,7 @@ namespace PM.Entity.Models
         public string UserId { get; set; }
         public int? ProductId { get; set; }
         public int? SupplierId { get; set; }
+        public int? StoreId { get; set; }
         public DateTime? CreatedOn { get; set; }
         public string CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
@@ -25,6 +26,7 @@ namespace PM.Entity.Models
         public virtual Product Product { get; set; }
         public virtual RequestType RequestType { get; set; }
         public virtual StatusType StatusType { get; set; }
+        public virtual Store Store { get; set; }
         public virtual Supplier Supplier { get; set; }
         public virtual ICollection<Note> Note { get; set; }
     }

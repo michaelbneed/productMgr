@@ -13,10 +13,10 @@
     }
 }
 
-function getTotalCost() {
-    var multiplier = document.getElementById("quantityEntered");
-    var value = document.getElementById("costEntered");
-    var product = multiplier.value * value.value;
+function getCost() {
+    var dividend = document.getElementById("quantityEntered");
+    var divider = document.getElementById("costEntered");
+    var product = divider.value / dividend.value;
     var roundedProduct = Math.round(100 * product) / 100;
-    document.getElementById("totalCostAltPackage").innerHTML = "Total Cost " + roundedProduct;
+    document.getElementById("costAltPackage").innerHTML = "Unit Cost " + roundedProduct;
 }

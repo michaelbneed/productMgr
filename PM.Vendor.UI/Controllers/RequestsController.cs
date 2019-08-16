@@ -32,6 +32,7 @@ namespace PM.Vendor.UI.Controllers
 		public async Task<IActionResult> Index()
 		{
 			_dbReadService.IncludeEntityNavigation<Product>();
+			_dbReadService.IncludeEntityNavigation<Store>();
 			_dbReadService.IncludeEntityNavigation<RequestType>();
 			_dbReadService.IncludeEntityNavigation<StatusType>();
 			_dbReadService.IncludeEntityNavigation<Supplier>();
@@ -60,22 +61,24 @@ namespace PM.Vendor.UI.Controllers
 			}
 
 			RequestDto.RequestId = null;
-			RequestDto.RequestDescription = null;
 
+			RequestDto.RequestDescription = null;
 			return View(requests);
 		}
 
-        public async Task<IActionResult> Details(int? id)
+		[Authorize]
+		public async Task<IActionResult> Details(int? id)
         {
 	        if (id == null)
             {
                 return NotFound();
             }
 
-			_dbReadService.IncludeEntityNavigation<Product>();
-			_dbReadService.IncludeEntityNavigation<RequestType>();
-			_dbReadService.IncludeEntityNavigation<StatusType>();
-			_dbReadService.IncludeEntityNavigation<Supplier>();
+	        _dbReadService.IncludeEntityNavigation<Product>();
+	        _dbReadService.IncludeEntityNavigation<Store>();
+	        _dbReadService.IncludeEntityNavigation<RequestType>();
+	        _dbReadService.IncludeEntityNavigation<StatusType>();
+	        _dbReadService.IncludeEntityNavigation<Supplier>();
 
 			var request = await _dbReadService.GetSingleRecordAsync<Request>(s => s.Id.Equals(id));
 
@@ -97,17 +100,21 @@ namespace PM.Vendor.UI.Controllers
 			return View(request);
         }
 
-        public IActionResult CreateRequest()
+		[Authorize]
+		public IActionResult CreateRequest()
         {
-	        ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName");
-	        ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName");
-	        
-	        return View();
+			ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName");
+			ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName");
+			ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
+			ViewData["StoreId"] = new SelectList(_context.Store, "Id", "StoreSupervisorName");
+
+			return View();
         }
 
-        [HttpPost]
+		[Authorize]
+		[HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateRequest([Bind("Id,RequestDescription,RequestTypeId,StatusTypeId,UserId,ProductId,SupplierId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Request request)
+        public async Task<IActionResult> CreateRequest([Bind("Id,RequestDescription,RequestTypeId,StatusTypeId,UserId,SupplierId,StoreId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Request request)
         {
 	        if (ModelState.IsValid)
 	        {
@@ -135,6 +142,7 @@ namespace PM.Vendor.UI.Controllers
 	        return RedirectToAction("CreateProduct", "Products", new { id = request.Id });
         }
 
+        [Authorize]
 		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -148,10 +156,13 @@ namespace PM.Vendor.UI.Controllers
             {
                 return NotFound();
             }
-			ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", request.ProductId);
-			ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
-			ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
-			
+
+            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", selectedValue: request.ProductId);
+            ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName");
+            ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName");
+            ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
+            ViewData["StoreId"] = new SelectList(_context.Store, "Id", "StoreSupervisorName");
+
 			RequestDto.RequestId = request.Id;
 			RequestDto.RequestDescription = request.RequestDescription;
 			
@@ -165,9 +176,10 @@ namespace PM.Vendor.UI.Controllers
 			return View(request);
         }
 
-        [HttpPost]
+		[Authorize]
+		[HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,RequestDescription,RequestTypeId,StatusTypeId,UserId,ProductId,SupplierId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Request request)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,RequestDescription,RequestTypeId,StatusTypeId,UserId,ProductId,SupplierId,StoreId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Request request)
         {
             if (id != request.Id)
             {

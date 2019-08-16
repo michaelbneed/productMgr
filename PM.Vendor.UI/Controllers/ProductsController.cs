@@ -31,17 +31,18 @@ namespace PM.Vendor.UI.Controllers
             _configuration = configuration;
         }
 
-        [Authorize]
-        public async Task<IActionResult> Index()
-        {
-			_dbReadService.IncludeEntityNavigation<Category>();
-			var products = await _dbReadService.GetAllRecordsAsync<Product>();
+		//      [Authorize]
+		//      public async Task<IActionResult> Index()
+		//      {
+		//	_dbReadService.IncludeEntityNavigation<Category>();
+		//	var products = await _dbReadService.GetAllRecordsAsync<Product>();
 
-			products.Reverse();
+		//	products.Reverse();
 
-			return View(products);
-		}
+		//	return View(products);
+		//}
 
+		[Authorize]
 		public IActionResult CreateProduct(int? id)
 		{
 			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName");
@@ -50,6 +51,7 @@ namespace PM.Vendor.UI.Controllers
 			return View();
 		}
 
+		[Authorize]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> CreateProduct(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
@@ -85,6 +87,7 @@ namespace PM.Vendor.UI.Controllers
 			return RedirectToAction("Details", "Requests", new { id = requestId });
 		}
 
+		[Authorize]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> CreateProductAndPackage(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
@@ -121,6 +124,7 @@ namespace PM.Vendor.UI.Controllers
 			return RedirectToAction("Create", "ProductPackageTypes", new { id = product.Id });
 		}
 
+		[Authorize]
 		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -148,6 +152,7 @@ namespace PM.Vendor.UI.Controllers
 			return View(product);
         }
 
+		[Authorize]
 		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -175,7 +180,8 @@ namespace PM.Vendor.UI.Controllers
 			return View(product);
         }
 
-        [HttpPost]
+		[Authorize]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
         {

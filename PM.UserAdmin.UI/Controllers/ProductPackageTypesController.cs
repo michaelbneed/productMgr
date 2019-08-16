@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PM.Business.Dto;
+using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -25,7 +27,8 @@ namespace PM.UserAdmin.UI.Controllers
             _dbWriteService = dbWriteService;
 		}
 
-        public async Task<IActionResult> Index(int? id)
+        [Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		public async Task<IActionResult> Index(int? id)
         {
 	        ViewData["ProductId"] = id;
 			_dbReadService.IncludeEntityNavigation<Supplier>();
@@ -39,7 +42,8 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(packages);
         }
 
-        public async Task<IActionResult> Details(int? id)
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -68,17 +72,28 @@ namespace PM.UserAdmin.UI.Controllers
 				ViewData["ProductStoreSpecificCount"] = productStoreSpecificCount;
 			}
 
+			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(productPackageType.ProductId)).Result;
+			if (product.ProductName != null) ViewData["ProductName"] = product.ProductName;
+			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+
 			return View(productPackageType);
         }
 
-        public IActionResult Create(int? id)
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		public IActionResult Create(int? id)
         {
 	        ViewData["ProductId"] = id;
-            ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
+
+	        var product =_dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(id)).Result;
+	        if (product.ProductName != null) ViewData["ProductName"] = product.ProductName;
+			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+
+			ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
             return View();
         }
 
-        [HttpPost]
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int id, bool multiple, [Bind("Id,Quantity,Unit,AlternateProductName,AlternateProductUpccode,SupplierData,SupplierId,AlternateProductPrice,AlternateProductCost,ProductId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] ProductPackageType productPackageType)
         {
@@ -111,6 +126,7 @@ namespace PM.UserAdmin.UI.Controllers
 			return RedirectToAction("Index", "ProductPackageTypes", new { id = productPackageType.ProductId });
 		}
 
+        [Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -126,7 +142,14 @@ namespace PM.UserAdmin.UI.Controllers
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", productPackageType.ProductId);
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", productPackageType.SupplierId);
 
-            var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
+            var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(id)).Result;
+            if (product != null)
+            {
+				if (product.ProductName != null) ViewData["ProductName"] = product.ProductName;
+				if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+            }
+
+			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
 			if (note != null)
             {
 	            ViewData["NoteId"] = note.Id;
@@ -135,7 +158,8 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(productPackageType);
         }
 
-        [HttpPost]
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Quantity,Unit,AlternateProductName,AlternateProductUpccode,SupplierData,SupplierId,AlternateProductPrice,AlternateProductCost,ProductId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] ProductPackageType productPackageType)
         {
@@ -178,7 +202,8 @@ namespace PM.UserAdmin.UI.Controllers
 			return RedirectToAction("Index", "ProductPackageTypes", new { id = productPackageType.ProductId });
 		}
 
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -193,10 +218,15 @@ namespace PM.UserAdmin.UI.Controllers
                 return NotFound();
             }
 
-            return View(productPackageType);
+			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(productPackageType.ProductId)).Result;
+			if (product.ProductName != null) ViewData["ProductName"] = product.ProductName;
+			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+
+			return View(productPackageType);
         }
 
-        [HttpPost, ActionName("Delete")]
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

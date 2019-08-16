@@ -49,6 +49,7 @@ namespace PM.Vendor.UI.Controllers
 			return View(notes);
 		}
 
+		[Authorize]
 		public async Task<IActionResult> Details(int? id)
         {
 	        _dbReadService.IncludeEntityNavigation<Request>();
@@ -76,11 +77,13 @@ namespace PM.Vendor.UI.Controllers
             return View(note);
         }
 
+		[Authorize]
 		public IActionResult CreateNote(int? id)
 		{
 			return View();
 		}
 
+		[Authorize]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> CreateNote(int? id, [Bind("Id,NoteText,SendEmailRequestor,SendEmailSupplier,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
@@ -109,6 +112,7 @@ namespace PM.Vendor.UI.Controllers
 			return RedirectToAction("Index", "Notes", new { id = note.RequestId });
 		}
 
+		[Authorize]
 		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -135,7 +139,8 @@ namespace PM.Vendor.UI.Controllers
 			return View(note);
         }
 
-        [HttpPost]
+		[Authorize]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,NoteText,SendEmailRequestor,SendEmailSupplier,RequestId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Note note)
         {
@@ -176,7 +181,8 @@ namespace PM.Vendor.UI.Controllers
 			return RedirectToAction("Index", "Notes", new { id = note.RequestId });
 		}
 
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -195,7 +201,8 @@ namespace PM.Vendor.UI.Controllers
             return View(note);
         }
 
-        [HttpPost, ActionName("Delete")]
+		[Authorize]
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

@@ -1,5 +1,6 @@
 ﻿@using System.Security.Claims
 @using Microsoft.AspNetCore.Http
+@using PM.Business.Dto
 <!DOCTYPE html>
 <html>
 <head>
@@ -37,39 +38,42 @@
 		               class="nav-link" style="font-size: 16pt; color:#6A0D1F">Request: @PM.Business.Dto.RequestDto.RequestDescription</a>
 	            }
 	            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse dropdown">
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
-                            <ul class="dropdown-menu">
-                                <li class="nav-item">
-                                    <a class="nav-link text-dark" asp-area="Admin" asp-controller="Suppliers" asp-action="Index" style="position: relative">Supplier</a>
-                                </li>
-	                            <li class="nav-item">
-		                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Users" asp-action="Index" style="position: relative">User</a>
-	                            </li>
-	                            <li class="nav-item">
-		                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="ContainerSizeTypes" asp-action="Index" style="position: relative">Container Size</a>
-	                            </li>
-	                            <li class="nav-item">
-		                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="ContainerTypes" asp-action="Index" style="position: relative">Container Type</a>
-	                            </li>
-	                            <li class="nav-item">
-		                            <a class="nav-link text-dark" asp-area="Admin" asp-controller="Stores" asp-action="Index" style="position: relative">Stores</a>
-	                            </li>
-                            </ul>
-                        </li>
-                        @if (User.Identity.IsAuthenticated)
-                        {
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@(((ClaimsIdentity)User.Identity).Claims.Single(x => x.Type == "name").Value)</a>
-                                <ul class="dropdown-menu">
-                                    <li class="nav-item">
-                                        <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="SignOut" style="position: relative">Sign Out</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        }
-                    </ul>
+		            <ul class="nav navbar-nav navbar-right">
+						@if (@UserDto.Role == "Admin")
+						{
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin</a>
+								<ul class="dropdown-menu">
+									<li class="nav-item">
+										<a class="nav-link text-dark" asp-area="Admin" asp-controller="Suppliers" asp-action="Index" style="position: relative">Supplier</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link text-dark" asp-area="Admin" asp-controller="Users" asp-action="Index" style="position: relative">User</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link text-dark" asp-area="Admin" asp-controller="ContainerSizeTypes" asp-action="Index" style="position: relative">Container Size</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link text-dark" asp-area="Admin" asp-controller="ContainerTypes" asp-action="Index" style="position: relative">Container Type</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link text-dark" asp-area="Admin" asp-controller="Stores" asp-action="Index" style="position: relative">Stores</a>
+									</li>
+								</ul>
+							</li>
+						}
+			            @if (User.Identity.IsAuthenticated)
+			            {
+				            <li class="dropdown">
+					            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">@(((ClaimsIdentity) User.Identity).Claims.Single(x => x.Type == "name").Value)</a>
+					            <ul class="dropdown-menu">
+						            <li class="nav-item">
+							            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="SignOut" style="position: relative">Sign Out</a>
+						            </li>
+					            </ul>
+				            </li>
+			            }
+		            </ul>
                 </div>
             </div>
         </nav>

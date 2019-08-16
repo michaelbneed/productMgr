@@ -66,6 +66,18 @@
 		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.Supplier.SupplierName)
 		</dd>
+		<dt class="col-sm-2">
+			Supervisor
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Store.StoreSupervisorName)
+		</dd>
+		<dt class="col-sm-2">
+			@Html.DisplayNameFor(model => model.Store)
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.Store.StoreName)
+		</dd>
 	</dl>
 
 	<form asp-action="Delete">

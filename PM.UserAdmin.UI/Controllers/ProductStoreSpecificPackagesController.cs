@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PM.Business.Dto;
 using PM.Business.Email;
+using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -29,6 +31,7 @@ namespace PM.UserAdmin.UI.Controllers
 			_configuration = configuration;
 		}
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Index(int? id)
 		{
 			ViewData["PackageTypeId"] = id;
@@ -50,6 +53,7 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(productStoreSpecific);
 		}
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Details(int? id)
 		{
 			if (id == null)
@@ -84,6 +88,7 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(productStoreSpecific);
 		}
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public IActionResult Create(int? id)
 		{
 			ViewData["PackageTypeId"] = id;
@@ -101,6 +106,7 @@ namespace PM.UserAdmin.UI.Controllers
 			return View();
 		}
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Create(int? id, [Bind("Id,ProductId,PackageTypeId,StoreId,StorePrice,StoreCost,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")]
@@ -134,6 +140,7 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(productStoreSpecific);
 		}
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Edit(int? id)
 		{
 			if (id == null)
@@ -170,6 +177,7 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(productStoreSpecific);
 		}
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Edit(int id, [Bind("Id,ProductId,PackageTypeId,StoreId,StorePrice,StoreCost,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")]
@@ -222,6 +230,7 @@ namespace PM.UserAdmin.UI.Controllers
 			
 		}
 
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -248,7 +257,8 @@ namespace PM.UserAdmin.UI.Controllers
 			return View(productStoreSpecific);
         }
 
-        [HttpPost, ActionName("Delete")]
+		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

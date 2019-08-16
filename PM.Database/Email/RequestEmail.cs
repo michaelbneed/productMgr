@@ -39,25 +39,125 @@ namespace PM.Business.Email
             }
         }
 
-        public async void SendRequestToSuppliers(Entity.Models.Request request)
+        public void SendApprovedRequestEmailToHeadQuarters(Entity.Models.Request request)
         {
-            var adminUrl = _configuration.GetValue<string>("AdminWebsite:BaseUrl");
-            var requestEditPath = string.Format(_configuration.GetValue<string>("AdminWebsite:RequestEdit"), request.Id);
-            var subject = $"Vandivier Product Request";
-            var users = await _dbReadService.GetAllRecordsAsync<Entity.Models.User>(x => x.SupplierId == request.SupplierId.Value);
+	        var adminUrl = _configuration.GetValue<string>("AdminWebsite:BaseUrl");
+	        var requestEditPath = string.Format(_configuration.GetValue<string>("AdminWebsite:RequestEdit"), request.Id);
+	        var subject = $"Vandivier Product Request";
+	        var emailAddresses = new GraphClient(_configuration, false).GetGroupUsersEmail(_configuration.GetValue<string>("SecurityGroups:HeadQuarters"));
 
-            foreach (var user in users)
-            {
-                var body = $"A new product request has been added that requires your attention. <br /><br />" +
-                           $"View the request <a href='{adminUrl}{requestEditPath}'>here</a> <br /><br />" +
-                           $"Thanks, <br /> Vandivier Management";
+	        foreach (var emailAddress in emailAddresses)
+	        {
+		        var body = $"A product request has been approved and requires your attention. <br /><br />" +
+		                   $"View the request <a href='{adminUrl}{requestEditPath}'>here</a> <br /><br />" +
+		                   $"Thanks, <br /> Vandivier Management";
 
-                if (user.EmailAddress != null)
-                {
-	                Helper.Send(_configuration, subject, body, new List<string>() { user.EmailAddress });
-				}
-            }
+		        if (emailAddress != null)
+		        {
+			        Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
+		        }
+
+	        }
         }
+
+        public void SendDeniedRequestEmailToOriginatingUser(Entity.Models.Request request)
+        {
+	        var subject = $"Vandivier Product Request: {request.RequestDescription}";
+			var emailAddress = new GraphClient(_configuration, false).GetUserEmail(request.UserId);
+	        var body = $"Your request {request.RequestDescription} was not approved at this time. <br /><br />" +
+					   $"Thanks, <br /> Vandivier Management";
+
+	        if (emailAddress != null)
+	        {
+		        Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
+	        }
+        }
+
+        public void SendRequestCompletedToGroup(Entity.Models.Request request)
+        {
+	        SendRequestCompletedToOriginatingUser(request);
+	        SendRequestCompletedToSupplier(request);
+	        SendRequestCompletedToStoreManager(request);
+	        SendRequestCompletedToHeadquarters(request);
+		}
+
+        private void SendRequestCompletedToSupplier(Request request)
+        {
+			if (request.SupplierId.HasValue == false)
+				return;
+
+			var vendorUrl = _configuration.GetValue<string>("VendorWebsite:BaseUrl");
+			var requestEditPath = string.Format(_configuration.GetValue<string>("VendorWebsite:RequestEdit"), request.Id);
+			var subject = $"Vandivier Product Request Complete: {request.RequestDescription}";
+			var users = _dbReadService.GetAllRecordsAsync<Entity.Models.User>(x => x.SupplierId == request.SupplierId.Value).Result;
+
+			foreach (var user in users)
+			{
+				var body = $"Request {request.RequestDescription} has been completed! <br /><br />" +
+				           $"View the request <a href='{vendorUrl}{requestEditPath}'>here</a> <br /><br />" +
+				           $"Thanks, <br /> Vandivier Management";
+
+				if (user.EmailAddress != null)
+				{
+					Helper.Send(_configuration, subject, body, new List<string>() { user.EmailAddress });
+				}
+			}
+        }
+
+        private void SendRequestCompletedToHeadquarters(Request request)
+        {
+			var adminUrl = _configuration.GetValue<string>("AdminWebsite:BaseUrl");
+			var requestEditPath = string.Format(_configuration.GetValue<string>("AdminWebsite:RequestEdit"), request.Id);
+			var subject = $"Vandivier Product Request Complete: {request.RequestDescription}";
+			var emailAddresses = new GraphClient(_configuration, false).GetGroupUsersEmail(_configuration.GetValue<string>("SecurityGroups:HeadQuarters"));
+
+			foreach (var emailAddress in emailAddresses)
+			{
+				var body = $"Request {request.RequestDescription} has been completed! <br /><br />" +
+				           $"View the request <a href='{adminUrl}{requestEditPath}'>here</a> <br /><br />" +
+				           $"Thanks, <br /> Vandivier Management";
+
+				if (emailAddress != null)
+				{
+					Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
+				}
+
+			}
+		}
+
+        private void SendRequestCompletedToStoreManager(Request request)
+        {
+			var adminUrl = _configuration.GetValue<string>("AdminWebsite:BaseUrl");
+			var requestEditPath = string.Format(_configuration.GetValue<string>("AdminWebsite:RequestEdit"), request.Id);
+			var subject = $"Vandivier Product Request Complete: {request.RequestDescription}";
+			var store = _dbReadService.GetSingleRecordAsync<Store>(s => s.Id.Equals(request.StoreId)).Result;
+			var email = store.StoreSupervisorEmail;
+
+			var body = $"Request {request.RequestDescription} has been completed! <br /><br />" +
+					   $"View the request <a href='{adminUrl}{requestEditPath}'>here</a> <br /><br />" +
+			           $"Thanks, <br /> Vandivier Management";
+
+			if (email != null)
+			{
+				Helper.Send(_configuration, subject, body, new List<string>() { email });
+			}
+		}
+
+        private void SendRequestCompletedToOriginatingUser(Request request)
+        {
+	        var adminUrl = _configuration.GetValue<string>("AdminWebsite:BaseUrl");
+	        var requestEditPath = string.Format(_configuration.GetValue<string>("AdminWebsite:RequestEdit"), request.Id);
+			var subject = $"Vandivier Product Request Complete: {request.RequestDescription}";
+			var emailAddress = new GraphClient(_configuration, false).GetUserEmail(request.UserId);
+			var body = $"Request {request.RequestDescription} has been completed! <br /><br />" +
+					   $"View the request <a href='{adminUrl}{requestEditPath}'>here</a> <br /><br />" +
+					   $"Thanks, <br /> Vandivier Management";
+
+			if (emailAddress != null)
+			{
+				Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
+			}
+		}
 
         public void SendNewNoteEmailToHeadQuarters(Entity.Models.Request request, Entity.Models.Note note)
         {
@@ -104,7 +204,7 @@ namespace PM.Business.Email
 			var adminUrl = _configuration.GetValue<string>("AdminWebsite:BaseUrl");
 			var requestEditPath = string.Format(_configuration.GetValue<string>("AdminWebsite:RequestEdit"), request.Id);
 			var subject = $"Vandivier Product Request";
-			var store = _dbReadService.GetSingleRecordAsync<Store>(s => s.Id.Equals(1)).Result;
+			var store = _dbReadService.GetSingleRecordAsync<Store>(s => s.Id.Equals(request.StoreId)).Result;
 			var email = store.StoreSupervisorEmail;
 
 			var body = $"A new product request has been added that requires your attention. <br /><br />" +
@@ -135,7 +235,7 @@ namespace PM.Business.Email
 			}
         }
 
-        public async void SendNewNoteEmailToSuppliers(Entity.Models.Request request, Entity.Models.Note note)
+		public async void SendNewNoteEmailToSuppliers(Entity.Models.Request request, Entity.Models.Note note)
         {
             if (request.SupplierId.HasValue == false)
                 return;
@@ -143,7 +243,7 @@ namespace PM.Business.Email
             var vendorUrl = _configuration.GetValue<string>("VendorWebsite:BaseUrl");
             var noteDetailPath = string.Format(_configuration.GetValue<string>("VendorWebsite:NoteDetail"), note.Id);
             var subject = $"Vandivier Product Request Note";
-            var users = await _dbReadService.GetAllRecordsAsync<Entity.Models.User>(x => x.SupplierId == request.SupplierId.Value);
+            var users = _dbReadService.GetAllRecordsAsync<Entity.Models.User>(x => x.SupplierId == request.SupplierId).Result;
 
             foreach (var user in users)
             {

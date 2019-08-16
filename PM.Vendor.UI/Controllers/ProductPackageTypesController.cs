@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +26,8 @@ namespace PM.Vendor.UI.Controllers
             _dbWriteService = dbWriteService;
 		}
 
-        public async Task<IActionResult> Index(int? id)
+        [Authorize]
+		public async Task<IActionResult> Index(int? id)
         {
 	        ViewData["ProductId"] = id;
 			_dbReadService.IncludeEntityNavigation<Supplier>();
@@ -41,7 +43,8 @@ namespace PM.Vendor.UI.Controllers
             return View(packages);
         }
 
-        public async Task<IActionResult> Details(int? id)
+		[Authorize]
+		public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
             {
@@ -64,17 +67,27 @@ namespace PM.Vendor.UI.Controllers
 				ViewData["NoteId"] = note.Id;
 			}
 
+			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(productPackageType.ProductId)).Result;
+			if (product.ProductName != null) ViewData["ProductName"] = product.ProductName;
+			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+
 			return View(productPackageType);
         }
 
-        public IActionResult Create(int? id)
+		[Authorize]
+		public IActionResult Create(int? id)
         {
-	        ViewData["ProductId"] = id;
+	        var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(id)).Result;
+	        if (product.ProductName != null) ViewData["ProductName"] = product.ProductName;
+	        if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+
+			ViewData["ProductId"] = id;
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
             return View();
         }
 
-        [HttpPost]
+		[Authorize]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(int id, bool multiple, [Bind("Id,Quantity,Unit,AlternateProductName,AlternateProductUpccode,SupplierData,SupplierId,AlternateProductPrice,AlternateProductCost,ProductId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] ProductPackageType productPackageType)
         {
@@ -107,7 +120,8 @@ namespace PM.Vendor.UI.Controllers
 			return RedirectToAction("Index", "ProductPackageTypes", new { id = productPackageType.ProductId });
 		}
 
-        public async Task<IActionResult> Edit(int? id)
+        [Authorize]
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -123,7 +137,14 @@ namespace PM.Vendor.UI.Controllers
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", productPackageType.ProductId);
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", productPackageType.SupplierId);
 
-            var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
+            var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(id)).Result;
+            if (product != null)
+            {
+	            if (product.ProductName != null) ViewData["ProductName"] = product.ProductName;
+	            if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+            }
+
+			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
 
             if (note != null)
             {
@@ -133,7 +154,8 @@ namespace PM.Vendor.UI.Controllers
 			return View(productPackageType);
         }
 
-        [HttpPost]
+		[Authorize]
+		[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Quantity,Unit,AlternateProductName,AlternateProductUpccode,SupplierData,SupplierId,AlternateProductPrice,AlternateProductCost,ProductId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] ProductPackageType productPackageType)
         {
@@ -176,7 +198,8 @@ namespace PM.Vendor.UI.Controllers
 			return RedirectToAction("Index", "ProductPackageTypes", new { id = productPackageType.ProductId });
 		}
 
-        public async Task<IActionResult> Delete(int? id)
+        [Authorize]
+		public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
             {
@@ -192,10 +215,15 @@ namespace PM.Vendor.UI.Controllers
                 return NotFound();
             }
 
-            return View(productPackageType);
+			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(productPackageType.ProductId)).Result;
+			if (product.ProductName != null) ViewData["ProductName"] = product.ProductName;
+			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+
+			return View(productPackageType);
         }
 
-        [HttpPost, ActionName("Delete")]
+		[Authorize]
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {

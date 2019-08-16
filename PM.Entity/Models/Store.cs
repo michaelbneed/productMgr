@@ -8,6 +8,7 @@ namespace PM.Entity.Models
         public Store()
         {
             ProductStoreSpecific = new HashSet<ProductStoreSpecific>();
+            Request = new HashSet<Request>();
         }
 
         public int Id { get; set; }
@@ -20,5 +21,6 @@ namespace PM.Entity.Models
         public string UpdatedBy { get; set; }
 
         public virtual ICollection<ProductStoreSpecific> ProductStoreSpecific { get; set; }
+        public virtual ICollection<Request> Request { get; set; }
     }
 }

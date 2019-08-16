@@ -25,10 +25,14 @@
                 <label asp-for="StatusTypeId" class="control-label">Type</label>
                 <select asp-for="StatusTypeId" class ="form-control" asp-items="ViewBag.StatusTypeId"></select>
             </div>
-            <div class="form-group">
-                <label asp-for="SupplierId" class="control-label">Supplier</label>
-                <select asp-for="SupplierId" class ="form-control" asp-items="ViewBag.SupplierId"></select>
-            </div>
+	        <div class="form-group">
+		        <label asp-for="SupplierId" class="control-label">Supplier</label>
+		        <select asp-for="SupplierId" class ="form-control" asp-items="ViewBag.SupplierId"></select>
+	        </div>
+	        <div class="form-group">
+		        <label asp-for="StoreId" class="control-label">Supervisor</label>
+		        <select asp-for="StoreId" class ="form-control" asp-items="ViewBag.StoreId"></select>
+	        </div>
 	        <input type="hidden" asp-for="CreatedBy" />
 	        <input type="hidden" asp-for="CreatedOn" />
 	        <input type="hidden" asp-for="UpdatedBy" />
