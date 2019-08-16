@@ -190,5 +190,8 @@
     <None Include="Profiles\QA.publish.xml" />
     <None Include="Scripts\PopulateRequestStatus.sql" />
     <None Include="Scripts\PopulateCategories.sql" />
+    <None Include="Scripts\PopulateContainerType.sql" />
+    <None Include="Scripts\PopulateContainerSizeType.sql" />
+    <None Include="Scripts\PopulateStore.sql" />
   </ItemGroup>
 </Project>
