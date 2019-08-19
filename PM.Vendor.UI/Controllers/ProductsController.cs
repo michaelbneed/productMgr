@@ -43,7 +43,7 @@ namespace PM.Vendor.UI.Controllers
 		[Authorize]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> CreateProduct(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
+		public async Task<IActionResult> CreateProduct(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,SuggestedPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
 		{
 			var requestId = id;
 			product.Id = 0;
@@ -68,8 +68,12 @@ namespace PM.Vendor.UI.Controllers
 				_dbWriteService.Update(request);
 				await _dbWriteService.SaveChangesAsync();
 
-				RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
-				requestEmail.SendRequestToStoreManager(request);
+				if (request.StoreId != null)
+				{
+					RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
+					requestEmail.SendRequestToStoreManager(request);
+				}
+				
 			}
 			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
 
@@ -79,7 +83,7 @@ namespace PM.Vendor.UI.Controllers
 		[Authorize]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> CreateProductAndPackage(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
+		public async Task<IActionResult> CreateProductAndPackage(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,SuggestedPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
 		{
 			var requestId = RequestDto.RequestId;
 			product.Id = 0;
@@ -104,8 +108,11 @@ namespace PM.Vendor.UI.Controllers
 				_dbWriteService.Update(request);
 				await _dbWriteService.SaveChangesAsync();
 
-				RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
-				requestEmail.SendRequestToStoreManager(request);
+				if (request.StoreId != null)
+				{
+					RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
+					requestEmail.SendRequestToStoreManager(request);
+				}
 			}
 
 			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
