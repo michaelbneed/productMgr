@@ -188,7 +188,7 @@ namespace PM.UserAdmin.UI.Controllers
 		                string claimTypeEmailAddress = $"http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name";
 		                var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
 		                request.UserId = User.Claims.FirstOrDefault(x => x.Type == claimTypeEmailAddress).Value;
-		                request.CreatedBy = userFullName;
+		                request.UpdatedBy = userFullName;
 	                }
 
 					request.UpdatedOn = DateTime.Now;
