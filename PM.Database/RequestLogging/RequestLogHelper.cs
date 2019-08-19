@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using PM.Business.Dto;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -14,8 +15,23 @@ namespace PM.Business.RequestLogging
 		public static void LogRequestChange(Request request, VandivierProductManagerContext context, [Optional] string changeNote)
 		{
 			_dbWriteService = new DbWriteService(context);
-			//TODO: Rescaffold and add RequestLog
-			//_dbWriteService.Add<RequestLog>(request);
+
+			RequestLog requestToLog = new RequestLog();
+			requestToLog.RequestId = request.Id;
+			requestToLog.ProductId = request.ProductId;
+			requestToLog.ChangeNote = changeNote;
+			requestToLog.RequestDescription = request.RequestDescription;
+			requestToLog.RequestTypeId = request.RequestTypeId;
+			requestToLog.StatusTypeId = request.StatusTypeId;
+			requestToLog.StoreId = request.StoreId;
+			requestToLog.SupplierId = request.SupplierId;
+			requestToLog.UserId = request.UserId;
+			requestToLog.OriginalCreatedOnDate = request.CreatedOn;
+			requestToLog.OriginalCreatedByUser = request.CreatedBy;
+			requestToLog.CreatedOn = DateTime.Now;
+			requestToLog.CreatedBy = UserDto.UserId;
+
+			_dbWriteService.Add<RequestLog>(requestToLog);
 			_dbWriteService.SaveChangesAsync();
 		}
 	}

@@ -23,7 +23,8 @@ namespace PM.Entity.Models
         public virtual DbSet<ProductPackageType> ProductPackageType { get; set; }
         public virtual DbSet<ProductStoreSpecific> ProductStoreSpecific { get; set; }
         public virtual DbSet<Request> Request { get; set; }
-        public virtual DbSet<RequestType> RequestType { get; set; }
+        public virtual DbSet<RequestLog> RequestLog { get; set; }
+		public virtual DbSet<RequestType> RequestType { get; set; }
         public virtual DbSet<StatusType> StatusType { get; set; }
         public virtual DbSet<Store> Store { get; set; }
         public virtual DbSet<Supplier> Supplier { get; set; }
@@ -315,7 +316,45 @@ namespace PM.Entity.Models
                     .HasConstraintName("FK_Request_Supplier");
             });
 
-            modelBuilder.Entity<RequestType>(entity =>
+            modelBuilder.Entity<RequestLog>(entity =>
+            {
+	            entity.Property(e => e.Id).HasColumnName("ID");
+
+	            entity.Property(e => e.ChangeNote)
+		            .HasMaxLength(100)
+		            .IsUnicode(false);
+
+	            entity.Property(e => e.CreatedBy)
+		            .HasMaxLength(100)
+		            .IsUnicode(false);
+
+	            entity.Property(e => e.OriginalCreatedByUser)
+		            .HasMaxLength(100)
+		            .IsUnicode(false);
+
+				entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+				entity.Property(e => e.OriginalCreatedOnDate).HasColumnType("datetime");
+
+				entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+	            entity.Property(e => e.RequestId).HasColumnName("RequestID");
+
+	            entity.Property(e => e.RequestTypeId).HasColumnName("RequestTypeID");
+
+	            entity.Property(e => e.StatusTypeId).HasColumnName("StatusTypeID");
+
+	            entity.Property(e => e.StoreId).HasColumnName("StoreID");
+
+	            entity.Property(e => e.SupplierId).HasColumnName("SupplierID");
+
+	            entity.Property(e => e.UserId)
+		            .HasColumnName("UserID")
+		            .HasMaxLength(100)
+		            .IsUnicode(false);
+            });
+
+			modelBuilder.Entity<RequestType>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
 
