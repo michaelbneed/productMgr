@@ -40,6 +40,7 @@ namespace PM.UserAdmin.UI.Controllers
 		public async Task<IActionResult> Index()
 		{
 			UserDto.SetUserRole(User.FindFirstValue("groups"), _configuration);
+			UserDto.UserId = User.Identity.Name;
 
 			_dbReadService.IncludeEntityNavigation<Product>();
 	        _dbReadService.IncludeEntityNavigation<Store>();
@@ -48,6 +49,7 @@ namespace PM.UserAdmin.UI.Controllers
 	        _dbReadService.IncludeEntityNavigation<Supplier>();
 
 			var requests = await _dbReadService.GetAllRecordsAsync<Request>();
+
 			requests.Reverse();
 
 			RequestDto.RequestId = null;
@@ -60,6 +62,8 @@ namespace PM.UserAdmin.UI.Controllers
 		public async Task<IActionResult> Details(int? id)
         {
 	        UserDto.SetUserRole(User.FindFirstValue("groups"), _configuration);
+
+	        var roleForDebug = UserDto.Role;
 
 			if (id == null)
             {
@@ -199,7 +203,7 @@ namespace PM.UserAdmin.UI.Controllers
 					{
 						switch (status.StatusTypeName)
 						{
-							case "New Product":
+							case "New Request":
 								break;
 							case "Approved":
 								RequestEmail requestEmailManager = new RequestEmail(_configuration, _dbReadService);

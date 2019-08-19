@@ -10,6 +10,8 @@ namespace PM.Business.Dto
 	{
 		public static string Role { get; set; }
 
+		public static string UserId { get; set; }
+
 		public static void SetUserRole(string userGroupId, IConfiguration configuration)
 		{
 			var securityGroups = configuration.GetSection("SecurityGroups").GetChildren()
