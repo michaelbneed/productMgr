@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PM.Business.Dto;
 using PM.Business.Email;
+using PM.Business.RequestLogging;
 using PM.Entity.Models;
 using PM.Entity.Services;
 
@@ -73,10 +74,10 @@ namespace PM.Vendor.UI.Controllers
 					RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
 					requestEmail.SendRequestToStoreManager(request);
 				}
-				
+
+				RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.ProductAddByVendor);
 			}
 			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
-
 			return RedirectToAction("Details", "Requests", new { id = requestId });
 		}
 
@@ -113,6 +114,8 @@ namespace PM.Vendor.UI.Controllers
 					RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
 					requestEmail.SendRequestToStoreManager(request);
 				}
+
+				RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.ProductAndPackageAddByVendor);
 			}
 
 			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);

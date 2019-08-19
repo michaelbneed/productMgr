@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PM.Business.Dto;
+using PM.Business.RequestLogging;
 using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
@@ -138,8 +139,10 @@ namespace PM.Vendor.UI.Controllers
 	        ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId).SelectedValue;
 			
 			RequestDto.RequestId = request.Id;
-			
-	        return RedirectToAction("CreateProduct", "Products", new { id = request.Id });
+
+			RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestAddByVendor);
+
+			return RedirectToAction("CreateProduct", "Products", new { id = request.Id });
         }
 
         [Authorize]
@@ -221,7 +224,8 @@ namespace PM.Vendor.UI.Controllers
             ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
             ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
 
-            return View(request);
+            RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestEditByVendor);
+			return View(request);
         }
 
 		private async Task<bool> RequestExists(int id)

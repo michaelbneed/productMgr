@@ -14,6 +14,7 @@ using Microsoft.Extensions.Configuration;
 using PM.Auth.GraphApi;
 using PM.Business.Dto;
 using PM.Business.Email;
+using PM.Business.RequestLogging;
 using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
@@ -132,6 +133,8 @@ namespace PM.UserAdmin.UI.Controllers
 
 			RequestDto.RequestId = request.Id;
 
+			RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestAddByStaff);
+
 			return RedirectToAction("CreateProduct", "Products", new { id = request.Id });
 		}
 
@@ -208,17 +211,22 @@ namespace PM.UserAdmin.UI.Controllers
 							case "Approved":
 								RequestEmail requestEmailManager = new RequestEmail(_configuration, _dbReadService);
 								requestEmailManager.SendApprovedRequestEmailToHeadQuarters(request);
+								RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestApproved);
 								break;
 							case "Denied":
 								RequestEmail requestEmailOriginator = new RequestEmail(_configuration, _dbReadService);
 								requestEmailOriginator.SendDeniedRequestEmailToOriginatingUser(request);
+								RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestDenied);
 								break;
 							case "Complete":
 								RequestEmail requestEmailCompletedStatus = new RequestEmail(_configuration, _dbReadService);
 								requestEmailCompletedStatus.SendRequestCompletedToGroup(request);
+								RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestComplete);
 								break;
 						}
 					}
+
+					RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestEditByStaff);
                 }
 				catch (DbUpdateConcurrencyException)
                 {
@@ -277,6 +285,8 @@ namespace PM.UserAdmin.UI.Controllers
 			{
 				TempData["notifyUser"] = "This action could not be performed due to data constraints.";
 			}
+
+			RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestDeletedByStaff);
 
 			return RedirectToAction(nameof(Index));
         }
