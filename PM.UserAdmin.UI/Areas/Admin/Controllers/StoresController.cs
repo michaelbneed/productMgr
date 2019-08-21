@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using PM.Business.Dto;
 using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
@@ -27,7 +28,8 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
 		public async Task<IActionResult> Index()
         {
-	        var stores = await _dbReadService.GetAllRecordsAsync<Store>();
+	        RequestDto.RequestDescription = string.Empty;
+			var stores = await _dbReadService.GetAllRecordsAsync<Store>();
 	        return View(stores.OrderBy(s => s.StoreName));
         }
 

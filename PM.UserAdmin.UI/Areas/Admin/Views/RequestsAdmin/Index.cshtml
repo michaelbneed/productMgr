@@ -1,0 +1,85 @@
+﻿@model IEnumerable<PM.Entity.Models.Request>
+
+@{
+	ViewData["Title"] = "Requests Admin";
+}
+
+<a asp-action="Index" style="font-size: 22px">Request Audit Log</a><br />
+<a asp-action="Index" asp-controller="RequestLogs" style="font-size: 12px">Go to Requests Audit Log</a><br />
+<p>
+	<a asp-action="CreateRequest" asp-controller="Requests" title="Add a new Request"><i class="material-icons">add</i>Add Request</a><br />
+</p>
+<br />
+<form asp-action="Index" asp-controller="RequestsAdmin" method="get">
+	<input type="text" style="text-align: center" placeholder="Search the grid..." name="search" value="@ViewData["FilterParam"]" />
+	<input type="submit" value="Search" class="btn btn-light small" />
+</form>
+<table class="table table-striped small" style="width:100%">
+	<thead>
+		<tr>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["RequestIdParam"]">RequestID</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["RequestDescriptionParam"]">Request</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["ChangeNoteParam"]">Type</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["RequestTypeParam"]">Status</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["StatusTypeParam"]">Product</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["ProductNameParam"]">Supplier</a>
+			</th>
+
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["StoreNameParam"]">Store</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["RequestDateParam"]">Requested On</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["RequesterNameParam"]">Requester</a>
+			</th>
+			@*<th></th>*@
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.ActionLink(linkText: @item.Id.ToString(), actionName: "Details", controllerName: "Requests", routeValues: new { id = @item.Id }, htmlAttributes: new { target = "_blank" })
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.RequestDescription)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.RequestType.RequestTypeName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.StatusType.StatusTypeName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Product.ProductName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Supplier.SupplierName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Store.StoreName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CreatedOn)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CreatedBy)
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

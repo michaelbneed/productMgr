@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using System.Text;
 using PM.Business.Dto;
 using PM.Entity.Models;
 using PM.Entity.Services;
+using PM.Entity.ViewModels;
 
 namespace PM.Business.RequestLogging
 {

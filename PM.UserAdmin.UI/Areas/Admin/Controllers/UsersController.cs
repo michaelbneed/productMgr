@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PM.Auth.GraphApi;
+using PM.Business.Dto;
 using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
@@ -34,7 +35,9 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
 		public async Task<IActionResult> Index()
         {
-            _dbReadService.IncludeEntityNavigation<Supplier>();
+	        RequestDto.RequestDescription = string.Empty;
+
+			_dbReadService.IncludeEntityNavigation<Supplier>();
             var users = await _dbReadService.GetAllRecordsAsync<User>();
 
             return View(users.OrderBy(s => s.LastName));

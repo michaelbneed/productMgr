@@ -1,0 +1,98 @@
+﻿@model List<PM.Entity.ViewModels.RequestLogFull>
+
+@{
+	ViewData["Title"] = "Index";
+}
+
+<a asp-action="Index" style="font-size: 22px">Request Audit Log</a><br />
+<a asp-action="Index" asp-controller="RequestsAdmin" style="font-size: 12px">Go to Requests Grid</a><br />
+<br />
+<form asp-action="Index" method="get">
+	<input type="text" style="text-align: center" placeholder="Search the grid..." name="search" value="@ViewData["FilterParam"]" />
+	<input type="submit" value="Search" class="btn btn-light small" />
+</form>
+<table class="table table-striped small" style="width:100%">
+	<thead>
+		<tr>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["RequestIdParam"]">RequestID</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["RequestDescriptionParam"]">Request</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["ChangeNoteParam"]">Event</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["RequestTypeParam"]">Type</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["StatusTypeParam"]">Status</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["ProductNameParam"]">Product</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["SupplierNameParam"]">Supplier</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["StoreNameParam"]">Store</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["RequestDateParam"]">Requested</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["RequesterNameParam"]">Requester</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["CreatedOnParam"]">Logged</a>
+			</th>
+			<th>
+				<a asp-action="Index" asp-route-sort="@ViewData["CreatedByParam"]">Changed By</a>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					@Html.ActionLink(linkText: @item.RequestId.ToString(), actionName: "Details", controllerName: "Requests", routeValues: new { id = @item.RequestId }, htmlAttributes: new { target = "_blank" })
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.RequestDescription)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ChangeNote)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.RequestTypeName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.StatusTypeName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ProductName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.SupplierName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.StoreName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.OriginalCreatedOnDate)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.OriginalCreatedByUser)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CreatedOn)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CreatedBy)
+				</td>
+			</tr>
+		}
+	</tbody>
+</table>

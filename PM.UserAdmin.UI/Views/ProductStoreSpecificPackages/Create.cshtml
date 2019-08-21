@@ -47,7 +47,7 @@
 
 <div>
 	<a asp-controller="ProductStoreSpecificPackages" asp-action="Index" asp-route-id=@ViewData["PackageTypeId"]>Back to Store Packaging</a> <br />
-	<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a>
+	<a asp-controller="RequestsAdmin" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a>
 </div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

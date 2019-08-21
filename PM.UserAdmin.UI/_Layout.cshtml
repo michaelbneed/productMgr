@@ -35,7 +35,7 @@
 	            @if (@PM.Business.Dto.RequestDto.RequestId != null)
 	            {
 		            <a asp-controller="Requests" asp-action="Details" asp-route-id=@PM.Business.Dto.RequestDto.RequestId
-		               class="nav-link" style="font-size: 16pt; color:#6A0D1F">Request: @PM.Business.Dto.RequestDto.RequestDescription</a>
+		               class="nav-link" style="font-size: 16pt; color:#6A0D1F">@PM.Business.Dto.RequestDto.RequestDescription</a>
 	            }
 	            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse dropdown">
 		            <ul class="nav navbar-nav navbar-right">
@@ -58,6 +58,9 @@
 									</li>
 									<li class="nav-item">
 										<a class="nav-link text-dark" asp-area="Admin" asp-controller="Stores" asp-action="Index" style="position: relative">Stores</a>
+									</li>
+									<li class="nav-item">
+										<a class="nav-link text-dark" asp-area="Admin" asp-controller="RequestLogs" asp-action="Index" style="position: relative">Dashboard</a>
 									</li>
 								</ul>
 							</li>

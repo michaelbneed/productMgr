@@ -17,7 +17,7 @@
 	<div class="card border-dark mb-3" style="max-width: 100%; color: #6A0D1F">
 		<div class="card-header">
 			<div class="row">
-				<a asp-action="Details" title="Details" asp-route-id="@item.Id" class="col-sm-6" style="color: #6A0D1F">Request: <br />@Html.DisplayFor(modelItem => item.RequestDescription)</a>
+				<a asp-action="Details" title="Details" asp-route-id="@item.Id" class="col-sm-6" style="color: #6A0D1F">Request: <br />@Html.DisplayFor(modelItem => item.RequestDescription) (@Html.DisplayFor(modelItem => item.Id))</a>
 				<div class="col-sm-6" align="right">
 					<a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a>
 					@if (@item.StatusTypeId == 1 && UserDto.Role == "Employee")

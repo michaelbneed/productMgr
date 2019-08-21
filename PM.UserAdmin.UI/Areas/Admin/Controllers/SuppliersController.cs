@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using PM.Business.Dto;
 using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
@@ -25,7 +26,8 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
 		public async Task<IActionResult> Index()
         {
-	        var suppliers = await _dbReadService.GetAllRecordsAsync<Supplier>();
+	        RequestDto.RequestDescription = string.Empty;
+			var suppliers = await _dbReadService.GetAllRecordsAsync<Supplier>();
 			return View(suppliers.OrderBy(s => s.SupplierName));
         }
 

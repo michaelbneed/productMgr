@@ -46,7 +46,7 @@
 				<p class="card-text">Cost (alt): @Html.DisplayFor(modelItem => item.AlternateProductCost)</p>
 				<p class="card-text">Retail Price (alt): @Html.DisplayFor(modelItem => item.AlternateProductPrice)</p>
 				<p class="card-text">Suggested Retail Price (alt): @Html.DisplayFor(modelItem => item.AlternateSuggestedPrice)</p>
-				<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId" class="control-label">
+				<a asp-controller="RequestsAdmin" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId" class="control-label">
 					<p class="card-text">Request: @Html.DisplayFor(modelItem => @PM.Business.Dto.RequestDto.RequestDescription)</p>
 				</a><br />
 			</div>

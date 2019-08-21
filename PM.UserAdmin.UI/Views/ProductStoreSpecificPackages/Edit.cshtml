@@ -59,7 +59,7 @@
 	<a asp-action="Index" asp-route-id="@Model.PackageTypeId">Back to Store Pricing List</a> <br />
 	@if (@PM.Business.Dto.RequestDto.RequestId != null)
 	{
-		<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a>
+		<a asp-controller="RequestsAdmin" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a>
 	}
 </div>
 

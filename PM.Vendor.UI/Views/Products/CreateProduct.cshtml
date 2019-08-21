@@ -88,9 +88,9 @@
 <div>
 	@if (@PM.Business.Dto.RequestDto.RequestId != null)
 	{
-		<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a> <br />
+		<a asp-controller="RequestsAdmin" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a> <br />
 	}
-	<a asp-action="Index" asp-controller="Requests">Back to Request List</a>
+	<a asp-action="Index" asp-controller="RequestsAdmin">Back to Request List</a>
 </div>
 
 @section Scripts {
