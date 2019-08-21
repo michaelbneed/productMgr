@@ -12,7 +12,10 @@
 		<a asp-action="CreateRequest" title="Add a new Request"><i class="material-icons">add</i>Add Request</a><br />
 	</p>
 }
-
+	<form asp-action="Index" method="get">
+		<input type="text" style="text-align: center" placeholder="Search Requests..." name="search" value="@ViewData["FilterParam"]" />
+		<input type="submit" value="Search" class="btn btn-light small" />
+	</form>
 <br />
 @foreach (var item in Model)
 {

@@ -11,7 +11,7 @@ namespace PM.UserAdmin.UI.Controllers
         [HttpGet]
         public IActionResult SignOut()
         {
-            var callbackUrl = Url.Action("Index", "RequestsAdmin", values: null, protocol: Request.Scheme);
+            var callbackUrl = Url.Action("Index", "Requests", values: null, protocol: Request.Scheme);
 
             return SignOut( new AuthenticationProperties { RedirectUri = callbackUrl }, AzureADDefaults.AuthenticationScheme, CookieAuthenticationDefaults.AuthenticationScheme, OpenIdConnectDefaults.AuthenticationScheme);
         }

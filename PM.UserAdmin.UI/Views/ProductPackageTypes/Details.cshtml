@@ -36,7 +36,7 @@
 			@Html.DisplayFor(model => model.SupplierData)
 		</dd>
 		<dt class="col-sm-2">
-			Cost (alt)
+			Cost Per Case (alt)
 		</dt>
 		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.AlternateProductCost)
@@ -113,5 +113,5 @@
 </div>
 <div>
 	<a asp-action="Index" asp-route-id="@Model.ProductId">Back to Package Type List</a> <br />
-	<a asp-controller="RequestsAdmin" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a>
+	<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a>
 </div>

@@ -55,44 +55,45 @@
 	<tbody>
 		@foreach (var item in Model)
 		{
-			<tr>
-				<td>
-					@Html.ActionLink(linkText: @item.RequestId.ToString(), actionName: "Details", controllerName: "Requests", routeValues: new { id = @item.RequestId }, htmlAttributes: new { target = "_blank" })
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.RequestDescription)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.ChangeNote)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.RequestTypeName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.StatusTypeName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.ProductName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.SupplierName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.StoreName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.OriginalCreatedOnDate)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.OriginalCreatedByUser)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.CreatedOn)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.CreatedBy)
-				</td>
-			</tr>
+		<tr>
+			<td>
+				@Html.ActionLink(linkText: @item.RequestId.ToString(), actionName: "Details", controllerName: "Requests", routeValues: new { id = @item.RequestId }, htmlAttributes: new { target = "_blank" })
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.RequestDescription)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.ChangeNote)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.RequestTypeName)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.StatusTypeName)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.ProductName)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.SupplierName)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.StoreName)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.OriginalCreatedOnDate)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.OriginalCreatedByUser)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.CreatedOn) 
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.CreatedBy)<br />
+				(LogID: @Html.DisplayFor(modelItem => item.Id))
+			</td>
+		</tr>
 		}
 	</tbody>
 </table>

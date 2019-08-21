@@ -89,7 +89,7 @@ namespace PM.UserAdmin.UI.Controllers
 			}
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
 
-	        return RedirectToAction("Details", "RequestsAdmin", new { id = requestId });
+	        return RedirectToAction("Details", "Requests", new { id = requestId });
         }
 
         [Authorize(Policy = GroupAuthorization.EmployeePolicyName)]

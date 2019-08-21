@@ -114,7 +114,7 @@
 		<input type="submit" value="Delete" class="btn btn-danger" /> |
 		@if (@PM.Business.Dto.RequestDto.RequestId != null)
 		{
-			<a asp-controller="RequestsAdmin" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a> <br />
+			<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId">Back to Request</a> <br />
 		}
 		<a asp-controller="Products" , asp-action="Details" asp-route-id="@Model.Id"> Back to Product</a>
 	</form>

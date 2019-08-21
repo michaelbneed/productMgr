@@ -55,6 +55,7 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 			ViewData["RequesterNameParam"] = sort == "RequesterNameParam" ? "requesterName_desc" : "RequesterNameParam";
 			ViewData["CreatedOnParam"] = sort == "CreatedOnParam" ? "createdOn_desc" : "CreatedOnParam";
 			ViewData["CreatedByParam"] = sort == "CreatedByParam" ? "createdBy_desc" : "CreatedByParam";
+			ViewData["RequestLogIdParam"] = sort == "RequestLogIdParam" ? "requestLogId_Desc" : "RequestLogIdParam";
 
 			// Intercept search term
 			ViewData["FilterParam"] = search;
@@ -80,6 +81,7 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 				requestLogFull.OriginalCreatedByUser = item.OriginalCreatedByUser;
 				requestLogFull.CreatedOn = item.CreatedOn;
 				requestLogFull.CreatedBy = item.CreatedBy;
+				requestLogFull.Id = item.Id;
 
 				requestLogFull.ProductName = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(item.ProductId)).Result.ProductName;
 				requestLogFull.SupplierName = _dbReadService.GetSingleRecordAsync<Supplier>(p => p.Id.Equals(item.SupplierId)).Result.SupplierName;
@@ -242,10 +244,20 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 						requestFullEnumerable =
 							new List<RequestLogFull>(requestFullEnumerable.Where(s => s.CreatedBy != null).OrderBy(s => s.CreatedBy.ToString()));
 					break;
+				case "requestLogId_desc":
+					if (requestFullEnumerable != null)
+						requestFullEnumerable =
+							new List<RequestLogFull>(requestFullEnumerable.Where(s => s.RequestId != null).OrderByDescending(s => s.Id.ToString()));
+					break;
+				case "RequestLogIdParam":
+					if (requestFullEnumerable != null)
+						requestFullEnumerable =
+							new List<RequestLogFull>(requestFullEnumerable.Where(s => s.RequestId != null).OrderBy(s => int.Parse(s.Id.ToString())));
+					break;
 				default:
 					if (requestFullEnumerable != null)
 						requestFullEnumerable = 
-							new List<RequestLogFull>(requestFullEnumerable.Where(s => s.Id != null).OrderByDescending(s => s.Id.ToString()));
+							new List<RequestLogFull>(requestFullEnumerable.Where(s => s.Id != null).OrderByDescending(s => int.Parse(s.Id.ToString())));
 					break;
 			}
 

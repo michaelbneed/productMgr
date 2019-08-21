@@ -26,14 +26,14 @@
 	<header>
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
 			<div class="container">
-				<a class="navbar-brand" asp-area="" asp-controller="RequestsAdmin" asp-action="Index"><img src=@Url.Content("~/images/vanlogo.jpg") alt="Product Manager" /></a>
+				<a class="navbar-brand" asp-area="" asp-controller="Requests" asp-action="Index"><img src=@Url.Content("~/images/vanlogo.jpg") alt="Product Manager" /></a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
 				</button>
 				@if (@PM.Business.Dto.RequestDto.RequestId != null)
 				{
-					<a asp-controller="RequestsAdmin" asp-action="Details" asp-route-id=@PM.Business.Dto.RequestDto.RequestId
+					<a asp-controller="Requests" asp-action="Details" asp-route-id=@PM.Business.Dto.RequestDto.RequestId
 					   class="nav-link" style="font-size: 16pt; color:#6A0D1F">Request: @PM.Business.Dto.RequestDto.RequestDescription</a>
 				}
 				<div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse dropdown">

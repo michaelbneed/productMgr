@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.AzureADB2C.UI.Internal;
 using Microsoft.AspNetCore.Authorization;
@@ -30,13 +31,21 @@ namespace PM.Vendor.UI.Controllers
         }
 
 		[Authorize]
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(string search)
 		{
 			_dbReadService.IncludeEntityNavigation<Product>();
 			_dbReadService.IncludeEntityNavigation<Store>();
 			_dbReadService.IncludeEntityNavigation<RequestType>();
 			_dbReadService.IncludeEntityNavigation<StatusType>();
 			_dbReadService.IncludeEntityNavigation<Supplier>();
+
+			if (search != null)
+			{
+				Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+				search = rgx.Replace(search, "").ToUpper();
+			}
+
+			ViewData["FilterParam"] = search;
 
 			// Restrict by SupplierId
 			var b2CUserAuthId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
@@ -62,9 +71,28 @@ namespace PM.Vendor.UI.Controllers
 			}
 
 			RequestDto.RequestId = null;
-
 			RequestDto.RequestDescription = null;
-			return View(requests);
+
+			var requestsEnumerable = requests.AsEnumerable();
+
+			if (!String.IsNullOrEmpty(search))
+			{
+				requestsEnumerable = requests.Where(s => s.RequestDescription != null && s.RequestDescription.ToUpper().Contains(search)
+
+				                                         || s.StatusType.StatusTypeName != null && s.StatusType.StatusTypeName.ToUpper().Contains(search)
+
+				                                         || s.RequestType.RequestTypeName != null && s.RequestType.RequestTypeName.ToUpper().Contains(search)
+
+				                                         || s.Store.StoreName != null && s.Store.StoreName.ToUpper().Contains(search)
+
+				                                         || s.Product.ProductName != null && s.Product.ProductName.ToUpper().Contains(search)
+
+				                                         || s.Id != null && s.Id.ToString().Contains(search)
+
+				                                         || s.CreatedBy != null && s.CreatedBy.ToUpper().Contains(search));
+			}
+
+			return View(requestsEnumerable.ToList());
 		}
 
 		[Authorize]

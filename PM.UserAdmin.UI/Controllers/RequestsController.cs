@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection.PortableExecutable;
 using System.Security.Claims;
 using System.Security.Principal;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -38,8 +39,16 @@ namespace PM.UserAdmin.UI.Controllers
 		}
 
 		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
-		public async Task<IActionResult> Index()
+		public async Task<IActionResult> Index(string search)
 		{
+			if (search != null)
+			{
+				Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+				search = rgx.Replace(search, "").ToUpper();
+			}
+
+			ViewData["FilterParam"] = search;
+
 			UserDto.SetUserRole(User.FindFirstValue("groups"), _configuration);
 			UserDto.UserId = User.Identity.Name;
 
@@ -50,13 +59,31 @@ namespace PM.UserAdmin.UI.Controllers
 	        _dbReadService.IncludeEntityNavigation<Supplier>();
 
 			var requests = await _dbReadService.GetAllRecordsAsync<Request>();
-
 			requests.Reverse();
+
+			var requestsEnumerable = requests.AsEnumerable();
+
+			if (!String.IsNullOrEmpty(search))
+			{
+				requestsEnumerable = requests.Where(s => s.RequestDescription != null && s.RequestDescription.ToUpper().Contains(search)
+				
+														|| s.StatusType.StatusTypeName != null && s.StatusType.StatusTypeName.ToUpper().Contains(search)
+
+														|| s.RequestType.RequestTypeName != null && s.RequestType.RequestTypeName.ToUpper().Contains(search)
+
+														|| s.Store.StoreName != null && s.Store.StoreName.ToUpper().Contains(search)
+
+														|| s.Product.ProductName != null && s.Product.ProductName.ToUpper().Contains(search)
+
+														|| s.Id != null && s.Id.ToString().Contains(search)
+
+														|| s.CreatedBy != null && s.CreatedBy.ToUpper().Contains(search));
+			}
 
 			RequestDto.RequestId = null;
 			RequestDto.RequestDescription = null;
 
-			return View(requests);
+			return View(requestsEnumerable.ToList());
 		}
 
 		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
