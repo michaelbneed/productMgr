@@ -74,8 +74,14 @@ namespace PM.UserAdmin.UI.Controllers
 
 			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(productPackageType.ProductId)).Result;
 			if (product.ProductName != null) ViewData["ProductName"] = product.ProductName;
-			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
-
+			if (product.ProductPrice == null)
+			{
+				if (product.SuggestedPrice != null) ViewData["ProductPrice"] = "No retail price has been entered yet";
+			}
+			else
+			{
+				ViewData["ProductPrice"] = "Retail Price: " + Math.Round((decimal)product.ProductPrice, 2);
+			}
 			return View(productPackageType);
         }
 
@@ -146,7 +152,15 @@ namespace PM.UserAdmin.UI.Controllers
             if (product != null)
             {
 				if (product.ProductName != null) ViewData["ProductName"] = product.ProductName;
-				if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+            }
+
+            if (product.ProductPrice == null)
+            {
+	            ViewData["ProductPrice"] = "No retail price has been entered yet";
+            }
+            else
+            {
+	            ViewData["ProductPrice"] = "Retail Price: " + Math.Round((decimal)product.ProductPrice, 2);
             }
 
 			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
@@ -220,7 +234,15 @@ namespace PM.UserAdmin.UI.Controllers
 
 			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(productPackageType.ProductId)).Result;
 			if (product.ProductName != null) ViewData["ProductName"] = product.ProductName;
-			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
+
+			if (product.ProductPrice == null)
+			{
+				ViewData["ProductPrice"] = "No retail price has been entered yet";
+			}
+			else
+			{
+				ViewData["ProductPrice"] = "Retail Price: " + Math.Round((decimal)product.ProductPrice, 2);
+			}
 
 			return View(productPackageType);
         }

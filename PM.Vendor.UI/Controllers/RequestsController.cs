@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using PM.Business.Dto;
 using PM.Business.RequestLogging;
 using PM.Business.Security;
@@ -22,13 +23,16 @@ namespace PM.Vendor.UI.Controllers
         private readonly VandivierProductManagerContext _context;
         private readonly IDbReadService _dbReadService;
         private readonly IDbWriteService _dbWriteService;
+        private readonly IConfiguration _configuration;
 
-		public RequestsController(IDbReadService dbReadService, IDbWriteService dbWriteService, VandivierProductManagerContext context)
+		public RequestsController(IDbReadService dbReadService, IDbWriteService dbWriteService, 
+			VandivierProductManagerContext context, IConfiguration configuration)
 		{
 			_dbReadService = dbReadService;
 			_dbWriteService = dbWriteService;
 	        _context = context;
-        }
+	        _configuration = configuration;
+		}
 
 		[Authorize]
 		public async Task<IActionResult> Index(string search)
@@ -45,12 +49,15 @@ namespace PM.Vendor.UI.Controllers
 				search = rgx.Replace(search, "").ToUpper();
 			}
 
+			
+
 			ViewData["FilterParam"] = search;
 
 			// Restrict by SupplierId
 			var b2CUserAuthId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 			var userToEnsure = await _dbReadService.GetSingleRecordAsync<User>(s => s.AuthId.Equals(b2CUserAuthId));
-			
+			UserDto.UserId = userToEnsure.EmailAddress;
+
 			List<Request> requests = new List<Request>();
 
 			if (userToEnsure != null)
@@ -154,6 +161,7 @@ namespace PM.Vendor.UI.Controllers
 		        }
 
 		        request.CreatedOn = DateTime.Now;
+		        request.UserId = UserDto.UserId;
 
 		        var status = await _dbReadService.GetSingleRecordAsync<StatusType>(s => s.StatusTypeName.Equals("New Request"));
 		        request.StatusTypeId = status.Id;
@@ -167,8 +175,6 @@ namespace PM.Vendor.UI.Controllers
 	        ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId).SelectedValue;
 			
 			RequestDto.RequestId = request.Id;
-
-			RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestAddByVendor);
 
 			return RedirectToAction("CreateProduct", "Products", new { id = request.Id });
         }
@@ -229,6 +235,7 @@ namespace PM.Vendor.UI.Controllers
 
 					request.UpdatedOn = DateTime.Now;
 					request.SupplierId = RequestDto.SupplierId;
+					request.UserId = request.UserId = UserDto.UserId;
 
 					_dbWriteService.Update(request);
 
@@ -246,13 +253,10 @@ namespace PM.Vendor.UI.Controllers
                         throw;
                     }
                 }
+                
                 return RedirectToAction(nameof(Index));
-            }
-            ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", request.ProductId);
-            ViewData["RequestTypeId"] = new SelectList(_context.RequestType, "Id", "RequestTypeName", request.RequestTypeId);
-            ViewData["StatusTypeId"] = new SelectList(_context.StatusType, "Id", "StatusTypeName", request.StatusTypeId);
-
-            RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestEditByVendor);
+			}
+            
 			return View(request);
         }
 

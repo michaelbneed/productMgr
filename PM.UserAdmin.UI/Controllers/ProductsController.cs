@@ -85,7 +85,12 @@ namespace PM.UserAdmin.UI.Controllers
 		        RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
 				requestEmail.SendRequestToStoreManager(request);
 
-				RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.ProductAddByStaff);
+				RequestLogHelper logHelper = new RequestLogHelper();
+				logHelper.LogRequestChange(request, RequestLogConstants.RequestAddByStaff);
+
+				RequestLogHelper logHelperProduct = new RequestLogHelper();
+				logHelper.LogRequestChange(request, RequestLogConstants.ProductAddByStaff);
+
 			}
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
 
@@ -123,7 +128,8 @@ namespace PM.UserAdmin.UI.Controllers
 		        RequestEmail requestEmail = new RequestEmail(_configuration, _dbReadService);
 		        requestEmail.SendRequestToStoreManager(request);
 
-		        RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.ProductAndPackageAddByStaff);
+				RequestLogHelper logHelper = new RequestLogHelper();
+				logHelper.LogRequestChange(request, RequestLogConstants.ProductAndPackageAddByStaff);
 			}
 
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);

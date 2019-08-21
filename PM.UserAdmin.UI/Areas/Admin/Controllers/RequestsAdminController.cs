@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
 using PM.Entity.ViewModels;
@@ -30,6 +32,7 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 			_configuration = configuration;
 		}
 
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
 		public async Task<IActionResult> Index(string sort, string search)
 		{
 			if (search != null)

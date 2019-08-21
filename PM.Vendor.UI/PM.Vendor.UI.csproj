@@ -16,7 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\PM.Database\PM.Business.csproj" />
     <ProjectReference Include="..\PM.Entity\PM.Entity.csproj" />
-    <ProjectReference Include="..\PM.UserAdmin.UI\PM.UserAdmin.UI.csproj" />
   </ItemGroup>
 
 

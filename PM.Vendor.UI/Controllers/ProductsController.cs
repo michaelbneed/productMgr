@@ -75,7 +75,11 @@ namespace PM.Vendor.UI.Controllers
 					requestEmail.SendRequestToStoreManager(request);
 				}
 
-				RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.ProductAddByVendor);
+				RequestLogHelper logHelper = new RequestLogHelper();
+				logHelper.LogRequestChange(request, RequestLogConstants.RequestAddByVendor);
+
+				RequestLogHelper logHelperProduct = new RequestLogHelper();
+				logHelper.LogRequestChange(request, RequestLogConstants.ProductAddByVendor);
 			}
 			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
 			return RedirectToAction("Details", "Requests", new { id = requestId });
@@ -115,7 +119,11 @@ namespace PM.Vendor.UI.Controllers
 					requestEmail.SendRequestToStoreManager(request);
 				}
 
-				RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.ProductAndPackageAddByVendor);
+				RequestLogHelper logHelper = new RequestLogHelper();
+				logHelper.LogRequestChange(request, RequestLogConstants.RequestAddByVendor);
+
+				RequestLogHelper logHelperProduct = new RequestLogHelper();
+				logHelper.LogRequestChange(request, RequestLogConstants.ProductAndPackageAddByVendor);
 			}
 
 			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
@@ -182,7 +190,7 @@ namespace PM.Vendor.UI.Controllers
 		[Authorize]
 		[HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,SuggestedPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy")] Product product)
         {
             if (id != product.Id)
             {

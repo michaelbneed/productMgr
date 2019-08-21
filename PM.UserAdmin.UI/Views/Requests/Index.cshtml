@@ -2,19 +2,24 @@
 @model IEnumerable<PM.Entity.Models.Request>
 
 @{
-    ViewData["Title"] = "Requests";
+	ViewData["Title"] = "Requests";
 }
-
-<h1 >Product Requests</h1>
-
+<table style="width: 100%">
+	<tr style="width: 100%">
+		<td style="width: 50%">
+			<a asp-action="Index" style="font-size: 22px" data-toggle="tooltip" data-placement="top" title="Click to reset search results!">Product Requests</a>
+		</td>
+		<td style="width: 50%; text-align: right">
+			<form asp-action="Index" method="get">
+				<input type="text" style="text-align: center" placeholder="Search Requests..." name="search" value="@ViewData["FilterParam"]" />
+				<input type="submit" value="Search" class="btn btn-light small" />
+			</form>
+		</td>
+	</tr>
+</table>
 <p>
-	<a asp-action="CreateRequest" title="Add a new Request"><i class="material-icons">add</i>Add Request</a><br/>
+	<a asp-action="CreateRequest" title="Add a new Request"><i class="material-icons">add</i>Add Request</a><br />
 </p>
-<form asp-action="Index" method="get">
-	<input type="text" style="text-align: center" placeholder="Search Requests..." name="search" value="@ViewData["FilterParam"]" />
-	<input type="submit" value="Search" class="btn btn-light small" />
-</form>
-<br />
 @foreach (var item in Model)
 {
 	<div class="card border-dark mb-3" style="max-width: 100%; color: #6A0D1F">

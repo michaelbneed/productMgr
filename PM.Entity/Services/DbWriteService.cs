@@ -17,14 +17,24 @@ namespace PM.Entity.Services
 
 		public async Task<bool> SaveChangesAsync()
 		{
-			try
+			var attempts = 0;
+			do
 			{
-				return await _db.SaveChangesAsync() >= 0;
-			}
-			catch (Exception e)
-			{
-				return false;
-			}
+				try
+				{
+					attempts++;
+					return await _db.SaveChangesAsync() >= 0;
+					break; 
+				}
+				catch (Exception ex)
+				{
+					if (attempts == 3)
+						throw;
+
+					Task.Delay(1000).Wait();
+				}
+			} while (true);
+
 		}
 
 		public void Add<TEntity>(TEntity item) where TEntity : class

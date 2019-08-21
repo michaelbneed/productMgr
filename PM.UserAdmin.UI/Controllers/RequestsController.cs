@@ -160,8 +160,6 @@ namespace PM.UserAdmin.UI.Controllers
 
 			RequestDto.RequestId = request.Id;
 
-			RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestAddByStaff);
-
 			return RedirectToAction("CreateProduct", "Products", new { id = request.Id });
 		}
 
@@ -236,24 +234,31 @@ namespace PM.UserAdmin.UI.Controllers
 							case "New Request":
 								break;
 							case "Approved":
+								RequestLogHelper logHelperApproved = new RequestLogHelper();
+								logHelperApproved.LogRequestChange(request, RequestLogConstants.RequestApproved);
+
 								RequestEmail requestEmailManager = new RequestEmail(_configuration, _dbReadService);
 								requestEmailManager.SendApprovedRequestEmailToHeadQuarters(request);
-								RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestApproved);
 								break;
+
 							case "Denied":
+								RequestLogHelper logHelperDenied = new RequestLogHelper();
+								logHelperDenied.LogRequestChange(request, RequestLogConstants.RequestDenied);
+
 								RequestEmail requestEmailOriginator = new RequestEmail(_configuration, _dbReadService);
 								requestEmailOriginator.SendDeniedRequestEmailToOriginatingUser(request);
-								RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestDenied);
+
 								break;
+
 							case "Complete":
+								RequestLogHelper logHelperComplete = new RequestLogHelper();
+								logHelperComplete.LogRequestChange(request, RequestLogConstants.RequestComplete);
+
 								RequestEmail requestEmailCompletedStatus = new RequestEmail(_configuration, _dbReadService);
 								requestEmailCompletedStatus.SendRequestCompletedToGroup(request);
-								RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestComplete);
 								break;
 						}
 					}
-
-					RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestEditByStaff);
                 }
 				catch (DbUpdateConcurrencyException)
                 {
@@ -267,6 +272,7 @@ namespace PM.UserAdmin.UI.Controllers
                         throw;
                     }
                 }
+
                 return RedirectToAction(nameof(Index));
             }
 
@@ -313,7 +319,8 @@ namespace PM.UserAdmin.UI.Controllers
 				TempData["notifyUser"] = "This action could not be performed due to data constraints.";
 			}
 
-			RequestLogHelper.LogRequestChange(request, _context, RequestLogConstants.RequestDeletedByStaff);
+			RequestLogHelper logHelper = new RequestLogHelper();
+			logHelper.LogRequestChange(request, RequestLogConstants.RequestDeletedByStaff);
 
 			return RedirectToAction(nameof(Index));
         }

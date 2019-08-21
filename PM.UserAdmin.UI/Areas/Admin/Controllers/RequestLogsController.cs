@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PM.Business.Dto;
+using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;
 using PM.Entity.ViewModels;
@@ -31,6 +33,7 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 			_configuration = configuration;
 		}
 
+		[Authorize(Policy = GroupAuthorization.AdminPolicyName)]
 		public async Task<IActionResult> Index(string sort, string search)
 		{
 			RequestDto.RequestDescription = string.Empty;
@@ -68,6 +71,7 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 			{
 				RequestLogFull requestLogFull = null;
 				requestLogFull = new RequestLogFull();
+
 				requestLogFull.RequestId = item.RequestId;
 				requestLogFull.ProductId = item.ProductId;
 				requestLogFull.ChangeNote = item.ChangeNote;
@@ -83,7 +87,15 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 				requestLogFull.CreatedBy = item.CreatedBy;
 				requestLogFull.Id = item.Id;
 
-				requestLogFull.ProductName = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(item.ProductId)).Result.ProductName;
+				var tempProduct = await _dbReadService.GetSingleRecordAsync<Product>(p => item.ProductId != null && p.Id.Equals(item.ProductId));
+				if (tempProduct != null)
+				{
+					if (tempProduct.ProductName != null || tempProduct.ProductName != string.Empty)
+					{
+						requestLogFull.ProductName = _dbReadService.GetSingleRecordAsync<Product>(p => item.ProductId != null && p.Id.Equals(item.ProductId)).Result.ProductName;
+					}
+				}
+				
 				requestLogFull.SupplierName = _dbReadService.GetSingleRecordAsync<Supplier>(p => p.Id.Equals(item.SupplierId)).Result.SupplierName;
 				requestLogFull.StoreName = _dbReadService.GetSingleRecordAsync<Store>(p => p.Id.Equals(item.StoreId)).Result.StoreName;
 				requestLogFull.StatusTypeName = _dbReadService.GetSingleRecordAsync<StatusType>(p => p.Id.Equals(item.StatusTypeId)).Result.StatusTypeName;

@@ -20,3 +20,7 @@ function getCost() {
     var roundedProduct = Math.round(100 * product) / 100;
     document.getElementById("costAltPackage").innerHTML = "Unit Cost " + roundedProduct;
 }
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+})
