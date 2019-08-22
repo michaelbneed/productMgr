@@ -275,14 +275,5 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 
 			return View(requestFullEnumerable.ToList());
 		}
-
-		public string Limit(string input, int max)
-		{
-			if (!String.IsNullOrEmpty(input) && input.Length > max)
-			{
-				return input.Substring(0, max);
-			}
-			return input;
-		}
-	}
+    }
 }
