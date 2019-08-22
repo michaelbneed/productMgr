@@ -4,13 +4,22 @@
 	ViewData["Title"] = "Index";
 }
 
-<a asp-action="Index" style="font-size: 22px">Request Audit Log</a><br />
-<a asp-action="Index" asp-controller="RequestsAdmin" style="font-size: 12px">Go to Requests Grid</a><br />
-<br />
-<form asp-action="Index" method="get">
-	<input type="text" style="text-align: center" placeholder="Search the grid..." name="search" value="@ViewData["FilterParam"]" />
-	<input type="submit" value="Search" class="btn btn-light small" />
-</form>
+<table style="width: 100%; border: black; border-width: 15px;">
+	<tr style="width: 100%">
+		<td style="width: 50%; vertical-align: top">
+			<a asp-action="Index" style="font-size: 22px">Request Audit Log</a><br />
+			<a asp-action="Index" asp-controller="RequestsAdmin" style="font-size: 12px">Go to Requests</a><br />
+		</td>
+		<td style="width: 50%; text-align: right; vertical-align: top">
+			<a asp-action="Index" style="font-size: 12px; text-align: left" data-toggle="tooltip" data-placement="top" title="Click to reset search results!">Reset</a><br />
+			<form asp-action="Index" method="get">
+				<input type="text" style="text-align: center" placeholder="Search Requests..." name="search" value="@ViewData["FilterParam"]" />
+				<input type="submit" value="Search" class="btn btn-light small" />
+			</form>
+		</td>
+	</tr>
+</table>
+<a asp-action="CreateRequest" asp-controller="Requests" title="Add a new Request"><i class="material-icons">add</i>Add Request</a><br />
 <table class="table table-striped small" style="width:100%">
 	<thead>
 		<tr>
@@ -55,45 +64,46 @@
 	<tbody>
 		@foreach (var item in Model)
 		{
-		<tr>
-			<td>
-				@Html.ActionLink(linkText: @item.RequestId.ToString(), actionName: "Details", controllerName: "Requests", routeValues: new { id = @item.RequestId }, htmlAttributes: new { target = "_blank" })
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.RequestDescription)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.ChangeNote)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.RequestTypeName)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.StatusTypeName)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.ProductName)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.SupplierName)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.StoreName)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.OriginalCreatedOnDate)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.OriginalCreatedByUser)
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.CreatedOn) 
-			</td>
-			<td>
-				@Html.DisplayFor(modelItem => item.CreatedBy)<br />
-				(LogID: @Html.DisplayFor(modelItem => item.Id))
-			</td>
-		</tr>
+			<tr>
+				<td>
+					@Html.ActionLink(linkText: @item.RequestId.ToString(), actionName: "Details", controllerName: "Requests", routeValues: new { id = @item.RequestId }, htmlAttributes: new { target = "_blank" })
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.RequestDescription)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ChangeNote)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.RequestTypeName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.StatusTypeName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ProductName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.SupplierName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.StoreName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.OriginalCreatedOnDate)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.OriginalCreatedByUser)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.CreatedOn)
+				</td>
+				<td>
+					<a href="mailto:@item.CreatedBy">@item.CreatedBy.Substring(0, 17)...</a>
+					<br />
+					(LogID: @Html.DisplayFor(modelItem => item.Id))
+				</td>
+			</tr>
 		}
 	</tbody>
 </table>

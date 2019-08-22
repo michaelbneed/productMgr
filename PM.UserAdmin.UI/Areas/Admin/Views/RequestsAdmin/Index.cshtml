@@ -4,16 +4,22 @@
 	ViewData["Title"] = "Requests Admin";
 }
 
-<a asp-action="Index" style="font-size: 22px">Request Audit Log</a><br />
-<a asp-action="Index" asp-controller="RequestLogs" style="font-size: 12px">Go to Requests Audit Log</a><br />
-<p>
-	<a asp-action="CreateRequest" asp-controller="Requests" title="Add a new Request"><i class="material-icons">add</i>Add Request</a><br />
-</p>
-<br />
-<form asp-action="Index" asp-controller="RequestsAdmin" method="get">
-	<input type="text" style="text-align: center" placeholder="Search the grid..." name="search" value="@ViewData["FilterParam"]" />
-	<input type="submit" value="Search" class="btn btn-light small" />
-</form>
+<table style="width: 100%; border: black; border-width: 15px;">
+	<tr style="width: 100%">
+		<td style="width: 50%; vertical-align: top">
+			<a asp-action="Index" style="font-size: 22px">Requests</a><br />
+			<a asp-action="Index" asp-controller="RequestLogs" style="font-size: 12px">Go to Requests Audit Log</a><br />
+		</td>
+		<td style="width: 50%; text-align: right; vertical-align: top">
+			<a asp-action="Index" style="font-size: 12px; text-align: left" data-toggle="tooltip" data-placement="top" title="Click to reset search results!">Reset</a><br />
+			<form asp-action="Index" method="get">
+				<input type="text" style="text-align: center" placeholder="Search Requests..." name="search" value="@ViewData["FilterParam"]" />
+				<input type="submit" value="Search" class="btn btn-light small" />
+			</form>
+		</td>
+	</tr>
+</table>
+<a asp-action="CreateRequest" asp-controller="Requests" title="Add a new Request"><i class="material-icons">add</i>Add Request</a><br />
 <table class="table table-striped small" style="width:100%">
 	<thead>
 		<tr>
@@ -54,6 +60,7 @@
 			<tr>
 				<td>
 					@Html.ActionLink(linkText: @item.Id.ToString(), actionName: "Details", controllerName: "Requests", routeValues: new { id = @item.Id }, htmlAttributes: new { target = "_blank" })
+					@Html.ActionLink(linkText: "Delete", actionName: "Delete", controllerName: "Requests", routeValues: new { id = @item.Id }, htmlAttributes: new { target = "_blank" })
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.RequestDescription)

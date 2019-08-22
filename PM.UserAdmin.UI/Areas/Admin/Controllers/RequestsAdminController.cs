@@ -82,6 +82,10 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 
 					|| s.Store.StoreName != null && s.Store.StoreName.ToUpper().Contains(search)
 
+					|| s.Product.ProductName != null && s.Product.ProductName.ToUpper().Contains(search)
+
+					|| s.Supplier.SupplierName != null && s.Supplier.SupplierName.ToUpper().Contains(search)
+
 					|| s.Id != null && s.Id.ToString().Contains(search)
 
 					|| s.UserId != null && s.UserId.ToUpper().Contains(search));
