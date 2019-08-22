@@ -88,18 +88,34 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 				requestLogFull.Id = item.Id;
 
 				var tempProduct = await _dbReadService.GetSingleRecordAsync<Product>(p => item.ProductId != null && p.Id.Equals(item.ProductId));
-				if (tempProduct != null)
+				if (tempProduct?.ProductName != null)
 				{
-					if (tempProduct.ProductName != null || tempProduct.ProductName != string.Empty)
-					{
-						requestLogFull.ProductName = _dbReadService.GetSingleRecordAsync<Product>(p => item.ProductId != null && p.Id.Equals(item.ProductId)).Result.ProductName;
-					}
+					requestLogFull.ProductName = tempProduct.ProductName;
 				}
-				
-				requestLogFull.SupplierName = _dbReadService.GetSingleRecordAsync<Supplier>(p => p.Id.Equals(item.SupplierId)).Result.SupplierName;
-				requestLogFull.StoreName = _dbReadService.GetSingleRecordAsync<Store>(p => p.Id.Equals(item.StoreId)).Result.StoreName;
-				requestLogFull.StatusTypeName = _dbReadService.GetSingleRecordAsync<StatusType>(p => p.Id.Equals(item.StatusTypeId)).Result.StatusTypeName;
-				requestLogFull.RequestTypeName = _dbReadService.GetSingleRecordAsync<RequestType>(p => p.Id.Equals(item.RequestTypeId)).Result.RequestTypeName;
+
+				var tempSupplier = await _dbReadService.GetSingleRecordAsync<Supplier>(p => item.SupplierId != null && p.Id.Equals(item.SupplierId));
+				if (tempSupplier?.SupplierName != null)
+				{
+					requestLogFull.SupplierName = tempSupplier.SupplierName;
+				}
+
+				var tempStore = await _dbReadService.GetSingleRecordAsync<Store>(p => item.StoreId != null && p.Id.Equals(item.StoreId));
+				if (tempStore?.StoreName != null)
+				{
+					requestLogFull.StoreName = tempStore.StoreName;
+				}
+
+				var tempStatus = await _dbReadService.GetSingleRecordAsync<StatusType>(p => item.StatusTypeId != null && p.Id.Equals(item.StatusTypeId));
+				if (tempStatus?.StatusTypeName != null)
+				{
+					requestLogFull.StatusTypeName = tempStatus.StatusTypeName;
+				}
+
+				var tempRequestType = await _dbReadService.GetSingleRecordAsync<RequestType>(p => p.Id.Equals(item.RequestTypeId));
+				if (tempRequestType?.RequestTypeName != null)
+				{
+					requestLogFull.RequestTypeName = tempRequestType.RequestTypeName;
+				}
 
 				requestLogFullList.Add(requestLogFull);
 			}
