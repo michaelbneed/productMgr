@@ -235,7 +235,7 @@ namespace PM.UserAdmin.UI.Controllers
 								break;
 							case "Approved":
 								RequestLogHelper logHelperApproved = new RequestLogHelper();
-								logHelperApproved.LogRequestChange(request, RequestLogConstants.RequestApproved);
+								logHelperApproved.LogRequestChange(request, _context, RequestLogConstants.RequestApproved);
 
 								RequestEmail requestEmailManager = new RequestEmail(_configuration, _dbReadService);
 								requestEmailManager.SendApprovedRequestEmailToHeadQuarters(request);
@@ -243,7 +243,7 @@ namespace PM.UserAdmin.UI.Controllers
 
 							case "Denied":
 								RequestLogHelper logHelperDenied = new RequestLogHelper();
-								logHelperDenied.LogRequestChange(request, RequestLogConstants.RequestDenied);
+								logHelperDenied.LogRequestChange(request, _context, RequestLogConstants.RequestDenied);
 
 								RequestEmail requestEmailOriginator = new RequestEmail(_configuration, _dbReadService);
 								requestEmailOriginator.SendDeniedRequestEmailToOriginatingUser(request);
@@ -252,7 +252,7 @@ namespace PM.UserAdmin.UI.Controllers
 
 							case "Complete":
 								RequestLogHelper logHelperComplete = new RequestLogHelper();
-								logHelperComplete.LogRequestChange(request, RequestLogConstants.RequestComplete);
+								logHelperComplete.LogRequestChange(request, _context, RequestLogConstants.RequestComplete);
 
 								RequestEmail requestEmailCompletedStatus = new RequestEmail(_configuration, _dbReadService);
 								requestEmailCompletedStatus.SendRequestCompletedToGroup(request);
@@ -320,7 +320,7 @@ namespace PM.UserAdmin.UI.Controllers
 			}
 
 			RequestLogHelper logHelper = new RequestLogHelper();
-			logHelper.LogRequestChange(request, RequestLogConstants.RequestDeletedByStaff);
+			logHelper.LogRequestChange(request, _context, RequestLogConstants.RequestDeletedByStaff);
 
 			return RedirectToAction(nameof(Index));
         }

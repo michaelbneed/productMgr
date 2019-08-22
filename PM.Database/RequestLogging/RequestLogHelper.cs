@@ -9,20 +9,11 @@ namespace PM.Business.RequestLogging
 {
 	public  class RequestLogHelper
 	{
-		//private IDbReadService _dbReadService;
-		//private IDbWriteService _dbWriteService;
-		//private readonly VandivierProductManagerContext _context;
+		public RequestLogHelper(){}
 
-		public RequestLogHelper()
+		public void LogRequestChange(Request request, VandivierProductManagerContext context, [Optional] string changeNote)
 		{
-			//_dbReadService = dbReadService;
-			//_dbWriteService = dbWriteService;
-			//_context = context;
-		}
-
-		public void LogRequestChange(Request request, [Optional] string changeNote)
-		{
-			VandivierProductManagerContext context = new VandivierProductManagerContext();
+			//VandivierProductManagerContext context = new VandivierProductManagerContext();
 			IDbWriteService dbWriteService = new DbWriteService(context);
 
 			RequestLog requestToLog = null;
@@ -55,15 +46,15 @@ namespace PM.Business.RequestLogging
 
 	public static class RequestLogConstants
 	{
-		public const string RequestAddByStaff = "Request Created by Staff";
-		public const string RequestDeletedByStaff = "Request Deleted by Staff";
-		public const string RequestAddByVendor = "Request Created by Vendor";
+		public const string RequestAddByStaff = "New Staff Request";
+		public const string RequestDeletedByStaff = "Request Deleted";
+		public const string RequestAddByVendor = "New Vendor Request";
 		public const string RequestApproved = "Request Approved";
 		public const string RequestDenied = "Request Denied";
 		public const string RequestComplete = "Request Complete";
-		public const string ProductAddByStaff = "Product Added to Request by Staff";
-		public const string ProductAddByVendor = "Product Added to Request by Vendor";
-		public const string ProductAndPackageAddByStaff = "Product and Package Added to Request by Staff";
-		public const string ProductAndPackageAddByVendor = "Product and Package Added to Request by Vendor";
+		public const string ProductAddByStaff = "New Staff Product";
+		public const string ProductAddByVendor = "New Vendor Product";
+		public const string ProductAndPackageAddByStaff = "New Product and Package Staff";
+		public const string ProductAndPackageAddByVendor = "New Product and Package Vendor";
 	}
 }

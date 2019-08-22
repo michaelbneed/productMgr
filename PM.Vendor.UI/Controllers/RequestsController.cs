@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using PM.Business.Dto;
-using PM.Business.RequestLogging;
 using PM.Business.Security;
 using PM.Entity.Models;
 using PM.Entity.Services;

@@ -76,10 +76,7 @@ namespace PM.Vendor.UI.Controllers
 				}
 
 				RequestLogHelper logHelper = new RequestLogHelper();
-				logHelper.LogRequestChange(request, RequestLogConstants.RequestAddByVendor);
-
-				RequestLogHelper logHelperProduct = new RequestLogHelper();
-				logHelper.LogRequestChange(request, RequestLogConstants.ProductAddByVendor);
+				logHelper.LogRequestChange(request, _context, RequestLogConstants.RequestAddByVendor);
 			}
 			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
 			return RedirectToAction("Details", "Requests", new { id = requestId });
@@ -120,10 +117,7 @@ namespace PM.Vendor.UI.Controllers
 				}
 
 				RequestLogHelper logHelper = new RequestLogHelper();
-				logHelper.LogRequestChange(request, RequestLogConstants.RequestAddByVendor);
-
-				RequestLogHelper logHelperProduct = new RequestLogHelper();
-				logHelper.LogRequestChange(request, RequestLogConstants.ProductAndPackageAddByVendor);
+				logHelper.LogRequestChange(request, _context, RequestLogConstants.RequestAddByVendor);
 			}
 
 			ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);

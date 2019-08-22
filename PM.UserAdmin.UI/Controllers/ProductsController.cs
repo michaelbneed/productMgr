@@ -86,12 +86,8 @@ namespace PM.UserAdmin.UI.Controllers
 				requestEmail.SendRequestToStoreManager(request);
 
 				RequestLogHelper logHelper = new RequestLogHelper();
-				logHelper.LogRequestChange(request, RequestLogConstants.RequestAddByStaff);
-
-				RequestLogHelper logHelperProduct = new RequestLogHelper();
-				logHelper.LogRequestChange(request, RequestLogConstants.ProductAddByStaff);
-
-			}
+				logHelper.LogRequestChange(request, _context, RequestLogConstants.RequestAddByStaff);
+	        }
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
 
 	        return RedirectToAction("Details", "Requests", new { id = requestId });
@@ -129,7 +125,7 @@ namespace PM.UserAdmin.UI.Controllers
 		        requestEmail.SendRequestToStoreManager(request);
 
 				RequestLogHelper logHelper = new RequestLogHelper();
-				logHelper.LogRequestChange(request, RequestLogConstants.ProductAndPackageAddByStaff);
+				logHelper.LogRequestChange(request, _context, RequestLogConstants.ProductAndPackageAddByStaff);
 			}
 
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);

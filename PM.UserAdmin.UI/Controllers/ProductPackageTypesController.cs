@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.InteropServices.ComTypes;
 using System.Threading.Tasks;
@@ -147,6 +148,9 @@ namespace PM.UserAdmin.UI.Controllers
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", productPackageType.ProductId);
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", productPackageType.SupplierId);
+
+            var unitPrice = Math.Round((double)Convert.ToDouble(productPackageType.AlternateProductCost) / Convert.ToDouble(productPackageType.Unit), 2);
+			ViewData["UnitCost"] = unitPrice.ToString(CultureInfo.InvariantCulture);
 
             var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(productPackageType.ProductId)).Result;
             if (product != null)
