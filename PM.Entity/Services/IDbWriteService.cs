@@ -6,6 +6,8 @@ namespace PM.Entity.Services
 	{
 		Task<bool> SaveChangesAsync();
 
+		Task<bool> SaveChanges();
+
 		void Add<TEntity>(TEntity item) where TEntity : class;
 
 		void Delete<TEntity>(TEntity item) where TEntity : class;

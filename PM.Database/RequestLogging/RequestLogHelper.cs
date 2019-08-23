@@ -16,12 +16,7 @@ namespace PM.Business.RequestLogging
 
 		public void LogRequestChange(Request request, VandivierProductManagerContext context, [Optional] string changeNote)
 		{
-			// Create a fresh context avoiding disposal - passed DI context from 2 UI projects can dispose
-			VandivierProductManagerContext _context = new VandivierProductManagerContext();
-			_context = context;
-			
-			// Initialize data service with new context
-			IDbWriteService dbWriteService = new DbWriteService(_context);
+			IDbWriteService dbWriteService = new DbWriteService(context);
 
 			RequestLog requestToLog = null;
 			requestToLog = new RequestLog();
@@ -47,7 +42,7 @@ namespace PM.Business.RequestLogging
 			requestToLog.CreatedBy = UserDto.UserId;
 
 			dbWriteService.Add<RequestLog>(requestToLog);
-			dbWriteService.SaveChangesAsync();
+			dbWriteService.SaveChanges();
 		}
 	}
 

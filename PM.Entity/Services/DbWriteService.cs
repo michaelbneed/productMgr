@@ -37,6 +37,28 @@ namespace PM.Entity.Services
 
 		}
 
+		public Task<bool> SaveChanges()
+		{
+			var attempts = 0;
+			do
+			{
+				try
+				{
+					attempts++;
+					return Task.FromResult(_db.SaveChanges() >= 0);
+					break;
+				}
+				catch (Exception ex)
+				{
+					if (attempts == 3)
+						throw;
+
+					Task.Delay(1000).Wait();
+				}
+			} while (true);
+
+		}
+
 		public void Add<TEntity>(TEntity item) where TEntity : class
 		{
 			try
