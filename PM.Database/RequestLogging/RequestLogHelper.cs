@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Runtime.InteropServices;
+using Microsoft.EntityFrameworkCore;
 using PM.Business.Dto;
 using PM.Entity.Models;
 using PM.Entity.Services;
@@ -7,14 +10,18 @@ using PM.Entity.ViewModels;
 
 namespace PM.Business.RequestLogging
 {
-	public  class RequestLogHelper
+	public  class RequestLogHelper : DbContext
 	{
 		public RequestLogHelper(){}
 
 		public void LogRequestChange(Request request, VandivierProductManagerContext context, [Optional] string changeNote)
 		{
-			//VandivierProductManagerContext context = new VandivierProductManagerContext();
-			IDbWriteService dbWriteService = new DbWriteService(context);
+			// Create a fresh context avoiding disposal - passed DI context from 2 UI projects can dispose
+			VandivierProductManagerContext _context = new VandivierProductManagerContext();
+			_context = context;
+			
+			// Initialize data service with new context
+			IDbWriteService dbWriteService = new DbWriteService(_context);
 
 			RequestLog requestToLog = null;
 			requestToLog = new RequestLog();
