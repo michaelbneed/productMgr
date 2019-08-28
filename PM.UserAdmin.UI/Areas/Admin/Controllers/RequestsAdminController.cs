@@ -207,7 +207,7 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 				default:
 					if (requestEnumerable != null)
 						requestEnumerable =
-							new List<Request>(requestEnumerable.Where(s => s.Id != null).OrderByDescending(s => s.Id.ToString()));
+							new List<Request>(requestEnumerable.Where(s => s.Id != null).OrderByDescending(s => s.CreatedOn));
 					break;
 			}
 
