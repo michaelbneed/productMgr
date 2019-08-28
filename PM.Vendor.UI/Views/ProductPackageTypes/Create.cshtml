@@ -44,10 +44,6 @@
 				<input asp-for="SupplierData" class="form-control" />
 				<span asp-validation-for="SupplierData" class="text-danger"></span>
 			</div>
-			<div class="form-group">
-				<label asp-for="SupplierId" class="control-label">Supplier</label>
-				<select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
-			</div>
 			<input type="hidden" asp-for="AlternateProductPrice" />
 			<input type="hidden" asp-for="CreatedBy" />
 			<input type="hidden" asp-for="CreatedOn" />

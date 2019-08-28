@@ -91,7 +91,7 @@ namespace PM.Vendor.UI.Controllers
 	        if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
 
 			ViewData["ProductId"] = id;
-            ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
+			ViewData["SupplierId"] = RequestDto.SupplierId;
             return View();
         }
 
@@ -109,7 +109,8 @@ namespace PM.Vendor.UI.Controllers
 		            productPackageType.CreatedBy = userFullName;
 	            }
 
-	            productPackageType.CreatedOn = DateTime.Now;
+				productPackageType.SupplierId = RequestDto.SupplierId;
+				productPackageType.CreatedOn = DateTime.Now;
 
 	            productPackageType.ProductId = id;
 	            _dbWriteService.Add(productPackageType);
@@ -144,9 +145,9 @@ namespace PM.Vendor.UI.Controllers
                 return NotFound();
             }
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", productPackageType.ProductId);
-            ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", productPackageType.SupplierId);
+            ViewData["SupplierId"] = RequestDto.SupplierId;
 
-            var unitPrice = Math.Round((double)Convert.ToDouble(productPackageType.AlternateProductCost) / Convert.ToDouble(productPackageType.Unit), 2);
+			var unitPrice = Math.Round((double)Convert.ToDouble(productPackageType.AlternateProductCost) / Convert.ToDouble(productPackageType.Unit), 2);
             ViewData["UnitCost"] = unitPrice.ToString(CultureInfo.InvariantCulture);
 
 			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(productPackageType.ProductId)).Result;
@@ -189,7 +190,8 @@ namespace PM.Vendor.UI.Controllers
 		                productPackageType.UpdatedBy = userFullName;
 	                }
 
-	                productPackageType.UpdatedOn = DateTime.Now;
+					productPackageType.SupplierId = RequestDto.SupplierId;
+					productPackageType.UpdatedOn = DateTime.Now;
 
 	                _dbWriteService.Update(productPackageType);
                     await _dbWriteService.SaveChangesAsync();
