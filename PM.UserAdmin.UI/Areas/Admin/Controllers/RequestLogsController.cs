@@ -285,7 +285,7 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 				default:
 					if (requestFullEnumerable != null)
 						requestFullEnumerable = 
-							new List<RequestLogFull>(requestFullEnumerable.Where(s => s.Id != null).OrderByDescending(s => int.Parse(s.Id.ToString())));
+							new List<RequestLogFull>(requestFullEnumerable.Where(s => s.CreatedOn != null).OrderByDescending(s => s.CreatedOn.ToString()));
 					break;
 			}
 
