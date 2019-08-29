@@ -61,6 +61,9 @@ namespace PM.Vendor.UI.Controllers
                 return NotFound();
             }
 
+			var unitPrice = Math.Round((double)Convert.ToDouble(productPackageType.AlternateProductCost) / Convert.ToDouble(productPackageType.Unit), 2);
+			ViewData["PackageCost"] = unitPrice.ToString(CultureInfo.InvariantCulture);
+
 			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
 
 			if (note != null)
@@ -147,8 +150,8 @@ namespace PM.Vendor.UI.Controllers
             ViewData["ProductId"] = new SelectList(_context.Product, "Id", "ProductName", productPackageType.ProductId);
             ViewData["SupplierId"] = RequestDto.SupplierId;
 
-			var unitPrice = Math.Round((double)Convert.ToDouble(productPackageType.AlternateProductCost) / Convert.ToDouble(productPackageType.Unit), 2);
-            ViewData["UnitCost"] = unitPrice.ToString(CultureInfo.InvariantCulture);
+            var unitPrice = Math.Round((double)Convert.ToDouble(productPackageType.AlternateProductCost) / Convert.ToDouble(productPackageType.Unit), 2);
+            ViewData["PackageCost"] = unitPrice.ToString(CultureInfo.InvariantCulture);
 
 			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(productPackageType.ProductId)).Result;
             if (product.ProductPrice == null)
@@ -229,6 +232,9 @@ namespace PM.Vendor.UI.Controllers
             {
                 return NotFound();
             }
+
+			var unitPrice = Math.Round((double)Convert.ToDouble(productPackageType.AlternateProductCost) / Convert.ToDouble(productPackageType.Unit), 2);
+			ViewData["PackageCost"] = unitPrice.ToString(CultureInfo.InvariantCulture);
 
 			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(productPackageType.ProductId)).Result;
 			if (product.ProductName != null) ViewData["ProductName"] = product.ProductName;

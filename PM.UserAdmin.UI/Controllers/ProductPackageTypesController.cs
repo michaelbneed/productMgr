@@ -39,7 +39,8 @@ namespace PM.UserAdmin.UI.Controllers
 			ViewData["ProductName"] = product.ProductName;
 
             var packages = await _dbReadService.GetAllRecordsAsync<ProductPackageType>(s => s.ProductId.Equals(id));
-			packages.Reverse();
+
+            packages.Reverse();
 			return View(packages);
         }
 
@@ -59,6 +60,9 @@ namespace PM.UserAdmin.UI.Controllers
             {
                 return NotFound();
             }
+
+			var unitPrice = Math.Round((double)Convert.ToDouble(productPackageType.AlternateProductCost) / Convert.ToDouble(productPackageType.Unit), 2);
+			ViewData["PackageCost"] = unitPrice.ToString(CultureInfo.InvariantCulture);
 
 			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
 			if (note != null)
@@ -150,7 +154,7 @@ namespace PM.UserAdmin.UI.Controllers
             ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName", productPackageType.SupplierId);
 
             var unitPrice = Math.Round((double)Convert.ToDouble(productPackageType.AlternateProductCost) / Convert.ToDouble(productPackageType.Unit), 2);
-			ViewData["UnitCost"] = unitPrice.ToString(CultureInfo.InvariantCulture);
+			ViewData["PackageCost"] = unitPrice.ToString(CultureInfo.InvariantCulture);
 
             var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(productPackageType.ProductId)).Result;
             if (product != null)
@@ -235,6 +239,9 @@ namespace PM.UserAdmin.UI.Controllers
             {
                 return NotFound();
             }
+
+			var unitPrice = Math.Round((double)Convert.ToDouble(productPackageType.AlternateProductCost) / Convert.ToDouble(productPackageType.Unit), 2);
+			ViewData["PackageCost"] = unitPrice.ToString(CultureInfo.InvariantCulture);
 
 			var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(productPackageType.ProductId)).Result;
 			if (product.ProductName != null) ViewData["ProductName"] = product.ProductName;

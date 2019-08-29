@@ -30,8 +30,8 @@
 	<div class="card-body text-dark">
 		<div class="row">
 			<div class="col-sm-4" style="padding-bottom: 10px">
-				<a asp-controller="Products" asp-action="Details" asp-route-id="@item.ProductId" class="control-label">
-					<p class="card-text">Parent Product: @Html.DisplayFor(modelItem => item.Product.ProductName)</p>
+				<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId" class="control-label">
+					<p class="card-text">Request: @Html.DisplayFor(modelItem => @PM.Business.Dto.RequestDto.RequestDescription)</p>
 				</a><br />
 				<p class="card-text">Product UPC (alt): @Html.DisplayFor(modelItem => item.AlternateProductUpccode)</p>
 				<p class="card-text">Supplier: @Html.DisplayFor(modelItem => item.Supplier.SupplierName)</p>
@@ -44,11 +44,9 @@
 			</div>
 			<div class="col-sm-4" style="padding-bottom: 10px">
 				<p class="card-text">Cost Per Case: @Html.DisplayFor(modelItem => item.AlternateProductCost)</p>
+				<p class="card-text">Package Cost: @(Math.Round(Convert.ToDouble(item.AlternateProductCost) / Convert.ToDouble(item.Unit), 2))</p>
 				<p class="card-text">Retail Price (alt): @Html.DisplayFor(modelItem => item.AlternateProductPrice)</p>
 				<p class="card-text">Suggested Retail Price (alt): @Html.DisplayFor(modelItem => item.AlternateSuggestedPrice)</p>
-				<a asp-controller="Requests" asp-action="Details" asp-route-id="@PM.Business.Dto.RequestDto.RequestId" class="control-label">
-					<p class="card-text">Request: @Html.DisplayFor(modelItem => @PM.Business.Dto.RequestDto.RequestDescription)</p>
-				</a><br />
 			</div>
 		</div>
 	</div>
