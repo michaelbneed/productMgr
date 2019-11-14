@@ -139,6 +139,8 @@ namespace PM.Entity.Models
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
+                entity.Property(e => e.UnitsPerCase).HasColumnType("int");
+
                 entity.Property(e => e.UpdatedOn).HasColumnType("datetime");
 
                 entity.HasOne(d => d.Category)

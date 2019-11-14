@@ -10,99 +10,106 @@
 <div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Product
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ProductName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Description
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ProductDescription)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             UPC
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Upccode)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Catapult Inventory Location
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ProductLocation)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Cost
         </dt>
-	    <dd class = "col-sm-10">
-		    @Html.DisplayFor(model => model.ProductCost)
-	    </dd>
-	    <dt class = "col-sm-2">
-		    Retail Price
-	    </dt>
-	    <dd class = "col-sm-10">
-		    @Html.DisplayFor(model => model.ProductPrice)
-	    </dd>
-	    <dt class="col-sm-2">
-		    Suggested Retail Price
-	    </dt>
-	    <dd class="col-sm-10">
-		    @Html.DisplayFor(model => model.SuggestedPrice)
-	    </dd>
-        <dt class = "col-sm-2">
-	        Container Size
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductCost)
+        </dd>
+        <dt class="col-sm-2">
+            Units Per Case
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.UnitsPerCase)
+        </dd>
+        <dt class="col-sm-2">
+            Retail Price
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ProductPrice)
+        </dd>
+        <dt class="col-sm-2">
+            Suggested Retail Price
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.SuggestedPrice)
+        </dd>
+        <dt class="col-sm-2">
+            Container Size
+        </dt>
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PackageSize)
-        </dd><dt class = "col-sm-2">
-		    Units of Measure
-	    </dt>
-	    <dd class = "col-sm-10">
-		    @Html.DisplayFor(model => model.ContainerSizeType.ContainerSizeTypeName)
-	    </dd>
-        <dt class = "col-sm-2">
-	        Container Type
+        </dd>
+        <dt class="col-sm-2">
+            Units of Measure
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.ContainerSizeType.ContainerSizeTypeName)
+        </dd>
+        <dt class="col-sm-2">
+            Container Type
+        </dt>
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.ContainerType.ContainerTypeName)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Order Week
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.OrderWeek)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Date
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CreatedOn)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             User
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.CreatedBy)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             Updated
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UpdatedOn)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             User
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.UpdatedBy)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Category.CategoryName)
         </dd>
     </dl>

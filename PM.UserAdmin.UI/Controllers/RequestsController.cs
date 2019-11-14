@@ -75,7 +75,7 @@ namespace PM.UserAdmin.UI.Controllers
 
 														|| s.Product.ProductName != null && s.Product.ProductName.ToUpper().Contains(search)
 
-														|| s.Id != null && s.Id.ToString().Contains(search)
+														|| s.Id.ToString().StartsWith(search)
 
 														|| s.CreatedBy != null && s.CreatedBy.ToUpper().Contains(search));
 			}
@@ -93,7 +93,7 @@ namespace PM.UserAdmin.UI.Controllers
 
 	        var roleForDebug = UserDto.Role;
 
-			if (id == null)
+			if (!id.HasValue)
             {
                 return NotFound();
             }

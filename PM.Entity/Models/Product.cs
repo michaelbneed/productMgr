@@ -29,6 +29,7 @@ namespace PM.Entity.Models
         public string CreatedBy { get; set; }
         public DateTime? UpdatedOn { get; set; }
         public string UpdatedBy { get; set; }
+        public int? UnitsPerCase { get; set; }
 
         public virtual Category Category { get; set; }
         public virtual ContainerSizeType ContainerSizeType { get; set; }

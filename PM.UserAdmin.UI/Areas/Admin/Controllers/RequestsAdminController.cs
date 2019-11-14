@@ -86,7 +86,7 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 
 					|| s.Supplier.SupplierName != null && s.Supplier.SupplierName.ToUpper().Contains(search)
 
-					|| s.Id != null && s.Id.ToString().Contains(search)
+					|| s.Id.ToString().StartsWith(search)
 
 					|| s.UserId != null && s.UserId.ToUpper().Contains(search));
 			}
@@ -97,12 +97,12 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 				case "requestId_desc":
 					if (requestEnumerable != null)
 						requestEnumerable =
-							new List<Request>(requestEnumerable.Where(s => s.Id != null).OrderByDescending(s => s.Id.ToString()));
+							new List<Request>(requestEnumerable.OrderByDescending(s => s.Id.ToString()));
 					break;
 				case "RequestId":
 					if (requestEnumerable != null)
 						requestEnumerable =
-							new List<Request>(requestEnumerable.Where(s => s.Id != null).OrderBy(s => s.Id.ToString()));
+							new List<Request>(requestEnumerable.OrderBy(s => s.Id.ToString()));
 					break;
 				case "requestDescription_desc":
 					if (requestEnumerable != null)
@@ -207,7 +207,7 @@ namespace PM.UserAdmin.UI.Areas.Admin.Controllers
 				default:
 					if (requestEnumerable != null)
 						requestEnumerable =
-							new List<Request>(requestEnumerable.Where(s => s.Id != null).OrderByDescending(s => s.CreatedOn));
+							new List<Request>(requestEnumerable.OrderByDescending(s => s.CreatedOn));
 					break;
 			}
 
