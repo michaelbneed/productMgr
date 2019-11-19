@@ -18,5 +18,5 @@ function getCost() {
     var divider = document.getElementById("costEntered");
     var product = divider.value / dividend.value;
     var roundedProduct = Math.round(100 * product) / 100;
-    document.getElementById("costAltPackage").innerHTML = "Unit Cost " + roundedProduct;
+    document.getElementById("costCalculated").innerHTML = "Unit Cost " + roundedProduct;
 }

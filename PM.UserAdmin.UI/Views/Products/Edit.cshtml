@@ -34,14 +34,15 @@
                 <span asp-validation-for="ProductLocation" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="ProductCost" class="control-label">Cost</label>
-                <input asp-for="ProductCost" class="form-control" />
-                <span asp-validation-for="ProductCost" class="text-danger"></span>
+	            <label asp-for="UnitsPerCase" class="control-label">Units Per Case</label>
+	            <input id="quantityEntered" asp-for="UnitsPerCase" class="form-control" />
+	            <span asp-validation-for="UnitsPerCase" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="UnitsPerCase" class="control-label">Units Per Case</label>
-                <input asp-for="UnitsPerCase" class="form-control" />
-                <span asp-validation-for="UnitsPerCase" class="text-danger"></span>
+	            <label asp-for="ProductCost" class="control-label">Cost</label>
+	            <input id="costEntered" asp-for="ProductCost" class="form-control" onkeyup="getCost()" />
+	            <span asp-validation-for="ProductCost" class="text-danger"></span>
+	            <label id="costCalculated" class="small" style="color:green"></label>
             </div>
             <div class="form-group">
                 <label asp-for="ProductPrice" class="control-label">Retail Price</label>
