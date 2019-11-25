@@ -14,9 +14,17 @@
 }
 
 function getCost() {
-    var dividend = document.getElementById("quantityEntered");
-    var divider = document.getElementById("costEntered");
-    var product = divider.value / dividend.value;
-    var roundedProduct = Math.round(100 * product) / 100;
-    document.getElementById("costCalculated").innerHTML = "Unit Cost " + roundedProduct;
+    var units = document.getElementById("quantityEntered");
+    var cost = document.getElementById("costEntered");
+    var product = 0.00;
+    var product = cost.value / units.value;
+    if (!isNaN(product) && isFinite(product)) {
+        var roundedProduct = Math.round(100 * product) / 100;
+        document.getElementById("costCalculated").innerHTML = "Unit Cost " + roundedProduct;
+    }
+    else {
+        document.getElementById("costCalculated").innerHTML = "Unit Cost";
+    }
 }
+
+$(function () { getCost(); });
