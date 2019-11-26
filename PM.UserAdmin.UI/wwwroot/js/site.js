@@ -16,7 +16,6 @@
 function getCost() {
     var units = document.getElementById("quantityEntered");
     var cost = document.getElementById("costEntered");
-    var product = 0.00;
     var product = cost.value / units.value;
     if (!isNaN(product) && isFinite(product)) {
         var roundedProduct = Math.round(100 * product) / 100;

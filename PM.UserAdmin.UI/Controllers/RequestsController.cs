@@ -73,9 +73,11 @@ namespace PM.UserAdmin.UI.Controllers
 
 														|| s.Store.StoreName != null && s.Store.StoreName.ToUpper().Contains(search)
 
-														|| s.Product.ProductName != null && s.Product.ProductName.ToUpper().Contains(search)
+														|| s.ProductId != null && s.Product.ProductName.ToUpper().Contains(search)
 
 														|| s.Id.ToString().StartsWith(search)
+
+														|| s.Id.ToString().Contains(search)
 
 														|| s.CreatedBy != null && s.CreatedBy.ToUpper().Contains(search));
 			}
@@ -147,6 +149,7 @@ namespace PM.UserAdmin.UI.Controllers
 					var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
 					request.UserId = User.Claims.FirstOrDefault(x => x.Type == claimTypeEmailAddress).Value;
 					request.CreatedBy = userFullName;
+					request.ProductId = 0;
 				}
 
 				request.CreatedOn = DateTime.Now;
