@@ -149,7 +149,6 @@ namespace PM.UserAdmin.UI.Controllers
 					var userFullName = User.Claims.FirstOrDefault(x => x.Type == $"name").Value;
 					request.UserId = User.Claims.FirstOrDefault(x => x.Type == claimTypeEmailAddress).Value;
 					request.CreatedBy = userFullName;
-					request.ProductId = 0;
 				}
 
 				request.CreatedOn = DateTime.Now;
