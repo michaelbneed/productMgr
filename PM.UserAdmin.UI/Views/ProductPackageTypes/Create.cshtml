@@ -52,7 +52,8 @@
 			</div>
 			<div class="form-group">
 				<label asp-for="SupplierId" class="control-label">Supplier</label>
-				<select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
+				<select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId" hidden="hidden"></select>
+				<select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId" disabled="disabled"></select>
 			</div>
 			<input type="hidden" asp-for="CreatedBy" />
 			<input type="hidden" asp-for="CreatedOn" />

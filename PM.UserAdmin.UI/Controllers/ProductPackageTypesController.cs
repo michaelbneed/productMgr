@@ -95,11 +95,13 @@ namespace PM.UserAdmin.UI.Controllers
         {
 	        ViewData["ProductId"] = id;
 
-	        var product =_dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(id)).Result;
+	        var product = _dbReadService.GetSingleRecordAsync<Product>(p => p.Id.Equals(id)).Result;
 	        if (product.ProductName != null) ViewData["ProductName"] = product.ProductName;
 			if (product.ProductPrice != null) ViewData["ProductPrice"] = Math.Round((decimal)product.ProductPrice, 2);
 
-			ViewData["SupplierId"] = new SelectList(_context.Supplier, "Id", "SupplierName");
+			var request = _dbReadService.GetSingleRecordAsync<Request>(r => r.Id.Equals(RequestDto.RequestId)).Result;
+
+			ViewBag.SupplierId = new SelectList(_context.Supplier, "Id", "SupplierName", request.SupplierId);
             return View();
         }
 
