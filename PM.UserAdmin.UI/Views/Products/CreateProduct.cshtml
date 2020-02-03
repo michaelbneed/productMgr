@@ -28,6 +28,11 @@
 				<span asp-validation-for="Upccode" class="text-danger"></span>
 			</div>
 			<div class="form-group">
+				<label asp-for="SupplierData" class="control-label">Supplier ID</label>
+				<input asp-for="SupplierData" class="form-control" />
+				<span asp-validation-for="SupplierData" class="text-danger"></span>
+			</div>
+			<div class="form-group">
 				<label asp-for="ProductLocation" class="control-label">Catapult Inventory Location</label>
 				<input asp-for="ProductLocation" class="form-control" />
 				<span asp-validation-for="ProductLocation" class="text-danger"></span>
@@ -77,11 +82,6 @@
 			<div class="form-group">
 				<label asp-for="CategoryId" class="control-label">Category</label>
 				<select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-			</div>
-			<div class="form-group">
-				<label asp-for="SupplierData" class="control-label">Supplier ID</label>
-				<input asp-for="SupplierData" class="form-control" />
-				<span asp-validation-for="SupplierData" class="text-danger"></span>
 			</div>
 			<input type="hidden" asp-for="CreatedBy" />
 			<input type="hidden" asp-for="CreatedOn" />

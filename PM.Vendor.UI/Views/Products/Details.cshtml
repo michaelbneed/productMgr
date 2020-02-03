@@ -29,6 +29,12 @@
 			@Html.DisplayFor(model => model.Upccode)
 		</dd>
 		<dt class="col-sm-2">
+			Supplier ID
+		</dt>
+		<dd class="col-sm-10">
+			@Html.DisplayFor(model => model.SupplierData)
+		</dd>
+		<dt class="col-sm-2">
 			Catapult Inventory Location
 		</dt>
 		<dd class="col-sm-10">
@@ -115,12 +121,6 @@
 		</dt>
 		<dd class="col-sm-10">
 			@Html.DisplayFor(model => model.Category.CategoryName)
-		</dd>
-		<dt class="col-sm-2">
-			Supplier ID
-		</dt>
-		<dd class="col-sm-10">
-			@Html.DisplayFor(model => model.SupplierData)
 		</dd>
 	</dl>
 </div>
