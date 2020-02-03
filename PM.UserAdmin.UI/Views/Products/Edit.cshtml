@@ -10,94 +10,99 @@
 <hr />
 <div class="row">
     <div class="col-md-5">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="ProductName" class="control-label">Product</label>
-                <input asp-for="ProductName" class="form-control" />
-                <span asp-validation-for="ProductName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProductDescription" class="control-label">Description</label>
-                <input asp-for="ProductDescription" class="form-control" />
-                <span asp-validation-for="ProductDescription" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Upccode" class="control-label">UPC</label>
-                <input asp-for="Upccode" class="form-control" />
-                <span asp-validation-for="Upccode" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProductLocation" class="control-label">Catapult Inventory Location</label>
-                <input asp-for="ProductLocation" class="form-control" />
-                <span asp-validation-for="ProductLocation" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-	            <label asp-for="UnitsPerCase" class="control-label">Units Per Case</label>
-	            <input id="quantityEntered" asp-for="UnitsPerCase" class="form-control" onkeyup="getCost()" />
-	            <span asp-validation-for="UnitsPerCase" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-	            <label asp-for="ProductCost" class="control-label">Cost</label>
-	            <input id="costEntered" asp-for="ProductCost" class="form-control" onkeyup="getCost()" />
-	            <span asp-validation-for="ProductCost" class="text-danger"></span>
-	            <label id="costCalculated" class="small" style="color:green"></label>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProductPrice" class="control-label">Retail Price</label>
-                <input asp-for="ProductPrice" class="form-control" />
-                <input type="hidden" asp-for="ProductPrice" />
-                <span asp-validation-for="ProductPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="SuggestedPrice" class="control-label">Suggested Retail Price</label>
-                <input asp-for="SuggestedPrice" class="form-control" />
-                <span asp-validation-for="SuggestedPrice" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="PackageSize" class="control-label">Container Size</label><br />
-                <input asp-for="PackageSize" class="form-control" />
-                <span asp-validation-for="PackageSize" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ContainerSizeTypeId" class="control-label">Units of Measure</label><br />
-                <select asp-for="ContainerSizeTypeId" class="form-control" asp-items="ViewBag.ContainerSizeTypeId"></select>
-                <span asp-validation-for="ContainerSizeTypeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ContainerTypeId" class="control-label">Container Type</label><br />
-                <select asp-for="ContainerTypeId" class="form-control" asp-items="ViewBag.ContainerTypeId"></select>
-                <span asp-validation-for="ContainerTypeId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="OrderWeek" class="control-label">Order Week</label>
-                <input asp-for="OrderWeek" class="form-control" />
-                <span asp-validation-for="OrderWeek" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CategoryId" class="control-label">Category</label>
-                <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
-                <span asp-validation-for="CategoryId" class="text-danger"></span>
-            </div>
-            <input type="hidden" asp-for="CreatedBy" />
-            <input type="hidden" asp-for="CreatedOn" />
-            <input type="hidden" asp-for="UpdatedBy" />
-            <input type="hidden" asp-for="UpdatedOn" />
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                @if (ViewData["NoteId"] == null)
-                {
-                    <a asp-controller="Notes" asp-action="CreateNote" asp-route-id="@RequestDto.RequestId" class="btn btn-warning">Add Note</a>
-                }
-                else
-                {
-                    <a asp-controller="Notes" asp-action="Index" asp-route-id="@RequestDto.RequestId" class="btn btn-warning">Notes</a>
-                }
+		<form asp-action="Edit">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+			<input type="hidden" asp-for="Id" />
+			<div class="form-group">
+				<label asp-for="ProductName" class="control-label">Product</label>
+				<input asp-for="ProductName" class="form-control" />
+				<span asp-validation-for="ProductName" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="ProductDescription" class="control-label">Description</label>
+				<input asp-for="ProductDescription" class="form-control" />
+				<span asp-validation-for="ProductDescription" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="Upccode" class="control-label">UPC</label>
+				<input asp-for="Upccode" class="form-control" />
+				<span asp-validation-for="Upccode" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="ProductLocation" class="control-label">Catapult Inventory Location</label>
+				<input asp-for="ProductLocation" class="form-control" />
+				<span asp-validation-for="ProductLocation" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="UnitsPerCase" class="control-label">Units Per Case</label>
+				<input id="quantityEntered" asp-for="UnitsPerCase" class="form-control" onkeyup="getCost()" />
+				<span asp-validation-for="UnitsPerCase" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="ProductCost" class="control-label">Cost</label>
+				<input id="costEntered" asp-for="ProductCost" class="form-control" onkeyup="getCost()" />
+				<span asp-validation-for="ProductCost" class="text-danger"></span>
+				<label id="costCalculated" class="small" style="color:green"></label>
+			</div>
+			<div class="form-group">
+				<label asp-for="ProductPrice" class="control-label">Retail Price</label>
+				<input asp-for="ProductPrice" class="form-control" />
+				<input type="hidden" asp-for="ProductPrice" />
+				<span asp-validation-for="ProductPrice" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="SuggestedPrice" class="control-label">Suggested Retail Price</label>
+				<input asp-for="SuggestedPrice" class="form-control" />
+				<span asp-validation-for="SuggestedPrice" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="PackageSize" class="control-label">Container Size</label><br />
+				<input asp-for="PackageSize" class="form-control" />
+				<span asp-validation-for="PackageSize" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="ContainerSizeTypeId" class="control-label">Units of Measure</label><br />
+				<select asp-for="ContainerSizeTypeId" class="form-control" asp-items="ViewBag.ContainerSizeTypeId"></select>
+				<span asp-validation-for="ContainerSizeTypeId" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="ContainerTypeId" class="control-label">Container Type</label><br />
+				<select asp-for="ContainerTypeId" class="form-control" asp-items="ViewBag.ContainerTypeId"></select>
+				<span asp-validation-for="ContainerTypeId" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="OrderWeek" class="control-label">Order Week</label>
+				<input asp-for="OrderWeek" class="form-control" />
+				<span asp-validation-for="OrderWeek" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="CategoryId" class="control-label">Category</label>
+				<select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+				<span asp-validation-for="CategoryId" class="text-danger"></span>
+			</div>
+			<div class="form-group">
+				<label asp-for="SupplierData" class="control-label">Supplier ID</label>
+				<input asp-for="SupplierData" class="form-control" />
+				<span asp-validation-for="SupplierData" class="text-danger"></span>
+			</div>
+			<input type="hidden" asp-for="CreatedBy" />
+			<input type="hidden" asp-for="CreatedOn" />
+			<input type="hidden" asp-for="UpdatedBy" />
+			<input type="hidden" asp-for="UpdatedOn" />
+			<div class="form-group">
+				<input type="submit" value="Save" class="btn btn-primary" />
+				@if (ViewData["NoteId"] == null)
+				{
+					<a asp-controller="Notes" asp-action="CreateNote" asp-route-id="@RequestDto.RequestId" class="btn btn-warning">Add Note</a>
+				}
+				else
+				{
+					<a asp-controller="Notes" asp-action="Index" asp-route-id="@RequestDto.RequestId" class="btn btn-warning">Notes</a>
+				}
 
-                <a asp-controller="ProductPackageTypes" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-success">Package Quantities</a>
-            </div>
-        </form>
+				<a asp-controller="ProductPackageTypes" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-success">Package Quantities</a>
+			</div>
+		</form>
     </div>
 </div>
 <div>

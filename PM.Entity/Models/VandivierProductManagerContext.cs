@@ -157,7 +157,11 @@ namespace PM.Entity.Models
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.ContainerTypeId)
                     .HasConstraintName("FK_Product_ContainerType");
-            });
+
+				entity.Property(e => e.SupplierData)
+					.HasMaxLength(50)
+					.IsUnicode(false);
+			});
 
             modelBuilder.Entity<ProductPackageType>(entity =>
             {

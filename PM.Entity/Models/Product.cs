@@ -30,8 +30,9 @@ namespace PM.Entity.Models
         public DateTime? UpdatedOn { get; set; }
         public string UpdatedBy { get; set; }
         public int? UnitsPerCase { get; set; }
+		public string SupplierData { get; set; }
 
-        public virtual Category Category { get; set; }
+		public virtual Category Category { get; set; }
         public virtual ContainerSizeType ContainerSizeType { get; set; }
         public virtual ContainerType ContainerType { get; set; }
         public virtual ICollection<ProductPackageType> ProductPackageType { get; set; }

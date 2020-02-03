@@ -17,6 +17,7 @@
     [UpdatedOn]           DATETIME       NULL,
     [UpdatedBy]           VARCHAR (100)  NULL,
     [UnitsPerCase] INT NULL, 
+    [SupplierData] VARCHAR(50) NOT NULL, 
     CONSTRAINT [PK_Prooduct] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_Product_Category] FOREIGN KEY ([CategoryID]) REFERENCES [dbo].[Category] ([ID]),
     CONSTRAINT [FK_Product_ContainerSizeType] FOREIGN KEY ([ContainerSizeTypeID]) REFERENCES [dbo].[ContainerSizeType] ([ID]),

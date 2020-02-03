@@ -44,7 +44,7 @@ namespace PM.Vendor.UI.Controllers
 		[Authorize]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> CreateProduct(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,SuggestedPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy,UnitsPerCase")] Product product)
+		public async Task<IActionResult> CreateProduct(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,SuggestedPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy,UnitsPerCase,SupplierData")] Product product)
 		{
 			var requestId = id;
 			product.Id = 0;
@@ -85,7 +85,7 @@ namespace PM.Vendor.UI.Controllers
 		[Authorize]
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> CreateProductAndPackage(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,SuggestedPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy,UnitsPerCase")] Product product)
+		public async Task<IActionResult> CreateProductAndPackage(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,SuggestedPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy,UnitsPerCase,SupplierData")] Product product)
 		{
 			var requestId = RequestDto.RequestId;
 			product.Id = 0;
@@ -184,7 +184,7 @@ namespace PM.Vendor.UI.Controllers
 		[Authorize]
 		[HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,SuggestedPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy,UnitsPerCase")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,ProductName,ProductDescription,Upccode,ProductLocation,ProductCost,ProductPrice,SuggestedPrice,PackageSize,PackageType,ContainerSizeTypeId,ContainerTypeId,OrderWeek,CategoryId,CreatedOn,CreatedBy,UpdatedOn,UpdatedBy,UnitsPerCase,SupplierData")] Product product)
         {
             if (id != product.Id)
             {
