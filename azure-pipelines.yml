@@ -47,6 +47,13 @@ steps:
     publishWebProjects: true
     arguments: '--output $(Build.ArtifactStagingDirectory)/QA /p:EnvironmentName=QA'
 
+- task: DotNetCoreCLI@2
+  displayName: "Publish Web Apps (Prod)"
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--output $(Build.ArtifactStagingDirectory)/Prod /p:EnvironmentName=Production'
+
 - task: VSBuild@1
   displayName: "Build Database"
   inputs:
@@ -94,6 +101,20 @@ steps:
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)/QA/PM.Vendor.UI.zip'
     ArtifactName: 'Vendor UI (QA)'
+    publishLocation: 'Container'
+
+- task: PublishBuildArtifacts@1
+  displayName: "Publish Admin UI (Prod) Artifact"
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/Prod/PM.UserAdmin.UI.zip'
+    ArtifactName: 'Admin UI (Prod)'
+    publishLocation: 'Container'
+
+- task: PublishBuildArtifacts@1
+  displayName: "Publish Vendor UI (Prod) Artifact"
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/Prod/PM.Vendor.UI.zip'
+    ArtifactName: 'Vendor UI (Prod)'
     publishLocation: 'Container'
 
 - task: PublishBuildArtifacts@1
