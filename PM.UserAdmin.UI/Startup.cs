@@ -40,6 +40,8 @@ namespace PM.UserAdmin.UI
 
 			services.AddDbContext<VandivierProductManagerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Connection")));
 
+		    services.AddSingleton<Security.AuthHelper>();
+
             services.AddAuthentication(AzureADDefaults.AuthenticationScheme).AddAzureAD(AzureADDefaults.AuthenticationScheme,
                 OpenIdConnectDefaults.AuthenticationScheme, CookieAuthenticationDefaults.AuthenticationScheme, "Test",
                 options => Configuration.Bind("AzureAd", options));

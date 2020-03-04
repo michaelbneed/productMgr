@@ -49,7 +49,6 @@ namespace PM.UserAdmin.UI.Controllers
 
 			ViewData["FilterParam"] = search;
 
-			UserDto.SetUserRole(User.FindFirstValue("groups"), _configuration);
 			UserDto.UserId = User.Identity.Name;
 
 			_dbReadService.IncludeEntityNavigation<Product>();
@@ -91,11 +90,7 @@ namespace PM.UserAdmin.UI.Controllers
 		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Details(int? id)
         {
-	        UserDto.SetUserRole(User.FindFirstValue("groups"), _configuration);
-
-	        var roleForDebug = UserDto.Role;
-
-			if (!id.HasValue)
+	        if (!id.HasValue)
             {
                 return NotFound();
             }

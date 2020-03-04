@@ -79,14 +79,7 @@
 	</dl>
 </div>
 <div>
-	@if (@Model.StatusTypeId == 1 && UserDto.Role == "Employee")
-	{
-		<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary border-right-0">Edit</a>
-	}
-	else if (UserDto.Role != "Employee")
-	{
-		<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary border-right-0">Edit</a>
-	}
+	<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary border-right-0">Edit</a>
 	
 	@if (ViewData["NoteId"] == null)
 	{

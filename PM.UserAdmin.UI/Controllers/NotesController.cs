@@ -53,9 +53,7 @@ namespace PM.UserAdmin.UI.Controllers
 		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
 		public async Task<IActionResult> Details(int? id)
         {
-	        UserDto.SetUserRole(User.FindFirstValue("groups"), _configuration);
-
-			_dbReadService.IncludeEntityNavigation<Request>();
+	        _dbReadService.IncludeEntityNavigation<Request>();
 			if (id == null)
             {
                 return NotFound();

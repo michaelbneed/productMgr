@@ -1,8 +1,13 @@
 ﻿@using PM.Business.Dto
 @model PM.Entity.Models.Request
 
+@inject Microsoft.AspNetCore.Authorization.IAuthorizationService Authorization
+
 @{
     ViewData["Title"] = "Edit";
+
+    var authHelper = new PM.UserAdmin.UI.Security.AuthHelper(Authorization);
+    var isEmployee = (await authHelper.IsEmployee(User));
 }
 
 <h1>Edit this request</h1>
@@ -10,105 +15,105 @@
 <hr />
 <div class="row">
     <div class="col-md-5">
-		<form asp-action="Edit">
-			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
-			<input type="hidden" asp-for="Id" />
-			<div class="form-group">
-				<label asp-for="RequestDescription" class="control-label">Request</label>
-				<input asp-for="RequestDescription" class="form-control" />
-				<span asp-validation-for="RequestDescription" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="RequestTypeId" class="control-label">Type</label>
-				@if (UserDto.Role == "Employee")
-				{
-					<select asp-for="RequestTypeId" class="form-control" asp-items="ViewBag.RequestTypeId" disabled="disabled"></select>
-					<select asp-for="RequestTypeId" class="form-control" asp-items="ViewBag.RequestTypeId" hidden="hidden"></select>
-				}
-				else
-				{
-					<select asp-for="RequestTypeId" class="form-control" asp-items="ViewBag.RequestTypeId"></select>
-				}
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="RequestDescription" class="control-label">Request</label>
+                <input asp-for="RequestDescription" class="form-control" />
+                <span asp-validation-for="RequestDescription" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RequestTypeId" class="control-label">Type</label>
+                @if (isEmployee)
+                {
+                    <select asp-for="RequestTypeId" class="form-control" asp-items="ViewBag.RequestTypeId" disabled="disabled"></select>
+                    <select asp-for="RequestTypeId" class="form-control" asp-items="ViewBag.RequestTypeId" hidden="hidden"></select>
+                }
+                else
+                {
+                    <select asp-for="RequestTypeId" class="form-control" asp-items="ViewBag.RequestTypeId"></select>
+                }
 
-				<span asp-validation-for="RequestTypeId" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="StatusTypeId" class="control-label">Status</label>
-				@if (UserDto.Role == "Employee")
-				{
-					<select asp-for="StatusTypeId" class="form-control" asp-items="ViewBag.StatusTypeId" disabled="disabled"></select>
-					<select asp-for="StatusTypeId" class="form-control" asp-items="ViewBag.StatusTypeId" hidden="hidden"></select>
-				}
-				else
-				{
-					<select asp-for="StatusTypeId" class="form-control" asp-items="ViewBag.StatusTypeId"></select>
-				}
-				<span asp-validation-for="StatusTypeId" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<a asp-controller="Products" asp-action="Edit" asp-route-id="@Model.ProductId" class="control-label">Edit Product</a>
-				<select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId" disabled="disabled"></select>
-				<select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId" hidden="hidden"></select>
-				<span asp-validation-for="ProductId" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="SupplierId" class="control-label">Supplier</label>
-				<select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
-				<span asp-validation-for="SupplierId" class="text-danger"></span>
-			</div>
-			<div class="form-group">
-				<label asp-for="StoreId" class="control-label">Supervisor</label>
-				@if (UserDto.Role == "Employee")
-				{
-					<select asp-for="StoreId" class="form-control" asp-items="ViewBag.StoreId" disabled="disabled"></select>
-					<select asp-for="StoreId" class="form-control" asp-items="ViewBag.StoreId" hidden="hidden"></select>
-				}
-				else
-				{
-					<select asp-for="StoreId" class="form-control" asp-items="ViewBag.StoreId"></select>
-				}
+                <span asp-validation-for="RequestTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StatusTypeId" class="control-label">Status</label>
+                @if (isEmployee)
+                {
+                    <select asp-for="StatusTypeId" class="form-control" asp-items="ViewBag.StatusTypeId" disabled="disabled"></select>
+                    <select asp-for="StatusTypeId" class="form-control" asp-items="ViewBag.StatusTypeId" hidden="hidden"></select>
+                }
+                else
+                {
+                    <select asp-for="StatusTypeId" class="form-control" asp-items="ViewBag.StatusTypeId"></select>
+                }
+                <span asp-validation-for="StatusTypeId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <a asp-controller="Products" asp-action="Edit" asp-route-id="@Model.ProductId" class="control-label">Edit Product</a>
+                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId" disabled="disabled"></select>
+                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId" hidden="hidden"></select>
+                <span asp-validation-for="ProductId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SupplierId" class="control-label">Supplier</label>
+                <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
+                <span asp-validation-for="SupplierId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StoreId" class="control-label">Supervisor</label>
+                @if (isEmployee)
+                {
+                    <select asp-for="StoreId" class="form-control" asp-items="ViewBag.StoreId" disabled="disabled"></select>
+                    <select asp-for="StoreId" class="form-control" asp-items="ViewBag.StoreId" hidden="hidden"></select>
+                }
+                else
+                {
+                    <select asp-for="StoreId" class="form-control" asp-items="ViewBag.StoreId"></select>
+                }
 
-			</div>
-			<input type="hidden" asp-for="CreatedBy" />
-			<input type="hidden" asp-for="CreatedOn" />
-			<input type="hidden" asp-for="UpdatedBy" />
-			<input type="hidden" asp-for="UpdatedOn" />
-			<div class="form-group">
-				<input type="submit" value="Save" class="btn btn-primary" />
-				@if (ViewData["NoteId"] == null)
-				{
-					<a asp-controller="Notes" asp-action="CreateNote" asp-route-id="@Model.Id" class="btn btn-warning">Add Note</a>
-				}
-				else
-				{
-					<a asp-controller="Notes" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-warning">Notes</a>
-				}
+            </div>
+            <input type="hidden" asp-for="CreatedBy" />
+            <input type="hidden" asp-for="CreatedOn" />
+            <input type="hidden" asp-for="UpdatedBy" />
+            <input type="hidden" asp-for="UpdatedOn" />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+                @if (ViewData["NoteId"] == null)
+                {
+                    <a asp-controller="Notes" asp-action="CreateNote" asp-route-id="@Model.Id" class="btn btn-warning">Add Note</a>
+                }
+                else
+                {
+                    <a asp-controller="Notes" asp-action="Index" asp-route-id="@Model.Id" class="btn btn-warning">Notes</a>
+                }
 
-				@if (@Model.ProductId == null)
-				{
-					<a asp-controller="Products" asp-action="CreateProduct" asp-route-id="@RequestDto.RequestId" class="btn btn-success">Add Product</a>
-				}
-				else
-				{
-					<a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-success">View Product</a>
-				}
+                @if (@Model.ProductId == null)
+                {
+                    <a asp-controller="Products" asp-action="CreateProduct" asp-route-id="@RequestDto.RequestId" class="btn btn-success">Add Product</a>
+                }
+                else
+                {
+                    <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-success">View Product</a>
+                }
 
-				@if (@Model.ProductId == null)
-				{
-					<a asp-controller="Products" asp-action="CreateProduct" asp-route-id="@RequestDto.RequestId" class="btn btn-info disabled">Edit Product</a>
-				}
-				else
-				{
-					<a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-info">Edit Product</a>
-				}
+                @if (@Model.ProductId == null)
+                {
+                    <a asp-controller="Products" asp-action="CreateProduct" asp-route-id="@RequestDto.RequestId" class="btn btn-info disabled">Edit Product</a>
+                }
+                else
+                {
+                    <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-info">Edit Product</a>
+                }
 
-			</div>
-		</form>
+            </div>
+        </form>
     </div>
 </div>
 <div>
-	<a asp-controller="Requests" asp-action="Details" asp-route-id="@Model.Id">Back to Request</a> <br/>
-	<a asp-action="Index">Back to Request List</a>
+    <a asp-controller="Requests" asp-action="Details" asp-route-id="@Model.Id">Back to Request</a> <br />
+    <a asp-action="Index">Back to Request List</a>
 </div>
 
 @section Scripts {

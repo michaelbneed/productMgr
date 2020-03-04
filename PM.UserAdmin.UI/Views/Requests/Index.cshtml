@@ -1,61 +1,67 @@
 ﻿@using PM.Business.Dto
+
 @model IEnumerable<PM.Entity.Models.Request>
 
+@inject Microsoft.AspNetCore.Authorization.IAuthorizationService Authorization
+
 @{
-	ViewData["Title"] = "Requests";
+    ViewData["Title"] = "Requests";
+
+    var authHelper = new PM.UserAdmin.UI.Security.AuthHelper(Authorization);
+    var isEmployee = (await authHelper.IsEmployee(User));
 }
 <table style="width: 100%">
-	<tr style="width: 100%">
-		<td style="width: 50%">
-			<a asp-action="Index" style="font-size: 22px" data-toggle="tooltip" data-placement="top" title="Click to reset search results!">Product Requests</a>
-		</td>
-		<td style="width: 50%; text-align: right">
-			<form asp-action="Index" method="get">
-				<input type="text" style="text-align: center" placeholder="Search Requests..." name="search" value="@ViewData["FilterParam"]" />
-				<input type="submit" value="Search" class="btn btn-light small" />
-			</form>
-		</td>
-	</tr>
+    <tr style="width: 100%">
+        <td style="width: 50%">
+            <a asp-action="Index" style="font-size: 22px" data-toggle="tooltip" data-placement="top" title="Click to reset search results!">Product Requests</a>
+        </td>
+        <td style="width: 50%; text-align: right">
+            <form asp-action="Index" method="get">
+                <input type="text" style="text-align: center" placeholder="Search Requests..." name="search" value="@ViewData["FilterParam"]" />
+                <input type="submit" value="Search" class="btn btn-light small" />
+            </form>
+        </td>
+    </tr>
 </table>
 <p>
-	<a asp-action="CreateRequest" title="Add a new Request"><i class="material-icons">add</i>Add Request</a><br />
+    <a asp-action="CreateRequest" title="Add a new Request"><i class="material-icons">add</i>Add Request</a><br />
 </p>
 @foreach (var item in Model)
 {
-	<div class="card border-dark mb-3" style="max-width: 100%; color: #6A0D1F">
-		<div class="card-header">
-			<div class="row">
-				<a asp-action="Details" title="Details" asp-route-id="@item.Id" class="col-sm-6" style="color: #6A0D1F">Request: <br />@Html.DisplayFor(modelItem => item.RequestDescription) (@Html.DisplayFor(modelItem => item.Id))</a>
-				<div class="col-sm-6" align="right">
-					<a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a>
-					@if (@item.StatusTypeId == 1 && UserDto.Role == "Employee")
-					{
-						<a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a>
-						<a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>
-					}
-					else if (UserDto.Role != "Employee")
-					{
-						<a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a>
-						<a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>
-					}
-				</div>
-			</div>
-		</div>
-		<div class="card-body text-dark">
-			<div class="row">
-				<div class="col-sm-6" style="padding-bottom: 10px">
-					<p class="card-text">Product: @Html.DisplayFor(modelItem => item.Product.ProductName)</p>
-					<p class="card-text">Supervisor: @Html.DisplayFor(modelItem => item.Store.StoreSupervisorName)</p>
-					<p class="card-text">Requestor: @Html.DisplayFor(modelItem => item.CreatedBy)</p>
-					<p class="card-text">Type: @Html.DisplayFor(modelItem => item.RequestType.RequestTypeName)</p>
-				</div>
-				<div class="col-sm-6">
-					<p class="card-text">Supplier: @Html.DisplayFor(modelItem => item.Supplier.SupplierName)</p>
-					<p class="card-text">Store: @Html.DisplayFor(modelItem => item.Store.StoreName)</p>
-					<p class="card-text">Submitted On: @Html.DisplayFor(modelItem => item.CreatedOn)</p>
-					<p class="card-text">Status: @Html.DisplayFor(modelItem => item.StatusType.StatusTypeName)</p>
-				</div>
-			</div>
-		</div>
-	</div>
+    <div class="card border-dark mb-3" style="max-width: 100%; color: #6A0D1F">
+        <div class="card-header">
+            <div class="row">
+                <a asp-action="Details" title="Details" asp-route-id="@item.Id" class="col-sm-6" style="color: #6A0D1F">Request: <br />@Html.DisplayFor(modelItem => item.RequestDescription) (@Html.DisplayFor(modelItem => item.Id))</a>
+                <div class="col-sm-6" align="right">
+                    <a asp-action="Details" title="Details" asp-route-id="@item.Id"><i class="material-icons">link</i></a>
+                    @if (@item.StatusTypeId == 1 && isEmployee)
+                    {
+                        <a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a>
+                        <a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>
+                    }
+                    else if (isEmployee == false)
+                    {
+                        <a asp-action="Edit" title="Edit" asp-route-id="@item.Id"><i class="material-icons">update</i></a>
+                        <a asp-action="Delete" title="Delete" asp-route-id="@item.Id"><i class="material-icons">remove_circle_outline</i></a>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card-body text-dark">
+            <div class="row">
+                <div class="col-sm-6" style="padding-bottom: 10px">
+                    <p class="card-text">Product: @Html.DisplayFor(modelItem => item.Product.ProductName)</p>
+                    <p class="card-text">Supervisor: @Html.DisplayFor(modelItem => item.Store.StoreSupervisorName)</p>
+                    <p class="card-text">Requestor: @Html.DisplayFor(modelItem => item.CreatedBy)</p>
+                    <p class="card-text">Type: @Html.DisplayFor(modelItem => item.RequestType.RequestTypeName)</p>
+                </div>
+                <div class="col-sm-6">
+                    <p class="card-text">Supplier: @Html.DisplayFor(modelItem => item.Supplier.SupplierName)</p>
+                    <p class="card-text">Store: @Html.DisplayFor(modelItem => item.Store.StoreName)</p>
+                    <p class="card-text">Submitted On: @Html.DisplayFor(modelItem => item.CreatedOn)</p>
+                    <p class="card-text">Status: @Html.DisplayFor(modelItem => item.StatusType.StatusTypeName)</p>
+                </div>
+            </div>
+        </div>
+    </div>
 }    
