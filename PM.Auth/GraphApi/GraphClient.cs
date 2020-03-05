@@ -111,7 +111,7 @@ namespace PM.Auth.GraphApi
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }
