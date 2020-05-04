@@ -17,7 +17,11 @@ namespace PM.Business.Email
             var smtp = new SmtpClient(smtpServerUrl);
 
             if (smtpServerPort.HasValue)
+            {
                 smtp.Port = smtpServerPort.Value;
+
+                smtp.EnableSsl = true;
+            }
 
             if (string.IsNullOrEmpty(password) == false)
                 smtp.Credentials = new NetworkCredential(emailFrom, password);
