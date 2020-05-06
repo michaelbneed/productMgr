@@ -218,21 +218,40 @@ namespace PM.Business.Email
 
 		}
 
-		public void SendNewNoteEmailToOriginatingUser(Entity.Models.Request request, Entity.Models.Note note)
+		public void SendNewNoteEmailToOriginatingUser(Entity.Models.Request request, Entity.Models.Note note, int? supplierId = 0)
         {
-            var adminUrl = _configuration.GetValue<string>("AdminWebsite:BaseUrl");
-            var noteDetailPath = string.Format(_configuration.GetValue<string>("AdminWebsite:NoteDetail"), note.Id);
-            var subject = $"Vandivier Product Request Note";
+			if (supplierId != null && supplierId > 0)
+			{
+				var vendorUrl = _configuration.GetValue<string>("VendorWebsite:BaseUrl");
+				var noteDetailPath = string.Format(_configuration.GetValue<string>("VendorWebsite:NoteDetail"), note.Id);
+				var subject = $"Vandivier Product Request Note";
 
-            var emailAddress = new GraphClient(_configuration, false).GetUserEmail(request.UserId);
-            var body = $"A new note has been added for a product request that requires your attention. <br /><br />" +
+				var emailAddress = new GraphClient(_configuration, false).GetUserEmail(request.UserId);
+				var body = $"A new note has been added for a product request that requires your attention. <br /><br />" +
+                        $"View the note <a href='{vendorUrl}{noteDetailPath}'>here</a> <br /><br />" +
+                        $"Thanks, <br /> Vandivier Management";
+
+				if (emailAddress != null)
+				{
+					Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
+				}
+			}
+			else
+			{
+				var adminUrl = _configuration.GetValue<string>("AdminWebsite:BaseUrl");
+				var noteDetailPath = string.Format(_configuration.GetValue<string>("AdminWebsite:NoteDetail"), note.Id);
+				var subject = $"Vandivier Product Request Note";
+
+				var emailAddress = new GraphClient(_configuration, false).GetUserEmail(request.UserId);
+				var body = $"A new note has been added for a product request that requires your attention. <br /><br />" +
                         $"View the note <a href='{adminUrl}{noteDetailPath}'>here</a> <br /><br />" +
                         $"Thanks, <br /> Vandivier Management";
 
-            if (emailAddress != null)
-            {
-	            Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
-			}
+				if (emailAddress != null)
+				{
+					Helper.Send(_configuration, subject, body, new List<string>() { emailAddress });
+				}
+			} 
         }
 
 		public async void SendNewNoteEmailToSuppliers(Entity.Models.Request request, Entity.Models.Note note)

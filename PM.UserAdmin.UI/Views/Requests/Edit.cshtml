@@ -50,12 +50,19 @@
                 }
                 <span asp-validation-for="StatusTypeId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <a asp-controller="Products" asp-action="Edit" asp-route-id="@Model.ProductId" class="control-label">Edit Product</a>
-                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId" disabled="disabled"></select>
-                <select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId" hidden="hidden"></select>
-                <span asp-validation-for="ProductId" class="text-danger"></span>
-            </div>
+			<div class="form-group">
+				@if (Model.ProductId != null)
+				{
+					<a asp-controller="Products" asp-action="Edit" asp-route-id="@Model.ProductId" class="control-label">Edit Product</a>
+				}
+				else
+				{
+					<a asp-controller="Products" asp-action="CreateProduct" asp-route-id="@Model.ProductId" class="control-label">Create Product (not yet assigned)</a>
+				}
+				<select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId" disabled="disabled"></select>
+				<select asp-for="ProductId" class="form-control" asp-items="ViewBag.ProductId" hidden="hidden"></select>
+				<span asp-validation-for="ProductId" class="text-danger"></span>
+			</div>
             <div class="form-group">
                 <label asp-for="SupplierId" class="control-label">Supplier</label>
                 <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
@@ -91,16 +98,7 @@
 
                 @if (@Model.ProductId == null)
                 {
-                    <a asp-controller="Products" asp-action="CreateProduct" asp-route-id="@RequestDto.RequestId" class="btn btn-success">Add Product</a>
-                }
-                else
-                {
-                    <a asp-controller="Products" asp-action="Details" asp-route-id="@Model.ProductId" class="btn btn-success">View Product</a>
-                }
-
-                @if (@Model.ProductId == null)
-                {
-                    <a asp-controller="Products" asp-action="CreateProduct" asp-route-id="@RequestDto.RequestId" class="btn btn-info disabled">Edit Product</a>
+                    <a asp-controller="Products" asp-action="CreateProduct" asp-route-id="@RequestDto.RequestId" class="btn btn-info">Add Product</a>
                 }
                 else
                 {

@@ -102,16 +102,24 @@ namespace PM.UserAdmin.UI.Controllers
 				await _dbWriteService.SaveChangesAsync();
 				var request = await _dbReadService.GetSingleRecordAsync<Request>(r => r.Id.Equals(id));
 
-				if (note.SendEmailSupplier) 
+				if (note.SendEmailSupplier == true) 
 				{
 					RequestEmail emailSupplier = new RequestEmail(_configuration, _dbReadService);
 					emailSupplier.SendNewNoteEmailToSuppliers(request, note);
 				}
 
-				if (note.SendEmailRequestor)
+				if (note.SendEmailRequestor == true)
 				{
 					RequestEmail emailOriginator = new RequestEmail(_configuration, _dbReadService);
-					emailOriginator.SendNewNoteEmailToOriginatingUser(request, note);
+					var user = await _dbReadService.GetSingleRecordAsync<Entity.Models.User>(u => u.Id.Equals(request.UserId));
+					if (user.SupplierId != null && user.SupplierId > 0)
+					{
+						emailOriginator.SendNewNoteEmailToOriginatingUser(request, note, user.SupplierId);
+					}
+					else
+					{
+						emailOriginator.SendNewNoteEmailToOriginatingUser(request, note);
+					}
 				}
 			}
 			return RedirectToAction("Index", "Notes", new { id = note.RequestId });
