@@ -2,7 +2,7 @@
 {
     public class PasswordProfile
     {
-        public bool ForceChangePasswordNextLogin => true;
+        public bool ForceChangePasswordNextLogin => false;
 
         public string Password { get; set; }
     }
