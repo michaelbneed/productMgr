@@ -19,17 +19,6 @@ namespace PM.UserAdmin.UI.Controllers
             return SignOut( new AuthenticationProperties { RedirectUri = callbackUrl }, AzureADB2CDefaults.AuthenticationScheme);
         }
 
-		[HttpGet]
-		public IActionResult ResetPassword([FromRoute] string scheme = null)
-		{
-			scheme = AzureADB2CDefaults.AuthenticationScheme;
-
-			var redirectUrl = Url.Content("~/");
-			var properties = new AuthenticationProperties { RedirectUri = redirectUrl };
-			properties.Items["policy"] = _options.CurrentValue?.ResetPasswordPolicyId;
-			return Challenge(properties, scheme);
-		}
-
 		public IActionResult AccessDenied()
         {
             return View();

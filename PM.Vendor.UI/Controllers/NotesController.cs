@@ -106,15 +106,18 @@ namespace PM.Vendor.UI.Controllers
 
 				var request = await _dbReadService.GetSingleRecordAsync<Request>(r => r.Id.Equals(id));
 
-				RequestEmail email = new RequestEmail(_configuration, _dbReadService);
-				var user = await _dbReadService.GetSingleRecordAsync<Entity.Models.User>(u => u.Id.Equals(request.UserId));
-				if (user.SupplierId != null && user.SupplierId > 0)
+				RequestEmail emailOriginator = new RequestEmail(_configuration, _dbReadService);
+				var user = await _dbReadService.GetSingleRecordAsync<Entity.Models.User>(u => u.EmailAddress.Equals(request.UserId));
+				if (user != null)
 				{
-					email.SendNewNoteEmailToOriginatingUser(request, note, user.SupplierId);
-				}
-				else
-				{
-					email.SendNewNoteEmailToOriginatingUser(request, note);
+					if (user.SupplierId != null && user.SupplierId > 0)
+					{
+						emailOriginator.SendNewNoteEmailToOriginatingUser(request, note, user.SupplierId);
+					}
+					else
+					{
+						emailOriginator.SendNewNoteEmailToOriginatingUser(request, note);
+					}
 				}
 			}
 			return RedirectToAction("Index", "Notes", new { id = note.RequestId });

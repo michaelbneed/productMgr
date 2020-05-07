@@ -111,15 +111,18 @@ namespace PM.UserAdmin.UI.Controllers
 				if (note.SendEmailRequestor == true)
 				{
 					RequestEmail emailOriginator = new RequestEmail(_configuration, _dbReadService);
-					var user = await _dbReadService.GetSingleRecordAsync<Entity.Models.User>(u => u.Id.Equals(request.UserId));
-					if (user.SupplierId != null && user.SupplierId > 0)
+					var user = await _dbReadService.GetSingleRecordAsync<Entity.Models.User>(u => u.EmailAddress.Equals(request.UserId));
+					if (user != null)
 					{
-						emailOriginator.SendNewNoteEmailToOriginatingUser(request, note, user.SupplierId);
-					}
-					else
-					{
-						emailOriginator.SendNewNoteEmailToOriginatingUser(request, note);
-					}
+						if (user.SupplierId != null && user.SupplierId > 0)
+						{
+							emailOriginator.SendNewNoteEmailToOriginatingUser(request, note, user.SupplierId);
+						}
+						else
+						{
+							emailOriginator.SendNewNoteEmailToOriginatingUser(request, note);
+						}
+					}					
 				}
 			}
 			return RedirectToAction("Index", "Notes", new { id = note.RequestId });
