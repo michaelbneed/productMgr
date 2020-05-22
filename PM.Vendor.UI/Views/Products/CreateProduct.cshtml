@@ -70,7 +70,7 @@
 			</div>
 			<div class="form-group">
 				<label asp-for="OrderWeek" class="control-label">Order Week</label>
-				<input asp-for="OrderWeek" class="form-control" />
+			    <select asp-for="OrderWeek" class="form-control" asp-items="ViewBag.OrderWeeks"></select>
 				<span asp-validation-for="OrderWeek" class="text-danger"></span>
 			</div>
 			<div class="form-group">

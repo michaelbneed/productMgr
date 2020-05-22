@@ -51,7 +51,9 @@ namespace PM.UserAdmin.UI.Controllers
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName");
 	        ViewData["ContainerTypeId"] = new SelectList(_context.ContainerType, "Id", "ContainerTypeName");
 	        ViewData["ContainerSizeTypeId"] = new SelectList(_context.ContainerSizeType, "Id", "ContainerSizeTypeName");
-			return View();
+            ViewData["OrderWeeks"] = new SelectList(new Dictionary<int, int>() { { 1, 1 }, { 2, 2 }, { 3, 3 }, { 4, 4 }, { 5, 5 }, { 6, 6 }, { 7, 7 }, { 8, 8 }, { 9, 9 } }, "Key", "Value");
+
+            return View();
         }
 
 		[Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
@@ -89,8 +91,9 @@ namespace PM.UserAdmin.UI.Controllers
 				logHelper.LogRequestChange(request, _context, RequestLogConstants.RequestAddByStaff);
 	        }
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
+            ViewData["OrderWeeks"] = new SelectList(new Dictionary<int, int>() { { 1, 1 }, { 2, 2 }, { 3, 3 }, { 4, 4 }, { 5, 5 }, { 6, 6 }, { 7, 7 }, { 8, 8 }, { 9, 9 } }, "Key", "Value", product.OrderWeek);
 
-	        return RedirectToAction("Details", "Requests", new { id = requestId });
+            return RedirectToAction("Details", "Requests", new { id = requestId });
         }
 
         [Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
@@ -131,8 +134,9 @@ namespace PM.UserAdmin.UI.Controllers
 	        ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
 	        ViewData["ContainerTypeId"] = new SelectList(_context.ContainerType, "Id", "ContainerTypeName");
 	        ViewData["ContainerSizeTypeId"] = new SelectList(_context.ContainerSizeType, "Id", "ContainerSizeTypeName");
+            ViewData["OrderWeeks"] = new SelectList(new Dictionary<int, int>() { { 1, 1 }, { 2, 2 }, { 3, 3 }, { 4, 4 }, { 5, 5 }, { 6, 6 }, { 7, 7 }, { 8, 8 }, { 9, 9 } }, "Key", "Value", product.OrderWeek);
 
-			return RedirectToAction("Create", "ProductPackageTypes", new { id = product.Id });
+            return RedirectToAction("Create", "ProductPackageTypes", new { id = product.Id });
 		}
 
         [Authorize(Policy = GroupAuthorization.EmployeePolicyName)]
@@ -185,8 +189,9 @@ namespace PM.UserAdmin.UI.Controllers
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
             ViewData["ContainerTypeId"] = new SelectList(_context.ContainerType, "Id", "ContainerTypeName");
             ViewData["ContainerSizeTypeId"] = new SelectList(_context.ContainerSizeType, "Id", "ContainerSizeTypeName");
+            ViewData["OrderWeeks"] = new SelectList(new Dictionary<int, int>() { { 1, 1 }, { 2, 2 }, { 3, 3 }, { 4, 4 }, { 5, 5 }, { 6, 6 }, { 7, 7 }, { 8, 8 }, { 9, 9 } }, "Key", "Value", product.OrderWeek);
 
-			var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
+            var note = await _dbReadService.GetSingleRecordAsync<Note>(s => s.RequestId.Equals(RequestDto.RequestId));
 			if (note != null)
             {
 	            ViewData["NoteId"] = note.Id;
@@ -234,6 +239,7 @@ namespace PM.UserAdmin.UI.Controllers
                 }
             }
             ViewData["CategoryId"] = new SelectList(_context.Category, "Id", "CategoryName", product.CategoryId);
+            ViewData["OrderWeeks"] = new SelectList(new Dictionary<int, int>() { { 1, 1 }, { 2, 2 }, { 3, 3 }, { 4, 4 }, { 5, 5 }, { 6, 6 }, { 7, 7 }, { 8, 8 }, { 9, 9 } }, "Key", "Value", product.OrderWeek);
 
             return RedirectToAction("Details", "Products", new { id = product.Id });
 		}
