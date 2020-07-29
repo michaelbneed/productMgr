@@ -4,9 +4,9 @@
  ;WITH [source] AS (
 	SELECT [ID], [Name], [Manager], [Email]
 	FROM ( VALUES
-		( 1, 'TestStore1', 'Michael', 'mneed@adaptivesys.com'),
-		( 2, 'TestStore2', 'David', 'dpacenka@adaptivesys.com'),
-		( 3, 'TestStore3', 'Doug', 'dwhitlock@adaptivesys.com')
+		( 1, 'TestStore1', 'Michael', 'mneed@needit.app'),
+		( 2, 'TestStore2', 'David', 'dpacenka@needit.app'),
+		( 3, 'TestStore3', 'Doug', 'dwhitlock@needit.app')
 	) AS s([ID], [Name], [Manager], [Email])
 )
 MERGE INTO dbo.[Store] [target]

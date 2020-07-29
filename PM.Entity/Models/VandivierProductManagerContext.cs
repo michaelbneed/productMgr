@@ -34,7 +34,7 @@ namespace PM.Entity.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-				optionsBuilder.UseSqlServer("Server=SQL2.corp.adaptivesys.com,1470;Database=Vandivier_PM_DEV;User ID=vandivierPmDev;Password=dev;");
+				optionsBuilder.UseSqlServer("Server=SQL2.corp.needit.app,1470;Database=Vandivier_PM_DEV;User ID=vandivierPmDev;Password=dev;");
             }
         }
 
